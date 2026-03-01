@@ -1,0 +1,11 @@
+npm install @nestjs/config zod
+
+npm install @prisma/client
+
+npm i --save @nestjs/config
+
+npm i @nestjs/graphql @nestjs/apollo @apollo/server graphql
+
+npm install graphql-scalars
+
+npm install class-validator class-transformer

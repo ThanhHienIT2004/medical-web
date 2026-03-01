@@ -1,0 +1,73 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type User {
+  """Unique identifier for the user"""
+  id: ID!
+
+  """Full name of the user"""
+  full_name: String!
+  email: String!
+
+  """Phone number of the user"""
+  phone: String
+
+  """Address of the user"""
+  address: String
+
+  """Gender of the user"""
+  gender: String
+
+  """Date of birth of the user"""
+  date_of_birth: Date
+
+  """Creation date of the user record"""
+  created_at: Date!
+
+  """Last update date of the user record"""
+  updated_at: Date
+}
+
+"""
+A date string, such as 2007-12-03, compliant with the `full-date` format outlined in section 5.6 of the RFC 3339 profile of the ISO 8601 standard for representation of dates and times using the Gregorian calendar.
+"""
+scalar Date
+
+type UserPaginationResponse {
+  data: [User!]!
+  total: Int!
+  currentPage: Int!
+  itemsPerPage: Int!
+}
+
+type Query {
+  """Lấy thông tin người dùng theo ID"""
+  getUserById(input: GetUserByIdInput!): User!
+  getAllUsers(pagination: PaginationInput): UserPaginationResponse!
+}
+
+input GetUserByIdInput {
+  """ID of the user to retrieve"""
+  id: ID!
+}
+
+input PaginationInput {
+  page: Int! = 1
+  limit: Int! = 10
+}
+
+type Mutation {
+  """Tạo người dùng mới"""
+  createUser(input: CreateUserInput!): User!
+}
+
+input CreateUserInput {
+  full_name: String!
+  phone: String
+  email: String!
+  password: String!
+  address: String
+  gender: String!
+  date_of_birth: Date
+}

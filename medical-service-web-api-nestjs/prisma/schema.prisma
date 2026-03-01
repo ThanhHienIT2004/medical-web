@@ -1,0 +1,257 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String     @id @default(uuid())
+  email         String     @unique
+  password      String
+  role          String
+  full_name     String
+  phone         String?
+  address       String?
+  date_of_birth DateTime?
+  created_at    DateTime   @default(now())
+  updated_at    DateTime?
+  avatar        String?
+  doctor        Doctors?
+  Document      Document[]
+  Patient       Patient?
+}
+
+model Medication {
+  id                 Int      @id @default(autoincrement())
+  acronym            String   @unique
+  name               String   @unique
+  price              Decimal  @db.Money
+  available_quantity Int
+  created_at         DateTime @default(now())
+  updated_at         DateTime @default(now())
+}
+
+model Doctors {
+  id                 String              @id @default(uuid())
+  user               User                @relation(fields: [id], references: [id], onDelete: Cascade)
+  qualifications     String?
+  specialty          String?
+  work_seniority     Int?
+  hospital           String?
+  default_fee        Float?              @default(0)
+  titles             String?
+  positions          String?
+  rating             Float?              @default(0)
+  rating_details     Json?
+  profile_views      Int                 @default(0)
+  gender             String?             @default("OTHER") // Giữ lại nếu bạn cố ý thêm
+  created_at         DateTime            @default(now())
+  updated_at         DateTime?           @updatedAt
+  appointments       Appointment[]
+  examinationReports ExaminationReport[] // Sửa tên cho rõ ràng
+  blogPosts          BlogPost[]
+
+  schedules DoctorSchedule[]
+}
+
+// ---------------- SCHEDULE ---------------------
+enum ShiftType {
+  MORNING
+  AFTERNOON
+  OVERTIME
+}
+
+enum Days {
+  MONDAY
+  TUESDAY
+  WEDNESDAY
+  THURSDAY
+  FRIDAY
+  SATURDAY
+  SUNDAY
+}
+
+model DoctorSchedule {
+  id           Int               @id @default(autoincrement())
+  doctor_id    String
+  day          Days
+  shift        ShiftType
+  start_time   DateTime
+  end_time     DateTime
+  is_available Boolean?
+  created_at   DateTime          @default(now())
+  doctor       Doctors           @relation(fields: [doctor_id], references: [id])
+  slots        AppointmentSlot[]
+}
+
+model AppointmentSlot {
+  id           Int            @id @default(autoincrement())
+  schedule_id  Int
+  start_time   DateTime
+  end_time     DateTime
+  max_patients Int            @default(6)
+  booked_count Int            @default(0)
+  created_at   DateTime       @default(now())
+  schedule     DoctorSchedule @relation(fields: [schedule_id], references: [id])
+  appointments Appointment[]
+}
+
+model Patient {
+  patient_id   String         @id @default(uuid())
+  plan_id      Int?
+  gender       String         @default("OTHER")
+  created_at   DateTime       @default(now())
+  updated_at   DateTime?      @updatedAt
+  appointments Appointment[]
+  user         User           @relation(fields: [patient_id], references: [id])
+  plan         TreatmentPlan? @relation(fields: [plan_id], references: [id])
+  Reminder     Reminder[]
+}
+
+model Appointment {
+  appointment_id   Int             @id @default(autoincrement())
+  patient_id       String
+  doctor_id        String
+  slot_id          Int
+  appointment_type String
+  appointment_date DateTime
+  status           String          @default("PENDING")
+  is_done          Boolean?        @default(false)
+  is_anonymous     Boolean         @default(false)
+  notes            String?
+  created_at       DateTime        @default(now())
+  updated_at       DateTime?       @updatedAt
+  doctor           Doctors         @relation(fields: [doctor_id], references: [id])
+  patient          Patient         @relation(fields: [patient_id], references: [patient_id], onDelete: Cascade)
+  slot             AppointmentSlot @relation(fields: [slot_id], references: [id])
+  TreatmentPlan    TreatmentPlan[] @relation("AppointmentToTreatmentPlan")
+
+  @@index([doctor_id])
+  @@index([appointment_date])
+}
+
+model TreatmentPlan {
+  id                     Int                 @id @default(autoincrement())
+  name                   String
+  hiv_diagnosis_date     DateTime?
+  start_date             DateTime
+  end_date               DateTime?
+  notes                  String?
+  created_at             DateTime            @default(now())
+  updated_at             DateTime?           @updatedAt
+  examinations           ExaminationReport[]
+  follow_up_appointments Appointment[]       @relation("AppointmentToTreatmentPlan")
+
+  Patient Patient[]
+}
+
+model ExaminationReport {
+  id                Int            @id @default(autoincrement())
+  name              String         @db.VarChar(50)
+  doctor_id         String
+  risk_assessment   String
+  is_HIV            Boolean
+  HIV_test_file     String
+  regimen_id        Int
+  created_at        DateTime       @default(now())
+  updated_at        DateTime?      @updatedAt
+  treatment_plan_id Int?
+  doctor            Doctors        @relation(fields: [doctor_id], references: [id])
+  regimen           Regimen        @relation(fields: [regimen_id], references: [id])
+  treatment_plan    TreatmentPlan? @relation(fields: [treatment_plan_id], references: [id])
+}
+
+model Regimen {
+  id                  Int                 @id @default(autoincrement())
+  care_stage          String
+  regimen_type        String
+  medication_list     String[]
+  user_guide          String
+  is_default          Boolean
+  created_at          DateTime            @default(now())
+  updated_at          DateTime            @default(now())
+  examination_reports ExaminationReport[]
+}
+
+model Reminder {
+  reminder_id   Int      @id @default(autoincrement())
+  patient_id    String   @default(uuid())
+  reminder_type String
+  reminder_time DateTime
+  message       String?
+  status        String   @default("pending")
+  created_at    DateTime @default(now())
+  patient       Patient  @relation(fields: [patient_id], references: [patient_id])
+}
+
+model BlogPost {
+  id           Int       @id @default(autoincrement())
+  title        String
+  content      String
+  author_id    String
+  category     String
+  published_at DateTime?
+  created_at   DateTime  @default(now())
+  updated_at   DateTime?
+
+  author Doctors @relation(fields: [author_id], references: [id])
+}
+
+model Document {
+  document_id    Int       @id @default(autoincrement())
+  title          String
+  file_url       String
+  category       String
+  uploaded_by_id String
+  created_at     DateTime  @default(now())
+  updated_at     DateTime?
+  uploaded_by    User      @relation(fields: [uploaded_by_id], references: [id])
+}
+
+model DashboardReport {
+  report_id    Int      @id @default(autoincrement())
+  report_type  String
+  generated_at DateTime
+  data         Json
+  created_at   DateTime @default(now())
+}
+
+enum Role {
+  USER
+  ADMIN
+  DOCTOR
+  GUEST
+}
+
+enum AppointmentType {
+  CONSULTATION
+  TREATMENT
+  FOLLOW_UP
+}
+
+enum AppointmentStatus {
+  PENDING
+  CONFIRMED
+  COMPLETED
+  CANCELLED
+}
+
+enum RiskLevel {
+  LOW
+  MEDIUM
+  HIGH
+}
+
+enum CareStage {
+  PrEP
+  PEP
+  ARV
+}
+
+enum RegimenType {
+  STANDARD
+  CUSTOM
+}

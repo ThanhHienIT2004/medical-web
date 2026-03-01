@@ -1,0 +1,559 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type Appointment {
+  appointment_date: Timestamp!
+  appointment_id: ID!
+  appointment_type: String!
+  created_at: Timestamp!
+  doctor: Doctor
+  doctor_id: String!
+  is_anonymous: Boolean!
+  notes: String
+  patient: Patient!
+  patient_id: String!
+  slot_id: Int!
+  status: String!
+  updated_at: Timestamp
+}
+
+type AppointmentSlot {
+  booked_count: Int!
+  created_at: DateTime!
+  end_time: DateTime!
+  id: Int!
+  max_patients: Int!
+  schedule: DoctorSchedule
+  schedule_id: Int!
+  start_time: DateTime!
+}
+
+type BlogPost {
+  author: Doctor
+  author_id: String!
+  category: String!
+  content: String!
+  created_at: DateTime!
+  id: ID!
+  publish_at: DateTime
+  title: String!
+  updated_at: DateTime
+}
+
+input CreateAppointmentInput {
+  appointment_date: Timestamp!
+  appointment_type: String!
+  doctor_id: String!
+  is_anonymous: Boolean! = false
+  notes: String
+  patient_id: String!
+  slot_id: Int!
+  status: String!
+}
+
+input CreateAppointmentSlotInput {
+  booked_count: Int! = 0
+  end_time: DateTime!
+  max_patients: Int! = 6
+  schedule_id: Int!
+  start_time: DateTime!
+}
+
+input CreateBlogPostInput {
+  author_id: String!
+  category: String!
+  content: String!
+  title: String!
+}
+
+input CreateDoctorScheduleInput {
+  date: String!
+  day: Days!
+  doctor_id: String!
+  is_available: Boolean
+  shift: ShiftType!
+  week_count: Float!
+}
+
+input CreateExaminationReportInput {
+  HIV_test_file: String!
+  doctor_id: String!
+  is_HIV: Boolean!
+  name: String!
+  regimen_id: Int!
+  risk_assessment: String!
+  treatment_plan_id: Int
+}
+
+input CreateMedicationInput {
+  acronym: String!
+  available_quantity: Int!
+  name: String!
+  price: Float!
+}
+
+input CreatePatientInput {
+  date_of_birth: Date
+  gender: String!
+  hiv_diagnosis_date: Date!
+  patient_id: ID!
+}
+
+input CreateRegimenInput {
+  care_stage: String!
+  is_default: Boolean!
+  medication_list: [String!]!
+  regimen_type: String!
+  user_guide: String!
+}
+
+input CreateTreatmentPlanInput {
+  end_date: Timestamp
+  hiv_diagnosis_date: Timestamp
+  name: String!
+  notes: String
+  start_date: Timestamp!
+}
+
+"""
+A date string, such as 2007-12-03, compliant with the `full-date` format outlined in section 5.6 of the RFC 3339 profile of the ISO 8601 standard for representation of dates and times using the Gregorian calendar.
+"""
+scalar Date
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+enum Days {
+  FRIDAY
+  MONDAY
+  SATURDAY
+  SUNDAY
+  THURSDAY
+  TUESDAY
+  WEDNESDAY
+}
+
+input DeleteAppointmentInput {
+  appointment_id: Int!
+}
+
+input DeletePatientInput {
+  patient_id: String!
+}
+
+type Doctor {
+  """Creation date of the doctor record"""
+  created_at: Date!
+  default_fee: Float!
+  gender: String
+  hospital: String
+  id: String!
+  positions: String
+  qualifications: String
+  rating: Float!
+  specialty: String
+  titles: String
+
+  """Last update date of the doctor record"""
+  updated_at: Date
+
+  """Related user information"""
+  user: User!
+  work_seniority: Int
+}
+
+type DoctorSchedule {
+  """Creation date of the user record"""
+  created_at: Date!
+  day: Days!
+  doctor: Doctor!
+  doctor_id: String!
+  end_time: Date!
+  id: Int!
+  is_available: Boolean
+  shift: ShiftType!
+  start_time: Date!
+}
+
+type ExaminationReport {
+  HIV_test_file: String!
+  created_at: Timestamp!
+  doctor_id: String!
+  id: ID!
+  is_HIV: Boolean!
+  name: String!
+  regimen_id: Int!
+  risk_assessment: String!
+  treatment_plan_id: Int
+  updated_at: Timestamp
+}
+
+input GetAppointmentByIdInput {
+  appointment_id: Int!
+}
+
+input GetAppointmentByPatientIdInput {
+  patient_id: String!
+}
+
+input GetMedicationByIdInput {
+  id: Float!
+}
+
+input GetPatientByIdInput {
+  patient_id: String!
+}
+
+input GetUserByIdInput {
+  """ID of the user to retrieve"""
+  id: ID!
+}
+
+input LoginDto {
+  email: String!
+  password: String!
+}
+
+type LoginResponse {
+  accessToken: String
+  refreshToken: String
+}
+
+input MedicalExaminationInput {
+  regimen: CreateRegimenInput!
+  report: CreateExaminationReportInput!
+  treatmentPlan: CreateTreatmentPlanInput
+}
+
+type Medication {
+  acronym: String!
+  available_quantity: Int!
+  created_at: Date!
+  id: Int!
+  name: String!
+  price: Float!
+  updated_at: Date!
+}
+
+type Mutation {
+  createAppointment(input: CreateAppointmentInput!): Appointment!
+  createAppointmentSlot(createAppointmentSlotInput: CreateAppointmentSlotInput!): AppointmentSlot!
+  createBlogPost(input: CreateBlogPostInput!): BlogPost!
+  createDoctor(doctorData: RegisterDoctorInput!): Boolean!
+  createDoctorSchedule(input: CreateDoctorScheduleInput!): Boolean!
+  createExaminationReport(input: CreateExaminationReportInput!): ExaminationReport!
+  createMedication(input: CreateMedicationInput!): Medication!
+  createPatient(input: CreatePatientInput!): Patient!
+  createRegimen(input: CreateRegimenInput!): Regimen!
+  createTreatmentPlan(input: CreateTreatmentPlanInput!): TreatmentPlan!
+  deleteAppointment(input: DeleteAppointmentInput!): Boolean!
+  deleteBlogPost(id: Int!): Boolean!
+  deleteDoctor(id: String!): Doctor!
+  deleteDoctorSchedule(schedule_id: Float!): Boolean!
+  deleteExaminationReport(id: Int!): ExaminationReport!
+  deleteMedication(id: Int!): Medication!
+  deletePatient(input: DeletePatientInput!): Boolean!
+  deleteRegimen(id: Int!): Regimen!
+  deleteTreatmentPlan(id: Int!): TreatmentPlan!
+
+  """Xóa người dùng"""
+  deleteUser(id: String!): User!
+
+  """Gửi mã xác nhận qua email để đặt lại mật khẩu"""
+  forgotPassword(email: String!): Boolean!
+  login(userData: LoginDto!): LoginResponse!
+  makeMedicalExamination(input: MedicalExaminationInput!): Boolean!
+  register(userData: RegisterDto!): User!
+  removeAppointmentSlot(id: Int!): AppointmentSlot!
+
+  """Đặt lại mật khẩu bằng mã xác nhận (OTP)"""
+  resetPassword(input: ResetPasswordInput!): Boolean!
+  updateAppointment(input: UpdateAppointmentInput!): Boolean!
+  updateAppointmentSlot(id: Int!, updateAppointmentSlotInput: UpdateAppointmentSlotInput!): AppointmentSlot!
+  updateAppointmentStatus(appointmentId: Int!, newStatus: String!): Appointment!
+  updateBlogPost(id: Int!, input: UpdateBlogPostInput!): BlogPost!
+  updateDoctor(doctorData: UpdateDoctorInput!, id: String!): Doctor!
+  updateDoctorSchedule(doctorData: CreateDoctorScheduleInput!, id: String!): DoctorSchedule!
+  updateMedication(id: Int!, input: UpdateMedicationInput!): Medication!
+  updatePatient(input: UpdatePatientInput!): Patient!
+  updateTreatmentPlan(input: UpdateTreatmentPlanInput!): TreatmentPlan!
+
+  """Cập nhật thông tin người dùng"""
+  updateUser(id: String!, input: UpdateUserInput!): User!
+}
+
+type PaginatedAppointment {
+  items: [Appointment!]!
+  page: Int!
+  pageSize: Int!
+  total: Int!
+  totalPages: Int!
+}
+
+type PaginatedBlogPosts {
+  items: [BlogPost!]!
+  page: Int!
+  pageSize: Int!
+  total: Int!
+  totalPages: Int!
+}
+
+type PaginatedMedications {
+  items: [Medication!]!
+  page: Int!
+  pageSize: Int!
+  total: Int!
+  totalPages: Int!
+}
+
+input PaginationAppointmentInput {
+  doctor_id: String
+  page: Int!
+  pageSize: Int!
+}
+
+input PaginationBlogInput {
+  page: Int!
+  pageSize: Int!
+}
+
+input PaginationInput {
+  limit: Int! = 10
+  page: Int! = 1
+}
+
+type Patient {
+  created_at: Timestamp!
+  gender: String!
+  patient_id: ID!
+  plan: TreatmentPlan
+  plan_id: Int
+  updated_at: Timestamp
+  user: User!
+}
+
+type PatientPlanResponse {
+  patient_id: String!
+  plan: TreatmentPlan
+  plan_id: Float
+}
+
+type Query {
+  appointmentSlot(id: Int!): AppointmentSlot!
+  appointmentSlots: [AppointmentSlot!]!
+  doctor(id: String!): Doctor
+  doctors: [Doctor!]!
+  findAllAppointments: [Appointment!]!
+  findAllExaminationReports: [ExaminationReport!]!
+  findAllPatients: [Patient!]!
+  findAllRegimens: [Regimen!]!
+  findAllTreatmentPlans: [TreatmentPlan!]!
+  findAppointmentByPatientId(input: GetAppointmentByPatientIdInput!): [Appointment!]!
+  findExaminationReport(id: Int!): ExaminationReport!
+  findOneAppointment(input: GetAppointmentByIdInput!): Appointment!
+  findOneBlogPost(id: Int!): BlogPost!
+  findOnePatient(input: GetPatientByIdInput!): Patient!
+  findPatientPlan(patient_id: String!): PatientPlanResponse!
+  findRegimen(id: Int!): Regimen!
+  findTreatmentPlan(id: Int!): TreatmentPlan!
+  getAllPatients(input: GetPatientByIdInput!): [Patient!]!
+  getAllUsers(pagination: PaginationInput): UserPaginationResponse!
+  getAppointmentSlotByScheduleId(id: Int!): [AppointmentSlot!]!
+  getAppointmentsByDoctor(input: PaginationAppointmentInput!): PaginatedAppointment!
+  getAvailableScheduleDates(doctor_id: String!): [String!]!
+  getDoctorScheduleByWeekDate(weekDate: WeekDateInput!): [DoctorSchedule!]!
+  getDoctorSchedulesIdByDate(date: String!, doctor_id: String!): [DoctorSchedule!]!
+
+  """Lấy thông tin người dùng theo email"""
+  getUserByEmail(email: String!): User!
+
+  """Lấy thông tin người dùng theo ID"""
+  getUserById(input: GetUserByIdInput!): User!
+  medication(input: GetMedicationByIdInput!): Medication!
+  medications(input: PaginationInput): PaginatedMedications!
+  posts(input: PaginationBlogInput!): PaginatedBlogPosts!
+  searchMedications(input: SearchMedicationsInput!): [Medication!]!
+}
+
+type Regimen {
+  care_stage: String!
+  created_at: Timestamp!
+  id: ID!
+  is_default: Boolean!
+  medication_list: [String!]!
+  regimen_type: String!
+  updated_at: Timestamp!
+  user_guide: String!
+}
+
+input RegisterDoctorInput {
+  email: String!
+  full_name: String!
+  gender: String!
+  password: String!
+  role: String!
+}
+
+input RegisterDto {
+  address: String
+
+  """Avatar"""
+  avatar: String
+  date_of_birth: Date
+  email: String!
+  full_name: String!
+  password: String!
+  phone: String
+
+  """Role of the user"""
+  role: String = "USER"
+}
+
+input ResetPasswordInput {
+  email: String!
+  newPassword: String!
+  otp: String!
+}
+
+input SearchMedicationsInput {
+  keyword: String!
+}
+
+enum ShiftType {
+  AFTERNOON
+  MORNING
+  OVERTIME
+}
+
+"""
+The javascript `Date` as integer. Type represents date and time as number of milliseconds from start of UNIX epoch.
+"""
+scalar Timestamp
+
+type TreatmentPlan {
+  created_at: Timestamp!
+  end_date: Timestamp
+  hiv_diagnosis_date: Timestamp
+  id: ID!
+  name: String!
+  notes: String
+  start_date: Timestamp!
+  updated_at: Timestamp
+}
+
+input UpdateAppointmentInput {
+  appointment_date: Timestamp
+  appointment_id: Int!
+  appointment_type: String
+  is_anonymous: Boolean
+  is_done: Boolean
+  notes: String
+  status: String
+}
+
+input UpdateAppointmentSlotInput {
+  booked_count: Int
+  end_time: DateTime!
+  max_patients: Int
+  schedule_id: Int
+  start_time: DateTime!
+}
+
+input UpdateBlogPostInput {
+  category: String!
+  content: String
+  title: String
+  updated_at: DateTime
+}
+
+input UpdateDoctorInput {
+  default_fee: Float
+  email: String
+  full_name: String
+  gender: String
+  hospital: String
+  positions: String
+  qualifications: String
+  rating: Float
+  specialty: String
+  titles: String
+  work_seniority: Float
+}
+
+input UpdateMedicationInput {
+  acronym: String
+  available_quantity: Int
+  name: String
+  price: Float
+}
+
+input UpdatePatientInput {
+  gender: String
+  patient_id: String!
+  user: UpdateUserInput
+}
+
+input UpdateTreatmentPlanInput {
+  end_date: Timestamp
+  hiv_diagnosis_date: Timestamp
+  id: Int!
+  name: String
+  notes: String
+  start_date: Timestamp
+}
+
+input UpdateUserInput {
+  address: String
+  avatar: String
+  date_of_birth: Date
+  email: String
+  full_name: String
+  password: String
+  phone: String
+}
+
+type User {
+  """Address of the user"""
+  address: String
+
+  """Avatar"""
+  avatar: String
+
+  """Creation date of the user record"""
+  created_at: Date!
+
+  """Date of birth of the user"""
+  date_of_birth: Date
+  email: String!
+
+  """Full name of the user"""
+  full_name: String!
+
+  """Unique identifier for the user"""
+  id: ID!
+  password: String!
+
+  """Phone number of the user"""
+  phone: String
+
+  """Role of the user"""
+  role: String
+
+  """Last update date of the user record"""
+  updated_at: Date
+}
+
+type UserPaginationResponse {
+  currentPage: Int!
+  data: [User!]!
+  itemsPerPage: Int!
+  total: Int!
+}
+
+input WeekDateInput {
+  end_week: String!
+  start_week: String!
+}

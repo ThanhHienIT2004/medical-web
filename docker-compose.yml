@@ -1,0 +1,27 @@
+services:
+  # 1. Cơ sở dữ liệu MySQL
+  db:
+    image: mysql:8.0
+    container_name: nihongohub_mysql
+    restart: always
+    environment:
+      MYSQL_DATABASE: nihongohub_db
+      MYSQL_ROOT_PASSWORD: 123456
+    ports:
+      - "3306:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+
+  # 2. Quản lý database trực quan (Tùy chọn - cực kỳ hữu ích)
+  phpmyadmin:
+    image: phpmyadmin:latest
+    container_name: nihongohub_phpmyadmin
+    restart: always
+    ports:
+      - "8081:80"
+    environment:
+      PMA_HOST: db
+      MYSQL_ROOT_PASSWORD: 123456
+
+volumes:
+  db_data:
