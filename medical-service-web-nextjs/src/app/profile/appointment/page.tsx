@@ -1,7 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
-import { useQuery, useMutation } from '@apollo/client';
+import React, { useEffect, useState, useCallback } from 'react';
 import { useSession } from 'next-auth/react';
 import {
     CalendarCheck,
@@ -10,33 +9,37 @@ import {
     Eye,
     XCircle,
 } from 'lucide-react';
-import { FIND_APPOINTMENT_BY_PATIENT_ID } from '@/libs/graphqls/queries/appointment';
-import { UPDATE_APPOINTMENT_STATUS } from '@/libs/graphqls/mutations/appointments';
 import AppointmentDetailModal from './AppointmentDetailModal';
 import { useSnackbar } from 'notistack';
+import { apiClient } from '@/libs/api/apiClient';
 
 export default function AppointmentsPage() {
     const { data: session, status } = useSession();
     const { enqueueSnackbar } = useSnackbar();
     const patientId = session?.user?.id;
 
-    const { data, loading, error, refetch } = useQuery(FIND_APPOINTMENT_BY_PATIENT_ID, {
-        variables: { input: { patient_id: patientId } },
-        skip: !patientId,
-    });
-
+    const [appointments, setAppointments] = useState<any[]>([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<Error | null>(null);
     const [selectedAppointment, setSelectedAppointment] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
 
-    const [updateStatus] = useMutation(UPDATE_APPOINTMENT_STATUS, {
-        onCompleted: () => {
-            enqueueSnackbar('Đã hủy lịch hẹn thành công!', { variant: 'success' });
-            refetch();
-        },
-        onError: (err) => {
-            enqueueSnackbar('Lỗi khi hủy lịch: ' + err.message, { variant: 'error' });
-        },
-    });
+    const fetchAppointments = useCallback(async () => {
+        if (!patientId) return;
+        try {
+            setLoading(true);
+            const result = await apiClient(`/appointments/patient/${patientId}`);
+            setAppointments(Array.isArray(result) ? result : []);
+        } catch (e: any) {
+            setError(e);
+        } finally {
+            setLoading(false);
+        }
+    }, [patientId]);
+
+    useEffect(() => {
+        fetchAppointments();
+    }, [fetchAppointments]);
 
     const handleOpenModal = (appointment: any) => {
         setSelectedAppointment(appointment);
@@ -48,14 +51,18 @@ export default function AppointmentsPage() {
         setIsModalOpen(false);
     };
 
-    const handleCancelAppointment = (appointmentId: string) => {
+    const handleCancelAppointment = async (appointmentId: string) => {
         if (confirm('Bạn có chắc muốn hủy lịch hẹn này không?')) {
-            updateStatus({
-                variables: {
-                    appointmentId: parseInt(appointmentId),
-                    newStatus: 'CANCELLED',
-                },
-            });
+            try {
+                await apiClient(`/appointments/${parseInt(appointmentId)}/status`, {
+                    method: 'PATCH',
+                    body: { status: 'CANCELLED' },
+                });
+                enqueueSnackbar('Đã hủy lịch hẹn thành công!', { variant: 'success' });
+                await fetchAppointments();
+            } catch (err: any) {
+                enqueueSnackbar('Lỗi khi hủy lịch: ' + err.message, { variant: 'error' });
+            }
         }
     };
 
@@ -102,8 +109,6 @@ export default function AppointmentsPage() {
         );
     }
 
-    const appointments = data?.findAppointmentByPatientId;
-
     return (
         <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100 py-8 px-4 sm:px-6 lg:px-8">
             <div className="max-w-4xl mx-auto">
@@ -133,7 +138,7 @@ export default function AppointmentsPage() {
                                         className="flex flex-col sm:flex-row justify-between items-start sm:items-center p-6 hover:bg-gray-50 transition-all duration-300 ease-in-out group"
                                     >
 
-                                    <div className="flex flex-col gap-3 w-full sm:w-auto">
+                                        <div className="flex flex-col gap-3 w-full sm:w-auto">
                                             <div className="flex items-center gap-3 text-gray-900 font-semibold">
                                                 <Clock className="h-5 w-5 text-indigo-600" />
                                                 <span>{formattedDate} lúc {formattedTime}</span>

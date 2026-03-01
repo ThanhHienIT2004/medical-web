@@ -1,17 +1,30 @@
-import { useQuery } from "@apollo/client";
-import { GET_PATIENT_PLAN } from "@/libs/graphqls/treatmentPlan";
+import { useState, useCallback } from 'react';
+import { apiClient } from "@/libs/api/apiClient";
 
 export function useGetTreatmentPlan(patient_id: string) {
-    const { data, loading, error, refetch } = useQuery(GET_PATIENT_PLAN, {
-        skip: true, // Không fetch tự động
-    });
+    const [data, setData] = useState<any>(null);
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState<Error | null>(null);
+
+    const refetchById = useCallback(async (id: string) => {
+        try {
+            setLoading(true);
+            setError(null);
+            const result = await apiClient(`/treatment-plans/${id}`);
+            setData(result);
+            return result;
+        } catch (e: any) {
+            setError(e);
+        } finally {
+            setLoading(false);
+        }
+    }, []);
 
     return {
-        patient: data?.getPatientById,
-        plan: data?.getPatientById?.plan,
+        patient: data,
+        plan: data?.plan,
         loading,
         error,
-        refetchById: (id: string) => refetch({ id }),
+        refetchById,
     };
 }
-

@@ -8,9 +8,9 @@ import { useGetTreatmentPlan } from "@/libs/hooks/treatmentPlan/useGetTreatmentP
 import { motion, AnimatePresence } from "framer-motion";
 import { X, AlertCircle } from "lucide-react";
 import MedicationSelector from "@/app/(doctor)/patient/m_resource/MedicationSelector";
-import {Medication} from "@/types/medications";
-import {useQuery} from "@apollo/client";
-import {GET_DOCTOR} from "@/libs/graphqls/doctors";
+import { Medication } from "@/types/medications";
+import { useState as useStateFetch, useEffect as useEffectFetch } from "react";
+import { apiClient } from "@/libs/api/apiClient";
 
 interface Props {
     onSubmitAction: (input: MedicalExaminationInput) => void;
@@ -20,12 +20,14 @@ interface Props {
 }
 
 export default function MedicalExaminationForm({ onSubmitAction, onCloseAction, patient_id, doctor_id }: Props) {
-    const{data} = useQuery(GET_DOCTOR,{
-        variables: { id: doctor_id },
-        skip: !doctor_id,
-    });
+    const [doctorData, setDoctorData] = useStateFetch<any>(null);
 
-    const user = data?.doctor?.user;
+    useEffectFetch(() => {
+        if (!doctor_id) return;
+        apiClient(`/doctors/${doctor_id}`).then(setDoctorData).catch(console.error);
+    }, [doctor_id]);
+
+    const user = doctorData?.user;
 
     const [treatmentPlan, setTreatmentPlan] = useState<CreateTreatmentPlanInput>({
         name: "",
@@ -161,9 +163,8 @@ export default function MedicalExaminationForm({ onSubmitAction, onCloseAction, 
                             <div>
                                 <label className="block font-medium mb-1 text-gray-700">Tên kế hoạch</label>
                                 <input
-                                    className={`w-full px-4 py-2 border-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors ${
-                                        errors.treatmentPlan_name ? "border-red-500" : "border-gray-300"
-                                    }`}
+                                    className={`w-full px-4 py-2 border-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors ${errors.treatmentPlan_name ? "border-red-500" : "border-gray-300"
+                                        }`}
                                     placeholder="Nhập tên kế hoạch"
                                     value={treatmentPlan.name}
                                     onChange={(e) => setTreatmentPlan({ ...treatmentPlan, name: e.target.value })}
@@ -179,9 +180,8 @@ export default function MedicalExaminationForm({ onSubmitAction, onCloseAction, 
                                 <label className="block font-medium mb-1 text-gray-700">Ngày bắt đầu</label>
                                 <input
                                     type="date"
-                                    className={`w-full px-4 py-2 border-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors ${
-                                        errors.treatmentPlan_start ? "border-red-500" : "border-gray-300"
-                                    }`}
+                                    className={`w-full px-4 py-2 border-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors ${errors.treatmentPlan_start ? "border-red-500" : "border-gray-300"
+                                        }`}
                                     value={treatmentPlan.start_date ? treatmentPlan.start_date.toISOString().split("T")[0] : ""}
                                     onChange={(e) =>
                                         setTreatmentPlan({ ...treatmentPlan, start_date: new Date(e.target.value) })
@@ -198,9 +198,8 @@ export default function MedicalExaminationForm({ onSubmitAction, onCloseAction, 
                                 <label className="block font-medium mb-1 text-gray-700">Ngày chẩn đoán HIV</label>
                                 <input
                                     type="date"
-                                    className={`w-full px-4 py-2 border-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors ${
-                                        errors.treatmentPlan_hiv ? "border-red-500" : "border-gray-300"
-                                    }`}
+                                    className={`w-full px-4 py-2 border-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors ${errors.treatmentPlan_hiv ? "border-red-500" : "border-gray-300"
+                                        }`}
                                     value={
                                         treatmentPlan.hiv_diagnosis_date
                                             ? treatmentPlan.hiv_diagnosis_date.toISOString().split("T")[0]
@@ -221,9 +220,8 @@ export default function MedicalExaminationForm({ onSubmitAction, onCloseAction, 
                                 <label className="block font-medium mb-1 text-gray-700">Ngày kết thúc</label>
                                 <input
                                     type="date"
-                                    className={`w-full px-4 py-2 border-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors ${
-                                        errors.treatmentPlan_end ? "border-red-500" : "border-gray-300"
-                                    }`}
+                                    className={`w-full px-4 py-2 border-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors ${errors.treatmentPlan_end ? "border-red-500" : "border-gray-300"
+                                        }`}
                                     value={treatmentPlan.end_date ? treatmentPlan.end_date.toISOString().split("T")[0] : ""}
                                     onChange={(e) =>
                                         setTreatmentPlan({ ...treatmentPlan, end_date: new Date(e.target.value) })
@@ -239,9 +237,8 @@ export default function MedicalExaminationForm({ onSubmitAction, onCloseAction, 
                             <div className="col-span-1 sm:col-span-2">
                                 <label className="block font-medium mb-1 text-gray-700">Ghi chú</label>
                                 <textarea
-                                    className={`w-full px-4 py-2 border-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors ${
-                                        errors.treatmentPlan_notes ? "border-red-500" : "border-gray-300"
-                                    }`}
+                                    className={`w-full px-4 py-2 border-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors ${errors.treatmentPlan_notes ? "border-red-500" : "border-gray-300"
+                                        }`}
                                     rows={4}
                                     placeholder="Nhập ghi chú"
                                     value={treatmentPlan.notes}
@@ -265,9 +262,8 @@ export default function MedicalExaminationForm({ onSubmitAction, onCloseAction, 
                             <div>
                                 <label className="block font-medium mb-1 text-gray-700">Giai đoạn ca bệnh</label>
                                 <input
-                                    className={`w-full px-4 py-2 border-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors ${
-                                        errors.regimen_care ? "border-red-500" : "border-gray-300"
-                                    }`}
+                                    className={`w-full px-4 py-2 border-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors ${errors.regimen_care ? "border-red-500" : "border-gray-300"
+                                        }`}
                                     placeholder="Nhập giai đoạn ca bệnh"
                                     value={regimen.care_stage}
                                     onChange={(e) => setRegimen({ ...regimen, care_stage: e.target.value })}
@@ -282,9 +278,8 @@ export default function MedicalExaminationForm({ onSubmitAction, onCloseAction, 
                             <div>
                                 <label className="block font-medium mb-1 text-gray-700">Loại phác đồ</label>
                                 <select
-                                    className={`w-full px-4 py-2 border-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors ${
-                                        errors.regimen_type ? "border-red-500" : "border-gray-300"
-                                    }`}
+                                    className={`w-full px-4 py-2 border-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors ${errors.regimen_type ? "border-red-500" : "border-gray-300"
+                                        }`}
                                     value={regimen.regimen_type}
                                     onChange={(e) => setRegimen({ ...regimen, regimen_type: e.target.value })}
                                 >
@@ -312,9 +307,8 @@ export default function MedicalExaminationForm({ onSubmitAction, onCloseAction, 
                             <div>
                                 <label className="block font-medium mb-1 text-gray-700">Hướng dẫn sử dụng</label>
                                 <input
-                                    className={`w-full px-4 py-2 border-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors ${
-                                        errors.regimen_guide ? "border-red-500" : "border-gray-300"
-                                    }`}
+                                    className={`w-full px-4 py-2 border-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors ${errors.regimen_guide ? "border-red-500" : "border-gray-300"
+                                        }`}
                                     placeholder="Nhập hướng dẫn sử dụng"
                                     value={regimen.user_guide}
                                     onChange={(e) => setRegimen({ ...regimen, user_guide: e.target.value })}
@@ -348,9 +342,8 @@ export default function MedicalExaminationForm({ onSubmitAction, onCloseAction, 
                             <div>
                                 <label className="block font-medium mb-1 text-gray-700">Tên phiếu khám</label>
                                 <input
-                                    className={`w-full px-4 py-2 border-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors ${
-                                        errors.report_name ? "border-red-500" : "border-gray-300"
-                                    }`}
+                                    className={`w-full px-4 py-2 border-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors ${errors.report_name ? "border-red-500" : "border-gray-300"
+                                        }`}
                                     placeholder="Nhập tên phiếu khám"
                                     value={report.name}
                                     onChange={(e) => setReport({ ...report, name: e.target.value })}
@@ -385,9 +378,8 @@ export default function MedicalExaminationForm({ onSubmitAction, onCloseAction, 
                             <div>
                                 <label className="block font-medium mb-1 text-gray-700">Đánh giá rủi ro</label>
                                 <input
-                                    className={`w-full px-4 py-2 border-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors ${
-                                        errors.report_risk ? "border-red-500" : "border-gray-300"
-                                    }`}
+                                    className={`w-full px-4 py-2 border-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors ${errors.report_risk ? "border-red-500" : "border-gray-300"
+                                        }`}
                                     placeholder="Nhập đánh giá rủi ro"
                                     value={report.risk_assessment}
                                     onChange={(e) => setReport({ ...report, risk_assessment: e.target.value })}
@@ -402,9 +394,8 @@ export default function MedicalExaminationForm({ onSubmitAction, onCloseAction, 
                             <div>
                                 <label className="block font-medium mb-1 text-gray-700">File xét nghiệm HIV</label>
                                 <input
-                                    className={`w-full px-4 py-2 border-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors ${
-                                        errors.report_file ? "border-red-500" : "border-gray-300"
-                                    }`}
+                                    className={`w-full px-4 py-2 border-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors ${errors.report_file ? "border-red-500" : "border-gray-300"
+                                        }`}
                                     placeholder="Nhập đường dẫn file xét nghiệm"
                                     value={report.HIV_test_file}
                                     onChange={(e) => setReport({ ...report, HIV_test_file: e.target.value })}
@@ -420,9 +411,8 @@ export default function MedicalExaminationForm({ onSubmitAction, onCloseAction, 
                                 <label className="block font-medium mb-1 text-gray-700">Regimen ID</label>
                                 <input
                                     type="number"
-                                    className={`w-full px-4 py-2 border-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors ${
-                                        errors.report_regimen ? "border-red-500" : "border-gray-300"
-                                    }`}
+                                    className={`w-full px-4 py-2 border-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors ${errors.report_regimen ? "border-red-500" : "border-gray-300"
+                                        }`}
                                     placeholder="Nhập Regimen ID"
                                     value={report.regimen_id || ""}
                                     onChange={(e) => setReport({ ...report, regimen_id: Number(e.target.value) })}

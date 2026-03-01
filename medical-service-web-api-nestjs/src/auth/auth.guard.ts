@@ -8,7 +8,6 @@ import {
   HttpException,
   HttpStatus,
 } from '@nestjs/common';
-import { GqlExecutionContext } from '@nestjs/graphql';
 import { JwtService } from '@nestjs/jwt';
 import { UserService } from 'src/user/user.service';
 import { User } from '@prisma/client';
@@ -34,10 +33,7 @@ export class AuthGuard implements CanActivate {
       context.getClass(),
     ]);
 
-    const ctx = GqlExecutionContext.create(context);
-    const req = ctx.getContext<{
-      req: { headers: Record<string, string | undefined>; user_data?: User };
-    }>().req;
+    const req = context.switchToHttp().getRequest();
 
     const token = this.extractToken(req);
     if (!token) {

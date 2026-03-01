@@ -2,20 +2,8 @@
 
 import { useForm } from "react-hook-form";
 import React, { useState, useEffect } from "react";
-import { gql, useMutation } from "@apollo/client";
 import { enqueueSnackbar } from "notistack";
-
-const SEND_OTP_MUTATION = gql`
-  mutation ForgotPassword($email: String!) {
-    forgotPassword(email: $email)
-  }
-`;
-
-const RESET_PASSWORD_MUTATION = gql`
-  mutation ResetPassword($input: ResetPasswordInput!) {
-    resetPassword(input: $input)
-  }
-`;
+import { apiClient } from "@/libs/api/apiClient";
 
 export default function ForgetPasswordPage() {
     const {
@@ -25,8 +13,6 @@ export default function ForgetPasswordPage() {
         reset,
     } = useForm();
 
-    const [sendOtp] = useMutation(SEND_OTP_MUTATION);
-    const [resetPassword] = useMutation(RESET_PASSWORD_MUTATION);
     const [step, setStep] = useState<"EMAIL" | "RESET">("EMAIL");
     const [countdown, setCountdown] = useState(0);
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -43,8 +29,12 @@ export default function ForgetPasswordPage() {
     const handleSendOtp = async (data: any) => {
         setIsSubmitting(true);
         try {
-            const res = await sendOtp({ variables: { email: data.email } });
-            if (res.data?.forgotPassword) {
+            const res = await apiClient('/users/forgot-password', {
+                method: 'POST',
+                body: { email: data.email },
+                skipAuth: true,
+            });
+            if (res) {
                 enqueueSnackbar("Mã OTP đã được gửi về email!", { variant: "success" });
                 setEmail(data.email);
                 setStep("RESET");
@@ -62,16 +52,16 @@ export default function ForgetPasswordPage() {
     const handleResetPassword = async (data: any) => {
         setIsSubmitting(true);
         try {
-            const res = await resetPassword({
-                variables: {
-                    input: {
-                        email: email,
-                        otp: data.otp,
-                        newPassword: data.newPassword,
-                    },
+            const res = await apiClient('/users/reset-password', {
+                method: 'POST',
+                body: {
+                    email: email,
+                    otp: data.otp,
+                    newPassword: data.newPassword,
                 },
+                skipAuth: true,
             });
-            if (res.data?.resetPassword) {
+            if (res) {
                 enqueueSnackbar("Đặt lại mật khẩu thành công!", { variant: "success" });
                 reset();
                 window.location.href = "/login";
@@ -115,9 +105,8 @@ export default function ForgetPasswordPage() {
                                         message: "Email không hợp lệ",
                                     },
                                 })}
-                                className={`mt-1 w-full px-3 py-2 border ${
-                                    errors.email ? "border-red-500" : "border-gray-300"
-                                } rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500`}
+                                className={`mt-1 w-full px-3 py-2 border ${errors.email ? "border-red-500" : "border-gray-300"
+                                    } rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500`}
                                 placeholder="Nhập email của bạn"
                             />
                             {errors.email && (
@@ -133,9 +122,8 @@ export default function ForgetPasswordPage() {
                                 <input
                                     type="text"
                                     {...register("otp", { required: "Mã OTP là bắt buộc" })}
-                                    className={`mt-1 w-full px-3 py-2 border ${
-                                        errors.otp ? "border-red-500" : "border-gray-300"
-                                    } rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500`}
+                                    className={`mt-1 w-full px-3 py-2 border ${errors.otp ? "border-red-500" : "border-gray-300"
+                                        } rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500`}
                                     placeholder="Nhập mã OTP"
                                 />
                                 {errors.otp && (
@@ -153,9 +141,8 @@ export default function ForgetPasswordPage() {
                                             message: "Mật khẩu phải có ít nhất 6 ký tự",
                                         },
                                     })}
-                                    className={`mt-1 w-full px-3 py-2 border ${
-                                        errors.newPassword ? "border-red-500" : "border-gray-300"
-                                    } rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500`}
+                                    className={`mt-1 w-full px-3 py-2 border ${errors.newPassword ? "border-red-500" : "border-gray-300"
+                                        } rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500`}
                                     placeholder="Nhập mật khẩu mới"
                                 />
                                 {errors.newPassword && (
@@ -168,11 +155,10 @@ export default function ForgetPasswordPage() {
                     <button
                         type="submit"
                         disabled={isSubmitting || (step === "EMAIL" && countdown > 0)}
-                        className={`w-full py-2 px-4 rounded-lg text-white transition ${
-                            isSubmitting || (step === "EMAIL" && countdown > 0)
+                        className={`w-full py-2 px-4 rounded-lg text-white transition ${isSubmitting || (step === "EMAIL" && countdown > 0)
                                 ? "bg-gray-400 cursor-not-allowed"
                                 : "bg-blue-600 hover:bg-blue-700"
-                        }`}
+                            }`}
                     >
                         {isSubmitting
                             ? "Đang xử lý..."

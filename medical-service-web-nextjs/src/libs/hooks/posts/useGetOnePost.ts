@@ -1,21 +1,30 @@
-import { GET_POST } from "@/libs/graphqls/post";
-import { useLazyQuery } from "@apollo/client";
-import {useCallback} from "react";
+import { useState, useCallback } from 'react';
+import { Post } from "@/types/posts";
+import { apiClient } from "@/libs/api/apiClient";
 
 export const useGetOnePost = () => {
-    const [executeQuery, { data, loading, error }] = useLazyQuery(GET_POST);
+    const [data, setData] = useState<Post | null>(null);
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState<Error | null>(null);
 
-    // Memoize getPostById để hàm không thay đổi trong mỗi render
-    const getPostById = useCallback(
-        (id) => executeQuery({ variables: { id } }),
-        [executeQuery]
-    );
+    const getPostById = useCallback(async (id: number) => {
+        try {
+            setLoading(true);
+            setError(null);
+            const result = await apiClient<Post>(`/blog-posts/${id}`);
+            setData(result);
+            return result;
+        } catch (e: any) {
+            setError(e);
+        } finally {
+            setLoading(false);
+        }
+    }, []);
 
     return {
         getPostById,
-        data: data?.findOneBlogPost,
+        data,
         loading,
         error,
     };
-}
-
+};

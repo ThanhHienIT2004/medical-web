@@ -1,15 +1,30 @@
-import {useMutation} from "@apollo/client";
-import {DELETE_MEDICATION} from "@/libs/graphqls/medications";
+import { useState } from 'react';
+import { apiClient } from "@/libs/api/apiClient";
 
 export function useDeleteMedication() {
-	const [deleteMedication, { data, loading, error }] = useMutation<{id: number}>(DELETE_MEDICATION);
+	const [data, setData] = useState<any>(null);
+	const [loading, setLoading] = useState(false);
+	const [error, setError] = useState<Error | null>(null);
 
-	const remove = (id: number) => deleteMedication({variables: {id}});
+	const remove = async (id: number) => {
+		try {
+			setLoading(true);
+			setError(null);
+			const result = await apiClient(`/medications/${id}`, { method: 'DELETE' });
+			setData(result);
+			return result;
+		} catch (e: any) {
+			setError(e);
+			throw e;
+		} finally {
+			setLoading(false);
+		}
+	};
 
 	return {
 		delete: remove,
-		data: data?.id ?? null,
+		data,
 		loading,
 		error,
-	}
+	};
 }

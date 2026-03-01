@@ -1,14 +1,11 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { useParams } from 'next/navigation';
 import { useSession } from 'next-auth/react';
-import { useQuery, useMutation } from '@apollo/client';
 import { useSnackbar } from 'notistack';
 import { useLoading } from '@/app/context/loadingContext';
-
-import { GET_PATIENT_BY_ID } from '@/libs/graphqls/queries/profile';
-import { CREATE_APPOINTMENT } from '@/libs/graphqls/mutations/appointments';
+import { apiClient } from '@/libs/api/apiClient';
 
 import { useBookingForm } from '@/libs/hooks/appoiment/useBookingForm';
 import { useBookingData } from '@/libs/hooks/appoiment/useBookingData';
@@ -22,20 +19,34 @@ export default function BookingPage() {
     const { id } = useParams();
     const doctorId = id as string;
     const { data: session } = useSession();
-    const { enqueueSnackbar } = useSnackbar(); // Hook từ notistack
+    const { enqueueSnackbar } = useSnackbar();
     const { setLoading } = useLoading();
 
     const [selectedDate, setSelectedDate] = useState('');
     const [selectedScheduleId, setSelectedScheduleId] = useState<number | null>(null);
     const [selectedSlotId, setSelectedSlotId] = useState<number | null>(null);
+    const [mutationLoading, setMutationLoading] = useState(false);
+    const [mutationError, setMutationError] = useState<Error | null>(null);
 
-    const { data } = useQuery(GET_PATIENT_BY_ID, {
-        variables: { input: { patient_id: session?.user?.id } },
-        skip: !session?.user?.id,
-    });
+    // Fetch patient data
+    const [patient, setPatient] = useState<any>(null);
+    const [user, setUser] = useState<any>(null);
 
-    const patient = data?.findOnePatient;
-    const user = patient?.user;
+    const fetchPatient = useCallback(async () => {
+        if (!session?.user?.id) return;
+        try {
+            const result = await apiClient(`/patients/${session.user.id}`);
+            setPatient(result);
+            setUser(result?.user);
+        } catch (e) {
+            console.error('Failed to load patient:', e);
+        }
+    }, [session?.user?.id]);
+
+    useEffect(() => {
+        fetchPatient();
+    }, [fetchPatient]);
+
     const { form, handleChange, resetForm } = useBookingForm(user, patient);
 
     const {
@@ -47,28 +58,19 @@ export default function BookingPage() {
         slots,
     } = useBookingData(doctorId, selectedDate, selectedScheduleId);
 
-    const [createAppointment, { loading: mutationLoading, error: mutationError }] = useMutation(CREATE_APPOINTMENT, {
-        onCompleted: () => {
-            enqueueSnackbar('Đặt lịch thành công, đã gửi thông tin lịch khám về mail của bạn!', {
-                variant: 'success', // Loại thông báo (success, error, warning, info)
-                autoHideDuration: 3000, // Ẩn sau 3 giây
-            });
-            resetForm();
-            setSelectedScheduleId(null);
-            setSelectedSlotId(null);
-        },
-    });
-
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         if (!selectedSlotId || !session?.user?.id) return;
 
-        const selectedSlot = slots.find((s) => s.id === selectedSlotId);
+        const selectedSlot = slots.find((s: any) => s.id === selectedSlotId);
         if (!selectedSlot) return;
 
-        await createAppointment({
-            variables: {
-                input: {
+        try {
+            setMutationLoading(true);
+            setMutationError(null);
+            await apiClient('/appointments', {
+                method: 'POST',
+                body: {
                     doctor_id: doctorId,
                     patient_id: session.user.id,
                     slot_id: selectedSlotId,
@@ -78,8 +80,20 @@ export default function BookingPage() {
                     is_anonymous: false,
                     notes: JSON.stringify(form),
                 },
-            },
-        });
+            });
+            enqueueSnackbar('Đặt lịch thành công, đã gửi thông tin lịch khám về mail của bạn!', {
+                variant: 'success',
+                autoHideDuration: 3000,
+            });
+            resetForm();
+            setSelectedScheduleId(null);
+            setSelectedSlotId(null);
+        } catch (err: any) {
+            setMutationError(err);
+            enqueueSnackbar('Đặt lịch thất bại: ' + err.message, { variant: 'error' });
+        } finally {
+            setMutationLoading(false);
+        }
     };
 
     useEffect(() => {
@@ -116,7 +130,7 @@ export default function BookingPage() {
                 gender={doctor.gender}
                 email={doctor.user.email}
                 phone={doctor.user.phone}
-                defaultFee={doctor.default_fee} // ← thêm dòng này
+                defaultFee={doctor.default_fee}
             />
 
             <hr className="my-8" />
@@ -126,23 +140,23 @@ export default function BookingPage() {
                     <div className={"bg-white border p-2 rounded-md shadow-sm mb-4"}>
                         <h2 className="text-lg font-semibold mb-4">Ngày khám</h2>
                         <DateSelector
-                          doctorId={doctorId}
-                          selectedDate={selectedDate}
-                          onDateChange={handleDateChange}
-                          availableDates={availableDates}
+                            doctorId={doctorId}
+                            selectedDate={selectedDate}
+                            onDateChange={handleDateChange}
+                            availableDates={availableDates}
                         />
                     </div>
                     <div className={"bg-white border p-2 rounded-md shadow-sm"}>
                         <h2 className="text-lg font-semibold mb-4">Giờ khám</h2>
                         <TimeSlotSelector
-                          slots={slots.map((slot) => ({
-                              id: slot.id,
-                              time: slot.start_time.slice(11, 16),
-                              max_patients: slot.max_patients,
-                              booked_count: slot.booked_count,
-                          }))}
-                          selectedSlotId={selectedSlotId}
-                          onSelect={setSelectedSlotId}
+                            slots={slots.map((slot: any) => ({
+                                id: slot.id,
+                                time: slot.start_time.slice(11, 16),
+                                max_patients: slot.max_patients,
+                                booked_count: slot.booked_count,
+                            }))}
+                            selectedSlotId={selectedSlotId}
+                            onSelect={setSelectedSlotId}
                         />
                     </div>
                 </div>
@@ -154,11 +168,10 @@ export default function BookingPage() {
                         <div className={"bg-white border p-2 rounded-md shadow-sm"}>
                             <PatientForm form={form} onChange={handleChange} />
                             <button
-                              type="submit"
-                              disabled={mutationLoading}
-                              className={`w-full bg-blue-600 text-white font-semibold px-6 py-3 rounded-md cursor-pointer hover:bg-blue-700 transition ${
-                                mutationLoading ? 'opacity-50 cursor-not-allowed' : ''
-                              }`}
+                                type="submit"
+                                disabled={mutationLoading}
+                                className={`w-full bg-blue-600 text-white font-semibold px-6 py-3 rounded-md cursor-pointer hover:bg-blue-700 transition ${mutationLoading ? 'opacity-50 cursor-not-allowed' : ''
+                                    }`}
                             >
                                 {mutationLoading ? 'Đang xử lý...' : 'Đặt lịch'}
                             </button>

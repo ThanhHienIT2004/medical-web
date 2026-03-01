@@ -57,7 +57,7 @@ export class User {
     nullable: true,
     description: 'Last update date of the user record',
   })
-  updated_at?: Date | null; //
+  updated_at?: Date | null;
 }
 
 @ObjectType()

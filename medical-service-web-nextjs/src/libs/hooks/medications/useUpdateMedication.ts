@@ -1,35 +1,34 @@
-import {Reference, StoreObject, useMutation} from "@apollo/client";
-import {UPDATE_MEDICATION} from "@/libs/graphqls/medications";
-import {Medication, UpdateMedicationInput} from "@/types/medications";
+import { useState } from 'react';
+import { Medication, UpdateMedicationInput } from "@/types/medications";
+import { apiClient } from "@/libs/api/apiClient";
 
 export function useUpdateMedication() {
-	const [updateMedication, {data, loading, error}] = useMutation<
-		{ medication: Medication },
-		{ id: number; input: UpdateMedicationInput }
-	>(UPDATE_MEDICATION, {
-		// Tùy chọn: Cập nhật cache sau khi mutation
-		update(cache, {data}) {
-			if (data?.medication) {
-				cache.modify({
-					fields: {
-						medications(existingMedications = [], {readField}) {
-							return existingMedications.map((med: Reference | StoreObject | undefined) =>
-								readField('id', med) === data.medication.id ? data.medication : med,
-							);
-						},
-					},
-				});
-			}
-		},
-	});
+	const [data, setData] = useState<Medication | null>(null);
+	const [loading, setLoading] = useState(false);
+	const [error, setError] = useState<Error | null>(null);
 
-	const update =  (id: number, input: UpdateMedicationInput) =>
-		updateMedication({variables: {id, input}});
+	const update = async (id: number, input: UpdateMedicationInput) => {
+		try {
+			setLoading(true);
+			setError(null);
+			const result = await apiClient<Medication>(`/medications/${id}`, {
+				method: 'PATCH',
+				body: input,
+			});
+			setData(result);
+			return result;
+		} catch (e: any) {
+			setError(e);
+			throw e;
+		} finally {
+			setLoading(false);
+		}
+	};
 
 	return {
 		update,
-		data: data?.medication ?? null,
+		data,
 		loading,
 		error,
-	}
+	};
 }

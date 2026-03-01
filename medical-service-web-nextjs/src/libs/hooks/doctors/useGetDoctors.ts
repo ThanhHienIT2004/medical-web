@@ -1,13 +1,30 @@
-import { useQuery } from "@apollo/client";
+import { useState, useEffect, useCallback } from 'react';
 import { Doctor, DoctorDisplay } from "@/types/doctors";
-import { GET_DOCTORS } from "@/libs/graphqls/doctors";
+import { apiClient } from "@/libs/api/apiClient";
 
 export function useGetDoctors() {
-	const { data, loading, error, refetch } = useQuery<{ doctors: Doctor[] }>(GET_DOCTORS);
-	
-	// Chuyển đổi Doctor sang DoctorDisplay
-	const doctorsDisplay: DoctorDisplay[] = data?.doctors
-		? data.doctors.map((doctor) => ({
+	const [data, setData] = useState<Doctor[]>([]);
+	const [loading, setLoading] = useState(true);
+	const [error, setError] = useState<Error | null>(null);
+
+	const fetchDoctors = useCallback(async () => {
+		try {
+			setLoading(true);
+			const doctors = await apiClient<Doctor[]>('/doctors');
+			setData(doctors);
+		} catch (e: any) {
+			setError(e);
+		} finally {
+			setLoading(false);
+		}
+	}, []);
+
+	useEffect(() => {
+		fetchDoctors();
+	}, [fetchDoctors]);
+
+	const doctorsDisplay: DoctorDisplay[] = data
+		? data.map((doctor) => ({
 			id: doctor.id || null,
 			email: doctor.user?.email || "",
 			full_name: doctor.user?.full_name || "",
@@ -22,11 +39,11 @@ export function useGetDoctors() {
 			hospital: doctor.hospital || null,
 		}))
 		: [];
-	
+
 	return {
 		doctors: doctorsDisplay,
 		loading,
 		error,
-		refetch,
+		refetch: fetchDoctors,
 	};
 }

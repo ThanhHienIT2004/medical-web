@@ -1,34 +1,46 @@
-import { useQuery } from "@apollo/client";
-import { GET_POSTS } from "@/libs/graphqls/post";
-import {PaginationBlogInput, Post} from "@/types/posts";
+import { useState, useEffect, useCallback } from 'react';
+import { PaginationBlogInput, Post } from "@/types/posts";
+import { apiClient } from "@/libs/api/apiClient";
 
-interface GetPostsResponse {
-    posts: {
-        items: Post[];
-        total: number;
-        page: number;
-        pageSize: number;
-        totalPages: number;
-    };
+interface PaginatedPosts {
+    items: Post[];
+    total: number;
+    page: number;
+    pageSize: number;
+    totalPages: number;
 }
 
 export function useGetAllPost(input: PaginationBlogInput) {
-    const { data, loading, error, refetch } = useQuery<GetPostsResponse, { input: PaginationBlogInput }>(
-        GET_POSTS,
-        {
-            variables: { input },
-            fetchPolicy: "network-only",
+    const [data, setData] = useState<PaginatedPosts | null>(null);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<Error | null>(null);
+
+    const fetchPosts = useCallback(async () => {
+        try {
+            setLoading(true);
+            const result = await apiClient<PaginatedPosts>(
+                `/blog-posts?page=${input.page}&pageSize=${input.pageSize}`
+            );
+            setData(result);
+        } catch (e: any) {
+            setError(e);
+        } finally {
+            setLoading(false);
         }
-    );
+    }, [input.page, input.pageSize]);
+
+    useEffect(() => {
+        fetchPosts();
+    }, [fetchPosts]);
 
     return {
-        posts: data?.posts.items ?? [],
-        total: data?.posts.total ?? 0,
-        page: data?.posts.page ?? input.page,
-        pageSize: data?.posts.pageSize ?? input.pageSize,
-        totalPages: data?.posts.totalPages ?? 0,
+        posts: data?.items ?? [],
+        total: data?.total ?? 0,
+        page: data?.page ?? input.page,
+        pageSize: data?.pageSize ?? input.pageSize,
+        totalPages: data?.totalPages ?? 0,
         loading,
         error,
-        refetch,
+        refetch: fetchPosts,
     };
 }

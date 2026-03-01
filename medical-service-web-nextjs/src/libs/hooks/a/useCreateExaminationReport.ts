@@ -1,17 +1,28 @@
-import { useMutation } from "@apollo/client";
-import {MedicalExaminationInput} from "@/types/examination_report";
-import {CREATE_EXAMINATION} from "@/libs/graphqls/examinationreport";
-
+import { useState } from 'react';
+import { MedicalExaminationInput } from "@/types/examination_report";
+import { apiClient } from "@/libs/api/apiClient";
 
 export function useCreateExamination() {
-    const [makeMedicalExamination, { data, loading, error }] = useMutation<
-        { makeMedicalExamination: boolean },
-        { input: MedicalExaminationInput }
-    >(CREATE_EXAMINATION);
+    const [data, setData] = useState<any>(null);
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState<Error | null>(null);
 
-    const create = async (input: MedicalExaminationInput) => {
-        const response = await makeMedicalExamination({ variables: { input } });
-        return response.data?.makeMedicalExamination ?? false;
+    const create = async (input: MedicalExaminationInput): Promise<boolean> => {
+        try {
+            setLoading(true);
+            setError(null);
+            const result = await apiClient('/examination-reports/medical-examination', {
+                method: 'POST',
+                body: input,
+            });
+            setData(result);
+            return true;
+        } catch (e: any) {
+            setError(e);
+            return false;
+        } finally {
+            setLoading(false);
+        }
     };
 
     return {

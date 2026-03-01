@@ -1,18 +1,29 @@
-import { useMutation } from "@apollo/client";
-import { DELETE_APPOINTMENT } from "@/libs/graphqls/appointment";
+import { useState } from 'react';
+import { apiClient } from "@/libs/api/apiClient";
 
 export function useDeleteAppointment() {
-    const [deleteAppointment, { data, loading, error }] = useMutation<
-        { deleteAppointment: boolean },
-        { input: { appointment_id: number } }
-    >(DELETE_APPOINTMENT);
+    const [data, setData] = useState<any>(null);
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState<Error | null>(null);
 
-    const remove = (id: number) =>
-        deleteAppointment({ variables: { input: { appointment_id: id } } });
+    const remove = async (id: number) => {
+        try {
+            setLoading(true);
+            setError(null);
+            const result = await apiClient(`/appointments/${id}`, { method: 'DELETE' });
+            setData(result);
+            return result;
+        } catch (e: any) {
+            setError(e);
+            throw e;
+        } finally {
+            setLoading(false);
+        }
+    };
 
     return {
         delete: remove,
-        data: data?.deleteAppointment ?? null,
+        data,
         loading,
         error,
     };

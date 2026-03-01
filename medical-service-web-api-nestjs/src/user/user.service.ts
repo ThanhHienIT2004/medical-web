@@ -60,7 +60,12 @@ export class UserService {
     await this.findById(id); // kiểm tra tồn tại
     return this.prisma.user.update({
       where: { id },
-      data: { ...input },
+      data: {
+        ...input,
+        date_of_birth: input.date_of_birth
+          ? new Date(input.date_of_birth)
+          : undefined,
+      },
     });
   }
 

@@ -1,15 +1,14 @@
 "use client";
 
-import {useForm} from "react-hook-form";
-import {getErrorMessage} from "@/app/utils/common";
-import {useRouter} from "next/navigation";
-import {useSnackbar} from "notistack";
-import {useLoading} from "@/app/context/loadingContext";
-import {useMutation} from "@apollo/client";
-import React, {useState} from "react";
-import REGISTER_MUTATION from "@/libs/graphqls/mutations/registerMutations";
-import {EyeIcon, EyeSlashIcon} from "@heroicons/react/24/solid";
-import {UserPlus} from "lucide-react";
+import { useForm } from "react-hook-form";
+import { getErrorMessage } from "@/app/utils/common";
+import { useRouter } from "next/navigation";
+import { useSnackbar } from "notistack";
+import { useLoading } from "@/app/context/loadingContext";
+import React, { useState } from "react";
+import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/solid";
+import { UserPlus } from "lucide-react";
+import { apiClient } from "@/libs/api/apiClient";
 
 const Register = () => {
     const [showPassword, setShowPassword] = useState(false);
@@ -35,8 +34,6 @@ const Register = () => {
         },
     });
 
-    const [registerUser] = useMutation(REGISTER_MUTATION);
-
     const onSubmit = async (data: any) => {
         setLoading(true);
         try {
@@ -50,7 +47,11 @@ const Register = () => {
                 date_of_birth: date_of_birth || null,
                 role,
             };
-            await registerUser({ variables: { userData } });
+            await apiClient('/auth/register', {
+                method: 'POST',
+                body: userData,
+                skipAuth: true,
+            });
             enqueueSnackbar("Đăng ký thành công!", { variant: "success" });
 
             router.push("/login");
@@ -93,9 +94,8 @@ const Register = () => {
                                         message: "Vui lòng nhập đúng định dạng email",
                                     },
                                 })}
-                                className={`mt-1 block w-full px-3 py-2 border ${
-                                    errors.email ? "border-red-500" : "border-gray-300"
-                                } rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500`}
+                                className={`mt-1 block w-full px-3 py-2 border ${errors.email ? "border-red-500" : "border-gray-300"
+                                    } rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500`}
                             />
                             {errors.email && <p className="mt-1 text-sm text-red-600">{getErrorMessage(errors.email)}</p>}
                         </div>
@@ -110,9 +110,8 @@ const Register = () => {
                                         required: "Mật khẩu là bắt buộc",
                                         minLength: { value: 6, message: "Ít nhất 6 ký tự" },
                                     })}
-                                    className={`mt-1 block w-full px-3 py-2 border ${
-                                        errors.password ? "border-red-500" : "border-gray-300"
-                                    } rounded-md shadow-sm pr-10 focus:outline-none focus:ring-blue-500 focus:border-blue-500`}
+                                    className={`mt-1 block w-full px-3 py-2 border ${errors.password ? "border-red-500" : "border-gray-300"
+                                        } rounded-md shadow-sm pr-10 focus:outline-none focus:ring-blue-500 focus:border-blue-500`}
                                 />
                                 <div
                                     onClick={() => setShowPassword(!showPassword)}
@@ -141,9 +140,8 @@ const Register = () => {
                             <input
                                 id="full_name"
                                 {...register("full_name", { required: "Họ tên không được để trống" })}
-                                className={`mt-1 block w-full px-3 py-2 border ${
-                                    errors.full_name ? "border-red-500" : "border-gray-300"
-                                } rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500`}
+                                className={`mt-1 block w-full px-3 py-2 border ${errors.full_name ? "border-red-500" : "border-gray-300"
+                                    } rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500`}
                             />
                             {errors.full_name && <p className="mt-1 text-sm text-red-600">{getErrorMessage(errors.full_name)}</p>}
                         </div>
@@ -158,9 +156,8 @@ const Register = () => {
                                         message: "Số điện thoại không hợp lệ",
                                     },
                                 })}
-                                className={`mt-1 block w-full px-3 py-2 border ${
-                                    errors.phone ? "border-red-500" : "border-gray-300"
-                                } rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500`}
+                                className={`mt-1 block w-full px-3 py-2 border ${errors.phone ? "border-red-500" : "border-gray-300"
+                                    } rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500`}
                             />
                             {errors.phone && <p className="mt-1 text-sm text-red-600">{getErrorMessage(errors.phone)}</p>}
                         </div>
@@ -189,9 +186,8 @@ const Register = () => {
                             <select
                                 id="role"
                                 {...register("role", { required: "Vai trò là bắt buộc" })}
-                                className={`mt-1 block w-full px-3 py-2 border ${
-                                    errors.role ? "border-red-500" : "border-gray-300"
-                                } rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500`}
+                                className={`mt-1 block w-full px-3 py-2 border ${errors.role ? "border-red-500" : "border-gray-300"
+                                    } rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500`}
                             >
                                 <option value="USER">Người dùng</option>
                                 <option value="DOCTOR">Bác sĩ</option>
@@ -226,4 +222,3 @@ const Register = () => {
     );
 };
 export default Register;
-

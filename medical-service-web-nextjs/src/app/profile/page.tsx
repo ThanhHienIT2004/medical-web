@@ -1,18 +1,18 @@
 "use client";
 
-import React, { useState } from "react";
-import { useMutation, useQuery } from "@apollo/client";
+import React, { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
-import { GET_PATIENT_BY_ID, UPDATE_PATIENT_BY_ID } from "@/libs/graphqls/queries/profile";
 import Image from "next/image";
+import { apiClient } from "@/libs/api/apiClient";
 
 export default function ProfilePage() {
     const { data: session } = useSession();
+    const patientId = session?.user?.id;
 
-    const { data, loading, error } = useQuery(GET_PATIENT_BY_ID, {
-        variables: { input: { patient_id: session?.user?.id } },
-        skip: !session?.user?.id,
-    });
+    const [patient, setPatient] = useState<any>(null);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<Error | null>(null);
+    const [updating, setUpdating] = useState(false);
 
     const [form, setForm] = useState({
         full_name: "",
@@ -23,32 +23,33 @@ export default function ProfilePage() {
         avatarFile: null as File | null,
         avatarPreview: "",
     });
+
+    const [editMode, setEditMode] = useState(false);
+
+    // Fetch patient
+    const fetchPatient = async () => {
+        if (!patientId) return;
+        try {
+            setLoading(true);
+            const result = await apiClient(`/patients/${patientId}`);
+            setPatient(result);
+        } catch (e: any) {
+            setError(e);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        fetchPatient();
+    }, [patientId]);
+
+    const user = patient?.user;
+
     const isValidPhone = (phone: string): boolean => {
         const phoneRegex = /^(?:\+84|0)(?:3[2-9]|5[6|8|9]|7[0|6-9]|8[1-5]|9[0-9])[0-9]{7}$/;
         return phoneRegex.test(phone);
     };
-
-    const [editMode, setEditMode] = useState(false);
-
-    const [updatePatient, { loading: updating }] = useMutation(UPDATE_PATIENT_BY_ID, {
-        refetchQueries: [
-            {
-                query: GET_PATIENT_BY_ID,
-                variables: { input: { patient_id: session?.user?.id } },
-            },
-        ],
-        awaitRefetchQueries: true,
-        onCompleted: () => {
-            alert("Cập nhật thành công!");
-            setEditMode(false);
-        },
-        onError: (err) => {
-            alert(`Cập nhật thất bại: ${err.message}`);
-        },
-    });
-
-    const patient = data?.findOnePatient;
-    const user = patient?.user;
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
@@ -133,10 +134,11 @@ export default function ProfilePage() {
             avatarUrl = await uploadAvatar(form.avatarFile);
         }
 
-        await updatePatient({
-            variables: {
-                input: {
-                    patient_id: session?.user?.id,
+        try {
+            setUpdating(true);
+            await apiClient(`/patients/${patientId}`, {
+                method: 'PATCH',
+                body: {
                     gender: form.gender || undefined,
                     user: {
                         full_name: form.full_name || undefined,
@@ -146,10 +148,16 @@ export default function ProfilePage() {
                         avatar: avatarUrl,
                     },
                 },
-            },
-        });
+            });
+            alert("Cập nhật thành công!");
+            setEditMode(false);
+            await fetchPatient();
+        } catch (err: any) {
+            alert(`Cập nhật thất bại: ${err.message}`);
+        } finally {
+            setUpdating(false);
+        }
     };
-
 
     const translateGender = (gender: string) => {
         switch (gender?.toUpperCase()) {

@@ -8,7 +8,7 @@ services:
       MYSQL_DATABASE: nihongohub_db
       MYSQL_ROOT_PASSWORD: 123456
     ports:
-      - "3306:3306"
+      - "3306:3306" 
     volumes:
       - db_data:/var/lib/mysql
 

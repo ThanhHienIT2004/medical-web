@@ -1,17 +1,33 @@
-import {useMutation} from "@apollo/client";
-import {CreateDoctorScheduleData} from "@/types/doctorSchedule";
-import {CREATE_DOCTOR_SCHEDULE} from "@/libs/graphqls/doctorSchedule";
+import { useState } from 'react';
+import { CreateDoctorScheduleData } from "@/types/doctorSchedule";
+import { apiClient } from "@/libs/api/apiClient";
 
 export function useCreateDoctorSchedule() {
-	const [create, { data, loading, error }] = useMutation<boolean, { input: CreateDoctorScheduleData }>(
-		CREATE_DOCTOR_SCHEDULE
-	);
-	
-	const createSchedule = (input: CreateDoctorScheduleData) => create({ variables: { input } });
-	
+	const [data, setData] = useState<any>(null);
+	const [loading, setLoading] = useState(false);
+	const [error, setError] = useState<Error | null>(null);
+
+	const createSchedule = async (input: CreateDoctorScheduleData) => {
+		try {
+			setLoading(true);
+			setError(null);
+			const result = await apiClient('/doctor-schedules', {
+				method: 'POST',
+				body: input,
+			});
+			setData(result);
+			return result;
+		} catch (e: any) {
+			setError(e);
+			throw e;
+		} finally {
+			setLoading(false);
+		}
+	};
+
 	return {
 		create: createSchedule,
-		data: data,
+		data,
 		loading,
 		error,
 	};

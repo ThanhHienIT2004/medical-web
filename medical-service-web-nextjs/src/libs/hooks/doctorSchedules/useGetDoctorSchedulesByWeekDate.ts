@@ -1,20 +1,34 @@
-import {GET_DOCTOR_SCHEDULES_BY_WEEK_DATE} from "@/libs/graphqls/doctorSchedule";
-import {DoctorSchedule, WeekDateInput} from "@/types/doctorSchedule";
-import {useQuery} from "@apollo/client";
+import { useState, useEffect, useCallback } from 'react';
+import { DoctorSchedule, WeekDateInput } from "@/types/doctorSchedule";
+import { apiClient } from "@/libs/api/apiClient";
 
 export const useGetDoctorSchedulesByWeekDate = (weekDate: WeekDateInput) => {
-	const { data, loading, error, refetch } = useQuery<
-		{ getDoctorScheduleByWeekDate: DoctorSchedule[] },
-		{ weekDate: WeekDateInput }
-	>(GET_DOCTOR_SCHEDULES_BY_WEEK_DATE, {
-		variables: { weekDate: weekDate },
-		fetchPolicy: "cache-first",
-	});
-	
+	const [data, setData] = useState<DoctorSchedule[]>([]);
+	const [loading, setLoading] = useState(true);
+	const [error, setError] = useState<Error | null>(null);
+
+	const fetchSchedules = useCallback(async () => {
+		try {
+			setLoading(true);
+			const result = await apiClient<DoctorSchedule[]>(
+				`/doctor-schedules/week?start_week=${weekDate.start_week}&end_week=${weekDate.end_week}`
+			);
+			setData(result);
+		} catch (e: any) {
+			setError(e);
+		} finally {
+			setLoading(false);
+		}
+	}, [weekDate.start_week, weekDate.end_week]);
+
+	useEffect(() => {
+		fetchSchedules();
+	}, [fetchSchedules]);
+
 	return {
-		data: data?.getDoctorScheduleByWeekDate || [],
+		data,
 		loading,
 		error,
-		refetch,
+		refetch: fetchSchedules,
 	};
 };

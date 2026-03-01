@@ -15,7 +15,7 @@ model User {
   full_name     String
   phone         String?
   address       String?
-  date_of_birth DateTime?
+  date_of_birth DateTime? @db.Date
   created_at    DateTime   @default(now())
   updated_at    DateTime?
   avatar        String?

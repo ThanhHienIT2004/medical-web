@@ -2,14 +2,13 @@
 
 import { useState } from "react";
 import { Loader, View, Pencil, Trash2 } from "lucide-react";
-import { useMutation } from "@apollo/client";
 import { INIT_BLOG_TABLE } from "@/app/(doctor)/blog/m_resource/constants";
-import { UPDATE_POST} from "@/libs/graphqls/post";
+import { useUpdatePost } from "@/libs/hooks/posts/useUpdatePost";
 import { useCreatePost } from "@/libs/hooks/posts/useCreatePost";
-import {useGetAllPost} from "@/libs/hooks/posts/useGetPost";
-import {useDeletePost} from "@/libs/hooks/posts/useDeletePost";
-import {Post} from "@/types/posts";
-import {useSession} from "next-auth/react";
+import { useGetAllPost } from "@/libs/hooks/posts/useGetPost";
+import { useDeletePost } from "@/libs/hooks/posts/useDeletePost";
+import { Post } from "@/types/posts";
+import { useSession } from "next-auth/react";
 import ConfirmationDialog from "@/app/(admin)/_components/molecules/dialog/ConfirmationDialog";
 
 export default function BlogPage() {
@@ -34,10 +33,7 @@ export default function BlogPage() {
     } = useGetAllPost({ page, pageSize });
 
     const { create: createPostInput, loading: createLoading, error: createError } = useCreatePost();
-    const [updatePost, { loading: updateLoading, error: updateError }] = useMutation<
-        { updatePost: Post },
-        { id: number; input: { title: string; content: string; category: string } }
-    >(UPDATE_POST);
+    const { update: updatePostFn, loading: updateLoading, error: updateError } = useUpdatePost();
     const { delete: deletePost, loading: deleteLoading, error: deleteError } = useDeletePost();
 
     const loading = getLoading || createLoading || updateLoading || deleteLoading;
@@ -105,21 +101,19 @@ export default function BlogPage() {
     async function handleUpdateSubmit() {
         if (selectedId === null) return;
         try {
-            await updatePost({
-                variables: {
-                    id: Number(selectedId),
-                    input: {
-                        title: formData.title,
-                        content: formData.content,
-                        category: formData.category,
-                    },
+            await updatePostFn({
+                id: Number(selectedId),
+                data: {
+                    title: formData.title,
+                    content: formData.content,
+                    category: formData.category,
                 },
             });
             await refetchPosts();
             handleAction("view");
             setFormData({ title: "", content: "", category: "" });
-        } catch (error) {
-            console.error("Create post error:", error.message, error.graphQLErrors, error.networkError?.result);
+        } catch (error: any) {
+            console.error("Update post error:", error.message);
         }
 
     }
@@ -159,7 +153,7 @@ export default function BlogPage() {
             </button>
         </div>
     );
-    
+
     const renderForm = () => {
         switch (selectedAction) {
             case "delete":
@@ -290,34 +284,34 @@ export default function BlogPage() {
                     {renderForm()}
                     <table className="w-full">
                         <thead>
-                        <tr className="bg-gray-100 text-gray-700">
-                            {INIT_BLOG_TABLE.map((header, index) => (
-                                <th key={index} className="p-4 text-left font-medium">
-                                    {header.label}
-                                </th>
-                            ))}
-                        </tr>
-                        </thead>
-                        <tbody>
-                        {displayedPosts.map((item, rowIndex) => (
-                            <tr
-                                key={rowIndex}
-                                className="border-t hover:bg-gray-50"
-                                onClick={() => typeof item.id === "string" && handleSelectedId(item.id)}
-                            >
-                                {INIT_BLOG_TABLE.map((header, colIndex) => (
-                                    <td key={colIndex} className="p-4 text-gray-600">
-                                        {header.key === "action" ? (
-                                            renderActions(item)
-                                        ) : header.type === "date" && item[header.key] ? (
-                                            <span>{formatDate(item[header.key])}</span>
-                                        ) : (
-                                            <span>{item[header.key] || "--"}</span>
-                                        )}
-                                    </td>
+                            <tr className="bg-gray-100 text-gray-700">
+                                {INIT_BLOG_TABLE.map((header, index) => (
+                                    <th key={index} className="p-4 text-left font-medium">
+                                        {header.label}
+                                    </th>
                                 ))}
                             </tr>
-                        ))}
+                        </thead>
+                        <tbody>
+                            {displayedPosts.map((item, rowIndex) => (
+                                <tr
+                                    key={rowIndex}
+                                    className="border-t hover:bg-gray-50"
+                                    onClick={() => typeof item.id === "string" && handleSelectedId(item.id)}
+                                >
+                                    {INIT_BLOG_TABLE.map((header, colIndex) => (
+                                        <td key={colIndex} className="p-4 text-gray-600">
+                                            {header.key === "action" ? (
+                                                renderActions(item)
+                                            ) : header.type === "date" && item[header.key] ? (
+                                                <span>{formatDate(item[header.key])}</span>
+                                            ) : (
+                                                <span>{item[header.key] || "--"}</span>
+                                            )}
+                                        </td>
+                                    ))}
+                                </tr>
+                            ))}
                         </tbody>
 
                     </table>

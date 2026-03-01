@@ -1,14 +1,29 @@
 'use client';
 
-import { useQuery } from '@apollo/client';
-import { GET_DOCTORS } from '@/libs/graphqls/doctors';
+import React, { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
-import React from "react";
+import { apiClient } from '@/libs/api/apiClient';
 
 function DoctorPage() {
-    const { loading, error, data } = useQuery(GET_DOCTORS, {
-        fetchPolicy: 'no-cache',
-    });
+    const [doctors, setDoctors] = useState<any[]>([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<Error | null>(null);
+
+    const fetchDoctors = useCallback(async () => {
+        try {
+            setLoading(true);
+            const result = await apiClient('/doctors');
+            setDoctors(Array.isArray(result) ? result : []);
+        } catch (e: any) {
+            setError(e);
+        } finally {
+            setLoading(false);
+        }
+    }, []);
+
+    useEffect(() => {
+        fetchDoctors();
+    }, [fetchDoctors]);
 
     if (loading) {
         return (
@@ -27,7 +42,7 @@ function DoctorPage() {
 
     return (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 p-6">
-            {data?.doctors.map((doctor: any, index: number)  => {
+            {doctors.map((doctor: any, index: number) => {
                 const user = doctor.user;
                 const avatarSrc =
                     user?.avatar?.startsWith('http') ? user.avatar : '/doctor-placeholder.jpg';
@@ -54,7 +69,7 @@ function DoctorPage() {
                             >
                                 <Link
                                     href={`/booking/${user?.id}`}
-                                className="mb-4 bg-gradient-to-r from-blue-400 to-sky-300 text-white font-semibold
+                                    className="mb-4 bg-gradient-to-r from-blue-400 to-sky-300 text-white font-semibold
                                    text-sm px-5 py-2 rounded-full shadow-md hover:from-blue-600 hover:to-sky-500
                                    hover:scale-105 transition-transform duration-300"
                                 >

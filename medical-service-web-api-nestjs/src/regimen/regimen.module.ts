@@ -1,9 +1,10 @@
 import { Module } from '@nestjs/common';
+import { RegimenController } from './regimen.controller';
 import { RegimenService } from './regimen.service';
-import { RegimenResolver } from './regimen.resolver';
 import { PrismaService } from '../prisma/prisma.service';
 
 @Module({
-  providers: [RegimenResolver, RegimenService, PrismaService],
+  controllers: [RegimenController],
+  providers: [RegimenService, PrismaService],
 })
 export class RegimenModule {}

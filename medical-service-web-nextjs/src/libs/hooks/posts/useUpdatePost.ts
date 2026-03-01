@@ -1,19 +1,33 @@
-import { useMutation } from "@apollo/client";
-import { UPDATE_POST } from "@/libs/graphqls/post";
+import { useState } from 'react';
 import { Post, UpdatePostInput } from "@/types/posts";
+import { apiClient } from "@/libs/api/apiClient";
 
 export function useUpdatePost() {
-    const [updatePost, { data, loading, error }] = useMutation<
-        { updatePost: Post },
-        { id: number; input: UpdatePostInput }
-    >(UPDATE_POST);
+    const [data, setData] = useState<Post | null>(null);
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState<Error | null>(null);
 
-    const update = (input: { id: number; data: UpdatePostInput }) =>
-        updatePost({ variables: { id: input.id, input: input.data } });
+    const update = async (input: { id: number; data: UpdatePostInput }) => {
+        try {
+            setLoading(true);
+            setError(null);
+            const result = await apiClient<Post>(`/blog-posts/${input.id}`, {
+                method: 'PATCH',
+                body: input.data,
+            });
+            setData(result);
+            return result;
+        } catch (e: any) {
+            setError(e);
+            throw e;
+        } finally {
+            setLoading(false);
+        }
+    };
 
     return {
         update,
-        data: data?.updatePost ?? null,
+        data,
         loading,
         error,
     };
