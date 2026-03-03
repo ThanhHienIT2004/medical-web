@@ -8,16 +8,16 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtStrategy } from './strategies/jwt.strategy';
 
 @Module({
-  imports: [
+  imports: [  
     ConfigModule,
     PassportModule.register({ defaultStrategy: 'jwt' }),
     JwtModule.registerAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => ({
-        secret: configService.get<string>('ACCESS_TOKEN_KEY') || 'your-secret-key',
+        secret: configService.get<string>('JWT_SECRET'),
         signOptions: { 
-          expiresIn: configService.get<string>('ACCESS_TOKEN_KEY') || '1d'
+          expiresIn: configService.get<string>('ACCESS_TOKEN_KEY')
         },
       }),
     }),

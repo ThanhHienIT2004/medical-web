@@ -18,7 +18,7 @@ import { ROLES_KEY } from './decorators/roles.decorator';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
-  private readonly logger = new Logger(AuthGuard.name);
+  private readonly logger = new Logger(AuthGuard.name); 
 
   constructor(
     private readonly jwtService: JwtService,

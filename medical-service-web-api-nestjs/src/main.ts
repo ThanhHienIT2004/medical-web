@@ -4,11 +4,12 @@ import { ValidationPipe } from '@nestjs/common';
 import { join } from 'path';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+declare const module: any;
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
-  // Global API prefix
+  // Global API prefix  
   app.setGlobalPrefix('api/v1');
 
   // Global pipes configuration
@@ -52,5 +53,9 @@ async function bootstrap() {
   await app.listen(process.env.PORT ?? 3000);
   console.log(`🚀 Application running on: http://localhost:${process.env.PORT ?? 3000}`);
   console.log(`📚 Swagger docs: http://localhost:${process.env.PORT ?? 3000}/api/docs`);
+  if (module.hot) {
+    module.hot.accept();
+    module.hot.dispose(() => app.close());
+  }
 }
 bootstrap();
