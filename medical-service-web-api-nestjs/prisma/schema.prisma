@@ -3,19 +3,19 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "mongodb"
   url      = env("DATABASE_URL")
 }
 
 model User {
-  id            String     @id @default(uuid())
+  id            String     @id @default(auto()) @map("_id") @db.ObjectId
   email         String     @unique
   password      String
   role          String
   full_name     String
   phone         String?
   address       String?
-  date_of_birth DateTime? @db.Date
+  date_of_birth DateTime?
   created_at    DateTime   @default(now())
   updated_at    DateTime?
   avatar        String?
@@ -25,17 +25,17 @@ model User {
 }
 
 model Medication {
-  id                 Int      @id @default(autoincrement())
+  id                 String   @id @default(auto()) @map("_id") @db.ObjectId
   acronym            String   @unique
   name               String   @unique
-  price              Decimal  @db.Money
+  price              Float // MongoDB uses Float for Decimal/Money usually
   available_quantity Int
   created_at         DateTime @default(now())
   updated_at         DateTime @default(now())
 }
 
 model Doctors {
-  id                 String              @id @default(uuid())
+  id                 String              @id @map("_id") @db.ObjectId // Same ID as User
   user               User                @relation(fields: [id], references: [id], onDelete: Cascade)
   qualifications     String?
   specialty          String?
@@ -47,11 +47,11 @@ model Doctors {
   rating             Float?              @default(0)
   rating_details     Json?
   profile_views      Int                 @default(0)
-  gender             String?             @default("OTHER") // Giữ lại nếu bạn cố ý thêm
+  gender             String?             @default("OTHER")
   created_at         DateTime            @default(now())
   updated_at         DateTime?           @updatedAt
   appointments       Appointment[]
-  examinationReports ExaminationReport[] // Sửa tên cho rõ ràng
+  examinationReports ExaminationReport[]
   blogPosts          BlogPost[]
 
   schedules DoctorSchedule[]
@@ -75,8 +75,8 @@ enum Days {
 }
 
 model DoctorSchedule {
-  id           Int               @id @default(autoincrement())
-  doctor_id    String
+  id           String            @id @default(auto()) @map("_id") @db.ObjectId
+  doctor_id    String            @db.ObjectId
   day          Days
   shift        ShiftType
   start_time   DateTime
@@ -88,8 +88,8 @@ model DoctorSchedule {
 }
 
 model AppointmentSlot {
-  id           Int            @id @default(autoincrement())
-  schedule_id  Int
+  id           String         @id @default(auto()) @map("_id") @db.ObjectId
+  schedule_id  String         @db.ObjectId
   start_time   DateTime
   end_time     DateTime
   max_patients Int            @default(6)
@@ -100,8 +100,8 @@ model AppointmentSlot {
 }
 
 model Patient {
-  patient_id   String         @id @default(uuid())
-  plan_id      Int?
+  patient_id   String         @id @map("_id") @db.ObjectId // Same ID as User
+  plan_id      String?        @db.ObjectId
   gender       String         @default("OTHER")
   created_at   DateTime       @default(now())
   updated_at   DateTime?      @updatedAt
@@ -112,10 +112,10 @@ model Patient {
 }
 
 model Appointment {
-  appointment_id   Int             @id @default(autoincrement())
-  patient_id       String
-  doctor_id        String
-  slot_id          Int
+  appointment_id   String          @id @default(auto()) @map("_id") @db.ObjectId
+  patient_id       String          @db.ObjectId
+  doctor_id        String          @db.ObjectId
+  slot_id          String          @db.ObjectId
   appointment_type String
   appointment_date DateTime
   status           String          @default("PENDING")
@@ -127,14 +127,15 @@ model Appointment {
   doctor           Doctors         @relation(fields: [doctor_id], references: [id])
   patient          Patient         @relation(fields: [patient_id], references: [patient_id], onDelete: Cascade)
   slot             AppointmentSlot @relation(fields: [slot_id], references: [id])
-  TreatmentPlan    TreatmentPlan[] @relation("AppointmentToTreatmentPlan")
+  treatment_plans  TreatmentPlan[] @relation(fields: [treatment_plan_ids], references: [id])
+  treatment_plan_ids String[]      @db.ObjectId
 
   @@index([doctor_id])
   @@index([appointment_date])
 }
 
 model TreatmentPlan {
-  id                     Int                 @id @default(autoincrement())
+  id                     String              @id @default(auto()) @map("_id") @db.ObjectId
   name                   String
   hiv_diagnosis_date     DateTime?
   start_date             DateTime
@@ -143,29 +144,30 @@ model TreatmentPlan {
   created_at             DateTime            @default(now())
   updated_at             DateTime?           @updatedAt
   examinations           ExaminationReport[]
-  follow_up_appointments Appointment[]       @relation("AppointmentToTreatmentPlan")
+  follow_up_appointments Appointment[]       @relation(fields: [follow_up_appointment_ids], references: [appointment_id])
+  follow_up_appointment_ids String[]         @db.ObjectId
 
-  Patient Patient[]
+  Patients               Patient[]
 }
 
 model ExaminationReport {
-  id                Int            @id @default(autoincrement())
-  name              String         @db.VarChar(50)
-  doctor_id         String
+  id                String         @id @default(auto()) @map("_id") @db.ObjectId
+  name              String
+  doctor_id         String         @db.ObjectId
   risk_assessment   String
   is_HIV            Boolean
   HIV_test_file     String
-  regimen_id        Int
+  regimen_id        String         @db.ObjectId
   created_at        DateTime       @default(now())
   updated_at        DateTime?      @updatedAt
-  treatment_plan_id Int?
+  treatment_plan_id String?        @db.ObjectId
   doctor            Doctors        @relation(fields: [doctor_id], references: [id])
   regimen           Regimen        @relation(fields: [regimen_id], references: [id])
   treatment_plan    TreatmentPlan? @relation(fields: [treatment_plan_id], references: [id])
 }
 
 model Regimen {
-  id                  Int                 @id @default(autoincrement())
+  id                  String              @id @default(auto()) @map("_id") @db.ObjectId
   care_stage          String
   regimen_type        String
   medication_list     String[]
@@ -177,8 +179,8 @@ model Regimen {
 }
 
 model Reminder {
-  reminder_id   Int      @id @default(autoincrement())
-  patient_id    String   @default(uuid())
+  reminder_id   String   @id @default(auto()) @map("_id") @db.ObjectId
+  patient_id    String   @db.ObjectId
   reminder_type String
   reminder_time DateTime
   message       String?
@@ -188,10 +190,10 @@ model Reminder {
 }
 
 model BlogPost {
-  id           Int       @id @default(autoincrement())
+  id           String    @id @default(auto()) @map("_id") @db.ObjectId
   title        String
   content      String
-  author_id    String
+  author_id    String    @db.ObjectId
   category     String
   published_at DateTime?
   created_at   DateTime  @default(now())
@@ -201,18 +203,18 @@ model BlogPost {
 }
 
 model Document {
-  document_id    Int       @id @default(autoincrement())
+  document_id    String    @id @default(auto()) @map("_id") @db.ObjectId
   title          String
   file_url       String
   category       String
-  uploaded_by_id String
+  uploaded_by_id String    @db.ObjectId
   created_at     DateTime  @default(now())
   updated_at     DateTime?
   uploaded_by    User      @relation(fields: [uploaded_by_id], references: [id])
 }
 
 model DashboardReport {
-  report_id    Int      @id @default(autoincrement())
+  report_id    String   @id @default(auto()) @map("_id") @db.ObjectId
   report_type  String
   generated_at DateTime
   data         Json
@@ -255,3 +257,4 @@ enum RegimenType {
   STANDARD
   CUSTOM
 }
+

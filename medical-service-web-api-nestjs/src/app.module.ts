@@ -1,27 +1,27 @@
 import { Module, ValidationPipe } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { UserModule } from './user/user.module';
+import { UserModule } from './modules/user/user.module';
 import { APP_PIPE } from '@nestjs/core';
-import { MedicationsModule } from './medications/medications.module';
-import { DoctorsModule } from './doctors/doctors.module';
-import { AuthModule } from './auth/auth.module';
+import { MedicationsModule } from './modules/medications/medications.module';
+import { DoctorsModule } from './modules/doctors/doctors.module';
+import { AuthModule } from './modules/auth/auth.module';
 import { ConfigModule } from '@nestjs/config';
-import { JwtStrategy } from './auth/strategies/jwt.strategy';
-import { DoctorSchedulesModule } from './doctor_schedules/doctor_schedules.module';
-import { PatientsModule } from './patients/patients.module';
-import { AppointmentsModule } from './appointments/appointments.module';
-import { TreatmentPlanModule } from './treatment-plan/treatment-plan.module';
-import { ExaminationReportModule } from './examination-report/examination-report.module';
-import { RegimenModule } from './regimen/regimen.module';
-import { BlogPostsModule } from './blog-posts/blog-posts.module';
-import { UploadController } from './upload/upload.controller';
-import { UploadService } from './upload/upload.service';
-import { UploadModule } from './upload/upload.module';
-import { AppointmentSlotsModule } from './appointment-slots/appointment-slots.module';
-import { EmailService } from './api/send-email/email.service';
-import { OtpModule } from './mail/otp.module';
-import { MailModule } from './mail/mail.module';
+import { JwtStrategy } from './modules/auth/strategies/jwt.strategy';
+import { DoctorSchedulesModule } from './modules/doctor_schedules/doctor_schedules.module';
+import { PatientsModule } from './modules/patients/patients.module';
+import { AppointmentsModule } from './modules/appointments/appointments.module';
+import { TreatmentPlanModule } from './modules/treatment-plan/treatment-plan.module';
+import { ExaminationReportModule } from './modules/examination-report/examination-report.module';
+import { RegimenModule } from './modules/regimen/regimen.module';
+import { BlogPostsModule } from './modules/blog-posts/blog-posts.module';
+import { UploadController } from './modules/upload/upload.controller';
+import { UploadService } from './modules/upload/upload.service';
+import { UploadModule } from './modules/upload/upload.module';
+import { AppointmentSlotsModule } from './modules/appointment-slots/appointment-slots.module';
+import { EmailService } from './modules/api/send-email/email.service';
+import { OtpModule } from './modules/mail/otp.module';
+import { MailModule } from './modules/mail/mail.module';
 
 @Module({
   imports: [
