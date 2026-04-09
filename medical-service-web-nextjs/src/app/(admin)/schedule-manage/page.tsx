@@ -1,15 +1,15 @@
 'use client'
 import AdminScheduleLayout from "@/app/(admin)/_components/organisms/adminSchedulesTable/AdminScheduleLayout";
-import {useGetDoctors} from "@/libs/hooks/doctors/useGetDoctors";
+import {useGetDoctors} from "@/features/doctors/hooks/useGetDoctors";
 import {CreateDoctorScheduleData, DoctorSchedule, WeekDateInput} from "@/types/doctorSchedule";
 import {useCallback, useState} from "react";
-import AdminForm from "@/app/(admin)/_components/organisms/create&UpdateForm/AdminForm";
+import AdminForm from "@/app/(admin)/_components/forms/AdminForm";
 import {CREATE_DOCTOR_SCHEDULE_INPUT} from "@/app/(admin)/schedule-manage/constant";
-import {useCreateDoctorSchedule} from "@/libs/hooks/doctorSchedules/useCreateDoctorSchedule";
+import {useCreateDoctorSchedule} from "@/features/doctorSchedules/hooks/useCreateDoctorSchedule";
 import {toast} from "react-toastify";
-import {useGetDoctorSchedulesByWeekDate} from "@/libs/hooks/doctorSchedules/useGetDoctorSchedulesByWeekDate";
+import {useGetDoctorSchedulesByWeekDate} from "@/features/doctorSchedules/hooks/useGetDoctorSchedulesByWeekDate";
 import {getWeekDates} from "@/libs/function/getWeekDates";
-import {useDeleteDoctorSchedule} from "@/libs/hooks/doctorSchedules/useDeleteDoctorSchedule";
+import {useDeleteDoctorSchedule} from "@/features/doctorSchedules/hooks/useDeleteDoctorSchedule";
 
 export default function AdminSchedulePage() {
 	// INIT for data

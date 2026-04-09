@@ -15,8 +15,12 @@ export const ROLE_PERMISSIONS: Record<string, Permission[]> = {
 
   // ─── DOCTOR: quyền chuyên môn ───────────────────────────────
   [Role.DOCTOR]: [
-    // Xem thông tin bệnh nhân & user
+    // Xem thông tin bác sĩ
+    Permission.DOCTOR_READ,
+
+    // Xem thông tin bệnh nhân & user (chi tiết); danh sách user cần USER_LIST
     Permission.USER_READ,
+    Permission.USER_LIST,
     Permission.PATIENT_READ,
 
     // Quản lý lịch hẹn
@@ -55,6 +59,9 @@ export const ROLE_PERMISSIONS: Record<string, Permission[]> = {
 
   // ─── USER (bệnh nhân): quyền cơ bản ────────────────────────
   [Role.USER]: [
+    // Xem danh sách bác sĩ
+    Permission.DOCTOR_READ,
+
     // Thông tin cá nhân
     Permission.USER_READ,
     Permission.USER_UPDATE,

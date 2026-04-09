@@ -1,0 +1,78 @@
+[
+  {
+    "_id": { "$oid": "661000000000000000000A01" },
+    "report_type": "SUMMARY",
+    "generated_at": { "$date": "2026-04-01T14:00:00.000Z" },
+    "data": {
+      "users": 3,
+      "doctors": 1,
+      "patients": 1,
+      "appointments": 1
+    },
+    "created_at": { "$date": "2026-04-01T14:00:00.000Z" }
+  },
+  {
+    "_id": { "$oid": "661000000000000000000A02" },
+    "report_type": "DAILY",
+    "generated_at": { "$date": "2026-04-02T14:00:00.000Z" },
+    "data": { "appointments": 2, "newUsers": 4 },
+    "created_at": { "$date": "2026-04-02T14:00:00.000Z" }
+  },
+  {
+    "_id": { "$oid": "661000000000000000000A03" },
+    "report_type": "DAILY",
+    "generated_at": { "$date": "2026-04-03T14:00:00.000Z" },
+    "data": { "appointments": 3, "newUsers": 2 },
+    "created_at": { "$date": "2026-04-03T14:00:00.000Z" }
+  },
+  {
+    "_id": { "$oid": "661000000000000000000A04" },
+    "report_type": "WEEKLY",
+    "generated_at": { "$date": "2026-04-04T14:00:00.000Z" },
+    "data": { "appointments": 10, "activePatients": 6 },
+    "created_at": { "$date": "2026-04-04T14:00:00.000Z" }
+  },
+  {
+    "_id": { "$oid": "661000000000000000000A05" },
+    "report_type": "WEEKLY",
+    "generated_at": { "$date": "2026-04-05T14:00:00.000Z" },
+    "data": { "appointments": 12, "activePatients": 7 },
+    "created_at": { "$date": "2026-04-05T14:00:00.000Z" }
+  },
+  {
+    "_id": { "$oid": "661000000000000000000A06" },
+    "report_type": "MONTHLY",
+    "generated_at": { "$date": "2026-04-06T14:00:00.000Z" },
+    "data": { "appointments": 40, "activeDoctors": 8 },
+    "created_at": { "$date": "2026-04-06T14:00:00.000Z" }
+  },
+  {
+    "_id": { "$oid": "661000000000000000000A07" },
+    "report_type": "MONTHLY",
+    "generated_at": { "$date": "2026-04-07T14:00:00.000Z" },
+    "data": { "appointments": 45, "activeDoctors": 9 },
+    "created_at": { "$date": "2026-04-07T14:00:00.000Z" }
+  },
+  {
+    "_id": { "$oid": "661000000000000000000A08" },
+    "report_type": "SUMMARY",
+    "generated_at": { "$date": "2026-04-08T14:00:00.000Z" },
+    "data": { "users": 22, "patients": 10, "doctors": 10 },
+    "created_at": { "$date": "2026-04-08T14:00:00.000Z" }
+  },
+  {
+    "_id": { "$oid": "661000000000000000000A09" },
+    "report_type": "SUMMARY",
+    "generated_at": { "$date": "2026-04-09T14:00:00.000Z" },
+    "data": { "medications": 10, "regimens": 10, "plans": 10 },
+    "created_at": { "$date": "2026-04-09T14:00:00.000Z" }
+  },
+  {
+    "_id": { "$oid": "661000000000000000000A0A" },
+    "report_type": "SUMMARY",
+    "generated_at": { "$date": "2026-04-10T14:00:00.000Z" },
+    "data": { "reports": 10, "reminders": 10, "documents": 10 },
+    "created_at": { "$date": "2026-04-10T14:00:00.000Z" }
+  }
+]
+

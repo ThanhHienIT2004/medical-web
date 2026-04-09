@@ -3,10 +3,10 @@
 import { useState } from "react";
 import { Loader, View, Pencil, Trash2 } from "lucide-react";
 import { INIT_BLOG_TABLE } from "@/app/(doctor)/blog/m_resource/constants";
-import { useUpdatePost } from "@/libs/hooks/posts/useUpdatePost";
-import { useCreatePost } from "@/libs/hooks/posts/useCreatePost";
-import { useGetAllPost } from "@/libs/hooks/posts/useGetPost";
-import { useDeletePost } from "@/libs/hooks/posts/useDeletePost";
+import { useUpdatePost } from "@/features/posts/hooks/useUpdatePost";
+import { useCreatePost } from "@/features/posts/hooks/useCreatePost";
+import { useGetAllPost } from "@/features/posts/hooks/useGetPost";
+import { useDeletePost } from "@/features/posts/hooks/useDeletePost";
 import { Post } from "@/types/posts";
 import { useSession } from "next-auth/react";
 import ConfirmationDialog from "@/app/(admin)/_components/molecules/dialog/ConfirmationDialog";
@@ -93,8 +93,9 @@ export default function BlogPage() {
             });
             await refetchPosts();
             setFormData({ title: "", content: "", category: "" });
-        } catch (error) {
-            console.error("Create post error:", error.message, error.graphQLErrors, error.networkError?.result);
+        } catch (err) {
+            const message = err instanceof Error ? err.message : String(err);
+            console.error("Create post error:", message, err);
         }
     }
 

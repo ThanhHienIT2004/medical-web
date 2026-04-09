@@ -9,11 +9,11 @@ import {
   HttpStatus,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { UserService } from '../user/user.service';
 import { ConfigService } from '@nestjs/config';
 import { JwtPayload } from './interfaces/jwt-payload.interface';
 import { Reflector } from '@nestjs/core';
 import { ROLES_KEY } from './decorators/roles.decorator';
+import { PrismaService } from '../prisma/prisma.service';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
@@ -21,7 +21,7 @@ export class AuthGuard implements CanActivate {
 
   constructor(
     private readonly jwtService: JwtService,
-    private readonly userService: UserService,
+    private readonly prismaService: PrismaService,
     private readonly configService: ConfigService,
     private readonly reflector: Reflector,
   ) {}
@@ -48,7 +48,12 @@ export class AuthGuard implements CanActivate {
         throw new UnauthorizedException('Token không hợp lệ: thiếu email');
       }
 
-      const user = await this.userService.findByEmail(payload.email);
+      const user = await this.prismaService.user.findUnique({
+        where: { email: payload.email },
+      });
+      if (!user) {
+        throw new UnauthorizedException('Không tìm thấy người dùng');
+      }
       req.user_data = user;
 
       // ✅ Kiểm tra role nếu có yêu cầu

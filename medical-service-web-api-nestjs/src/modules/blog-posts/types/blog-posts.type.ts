@@ -86,8 +86,8 @@ export class UpdateBlogPostInput {
   @Field({ nullable: true })
   content?: string;
 
-  @Field()
-  category: string;
+  @Field({ nullable: true })
+  category?: string;
 
   @Field({nullable: true})
   updated_at?: Date;

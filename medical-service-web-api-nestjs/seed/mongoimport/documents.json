@@ -1,0 +1,93 @@
+[
+  {
+    "_id": { "$oid": "661000000000000000000901" },
+    "title": "HIV Test Result (Demo)",
+    "file_url": "uploads/hiv_test_demo.pdf",
+    "category": "LAB",
+    "uploaded_by_id": { "$oid": "661000000000000000000002" },
+    "created_at": { "$date": "2026-04-01T13:10:00.000Z" },
+    "updated_at": { "$date": "2026-04-01T13:10:00.000Z" }
+  },
+  {
+    "_id": { "$oid": "661000000000000000000902" },
+    "title": "Lab Result 2",
+    "file_url": "uploads/lab_2.pdf",
+    "category": "LAB",
+    "uploaded_by_id": { "$oid": "661000000000000000000004" },
+    "created_at": { "$date": "2026-04-01T13:11:00.000Z" },
+    "updated_at": { "$date": "2026-04-01T13:11:00.000Z" }
+  },
+  {
+    "_id": { "$oid": "661000000000000000000903" },
+    "title": "Prescription 3",
+    "file_url": "uploads/prescription_3.pdf",
+    "category": "PRESCRIPTION",
+    "uploaded_by_id": { "$oid": "661000000000000000000005" },
+    "created_at": { "$date": "2026-04-01T13:12:00.000Z" },
+    "updated_at": { "$date": "2026-04-01T13:12:00.000Z" }
+  },
+  {
+    "_id": { "$oid": "661000000000000000000904" },
+    "title": "Medical Note 4",
+    "file_url": "uploads/note_4.pdf",
+    "category": "NOTE",
+    "uploaded_by_id": { "$oid": "66100000000000000000000B" },
+    "created_at": { "$date": "2026-04-01T13:13:00.000Z" },
+    "updated_at": { "$date": "2026-04-01T13:13:00.000Z" }
+  },
+  {
+    "_id": { "$oid": "661000000000000000000905" },
+    "title": "Lab Result 5",
+    "file_url": "uploads/lab_5.pdf",
+    "category": "LAB",
+    "uploaded_by_id": { "$oid": "66100000000000000000000C" },
+    "created_at": { "$date": "2026-04-01T13:14:00.000Z" },
+    "updated_at": { "$date": "2026-04-01T13:14:00.000Z" }
+  },
+  {
+    "_id": { "$oid": "661000000000000000000906" },
+    "title": "Consent Form 6",
+    "file_url": "uploads/consent_6.pdf",
+    "category": "FORM",
+    "uploaded_by_id": { "$oid": "66100000000000000000000D" },
+    "created_at": { "$date": "2026-04-01T13:15:00.000Z" },
+    "updated_at": { "$date": "2026-04-01T13:15:00.000Z" }
+  },
+  {
+    "_id": { "$oid": "661000000000000000000907" },
+    "title": "Report 7",
+    "file_url": "uploads/report_7.pdf",
+    "category": "REPORT",
+    "uploaded_by_id": { "$oid": "66100000000000000000000E" },
+    "created_at": { "$date": "2026-04-01T13:16:00.000Z" },
+    "updated_at": { "$date": "2026-04-01T13:16:00.000Z" }
+  },
+  {
+    "_id": { "$oid": "661000000000000000000908" },
+    "title": "Imaging 8",
+    "file_url": "uploads/imaging_8.pdf",
+    "category": "IMAGING",
+    "uploaded_by_id": { "$oid": "66100000000000000000000F" },
+    "created_at": { "$date": "2026-04-01T13:17:00.000Z" },
+    "updated_at": { "$date": "2026-04-01T13:17:00.000Z" }
+  },
+  {
+    "_id": { "$oid": "661000000000000000000909" },
+    "title": "Invoice 9",
+    "file_url": "uploads/invoice_9.pdf",
+    "category": "BILLING",
+    "uploaded_by_id": { "$oid": "661000000000000000000010" },
+    "created_at": { "$date": "2026-04-01T13:18:00.000Z" },
+    "updated_at": { "$date": "2026-04-01T13:18:00.000Z" }
+  },
+  {
+    "_id": { "$oid": "66100000000000000000090A" },
+    "title": "Other Doc 10",
+    "file_url": "uploads/other_10.pdf",
+    "category": "OTHER",
+    "uploaded_by_id": { "$oid": "661000000000000000000011" },
+    "created_at": { "$date": "2026-04-01T13:19:00.000Z" },
+    "updated_at": { "$date": "2026-04-01T13:19:00.000Z" }
+  }
+]
+

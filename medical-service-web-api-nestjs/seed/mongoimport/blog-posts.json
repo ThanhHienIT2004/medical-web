@@ -1,0 +1,103 @@
+[
+  {
+    "_id": { "$oid": "661000000000000000000801" },
+    "title": "Giới thiệu chương trình ARV",
+    "content": "Nội dung demo...",
+    "author_id": { "$oid": "661000000000000000000002" },
+    "category": "ARV",
+    "published_at": { "$date": "2026-04-01T13:00:00.000Z" },
+    "created_at": { "$date": "2026-04-01T13:00:00.000Z" },
+    "updated_at": { "$date": "2026-04-01T13:00:00.000Z" }
+  },
+  {
+    "_id": { "$oid": "661000000000000000000802" },
+    "title": "PrEP là gì?",
+    "content": "Nội dung demo 2...",
+    "author_id": { "$oid": "661000000000000000000004" },
+    "category": "PrEP",
+    "published_at": { "$date": "2026-04-01T13:01:00.000Z" },
+    "created_at": { "$date": "2026-04-01T13:01:00.000Z" },
+    "updated_at": { "$date": "2026-04-01T13:01:00.000Z" }
+  },
+  {
+    "_id": { "$oid": "661000000000000000000803" },
+    "title": "PEP trong 28 ngày",
+    "content": "Nội dung demo 3...",
+    "author_id": { "$oid": "661000000000000000000005" },
+    "category": "PEP",
+    "published_at": { "$date": "2026-04-01T13:02:00.000Z" },
+    "created_at": { "$date": "2026-04-01T13:02:00.000Z" },
+    "updated_at": { "$date": "2026-04-01T13:02:00.000Z" }
+  },
+  {
+    "_id": { "$oid": "661000000000000000000804" },
+    "title": "Cách uống thuốc đúng giờ",
+    "content": "Nội dung demo 4...",
+    "author_id": { "$oid": "66100000000000000000000B" },
+    "category": "ARV",
+    "published_at": { "$date": "2026-04-01T13:03:00.000Z" },
+    "created_at": { "$date": "2026-04-01T13:03:00.000Z" },
+    "updated_at": { "$date": "2026-04-01T13:03:00.000Z" }
+  },
+  {
+    "_id": { "$oid": "661000000000000000000805" },
+    "title": "Tác dụng phụ thường gặp",
+    "content": "Nội dung demo 5...",
+    "author_id": { "$oid": "66100000000000000000000C" },
+    "category": "ARV",
+    "published_at": { "$date": "2026-04-01T13:04:00.000Z" },
+    "created_at": { "$date": "2026-04-01T13:04:00.000Z" },
+    "updated_at": { "$date": "2026-04-01T13:04:00.000Z" }
+  },
+  {
+    "_id": { "$oid": "661000000000000000000806" },
+    "title": "Theo dõi định kỳ",
+    "content": "Nội dung demo 6...",
+    "author_id": { "$oid": "66100000000000000000000D" },
+    "category": "FOLLOW_UP",
+    "published_at": { "$date": "2026-04-01T13:05:00.000Z" },
+    "created_at": { "$date": "2026-04-01T13:05:00.000Z" },
+    "updated_at": { "$date": "2026-04-01T13:05:00.000Z" }
+  },
+  {
+    "_id": { "$oid": "661000000000000000000807" },
+    "title": "Xét nghiệm cần thiết",
+    "content": "Nội dung demo 7...",
+    "author_id": { "$oid": "66100000000000000000000E" },
+    "category": "LAB",
+    "published_at": { "$date": "2026-04-01T13:06:00.000Z" },
+    "created_at": { "$date": "2026-04-01T13:06:00.000Z" },
+    "updated_at": { "$date": "2026-04-01T13:06:00.000Z" }
+  },
+  {
+    "_id": { "$oid": "661000000000000000000808" },
+    "title": "Chế độ ăn uống",
+    "content": "Nội dung demo 8...",
+    "author_id": { "$oid": "66100000000000000000000F" },
+    "category": "LIFESTYLE",
+    "published_at": { "$date": "2026-04-01T13:07:00.000Z" },
+    "created_at": { "$date": "2026-04-01T13:07:00.000Z" },
+    "updated_at": { "$date": "2026-04-01T13:07:00.000Z" }
+  },
+  {
+    "_id": { "$oid": "661000000000000000000809" },
+    "title": "Sức khỏe tinh thần",
+    "content": "Nội dung demo 9...",
+    "author_id": { "$oid": "661000000000000000000010" },
+    "category": "MENTAL_HEALTH",
+    "published_at": { "$date": "2026-04-01T13:08:00.000Z" },
+    "created_at": { "$date": "2026-04-01T13:08:00.000Z" },
+    "updated_at": { "$date": "2026-04-01T13:08:00.000Z" }
+  },
+  {
+    "_id": { "$oid": "66100000000000000000080A" },
+    "title": "Hỏi đáp nhanh",
+    "content": "Nội dung demo 10...",
+    "author_id": { "$oid": "661000000000000000000011" },
+    "category": "QNA",
+    "published_at": { "$date": "2026-04-01T13:09:00.000Z" },
+    "created_at": { "$date": "2026-04-01T13:09:00.000Z" },
+    "updated_at": { "$date": "2026-04-01T13:09:00.000Z" }
+  }
+]
+

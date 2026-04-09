@@ -1,18 +1,27 @@
-import React, {ChangeEvent} from "react";
+import React, {ChangeEvent, useEffect, useState} from "react";
 import {Search} from "lucide-react";
 
 
 export interface TableSearchProps {
 	placeholder?: string;
 	onSearch?: (term: string) => void;
+	debounceMs?: number;
 }
 
 export default function TableSearch(
-	{ placeholder , onSearch }: TableSearchProps
+	{ placeholder , onSearch, debounceMs = 300 }: TableSearchProps
 ) {
+	const [value, setValue] = useState("");
+
+	useEffect(() => {
+		if (!onSearch) return;
+		const id = window.setTimeout(() => onSearch(value), debounceMs);
+		return () => window.clearTimeout(id);
+	}, [value, onSearch, debounceMs]);
+
 	const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-		if (onSearch) onSearch(e.target.value)
-	}
+		setValue(e.target.value);
+	};
 
 	return (
 		<div className="relative">
@@ -27,6 +36,7 @@ export default function TableSearch(
 					bg-gray-50 shadow-xl hover:border-gray-800 focus:outline-none focus:ring-1 focus:ring-violet-500 focus:border-violet-500 text-gray-900 border border-gray-300
 					dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-300 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
 				placeholder={placeholder}
+				value={value}
 				onChange={handleChange}
 			/>
 		</div>

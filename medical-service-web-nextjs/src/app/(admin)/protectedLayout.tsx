@@ -1,10 +1,10 @@
 "use client";
 
-import useAuth from "@/libs/hooks/auth/useAuth";
+import useAuth from "@/features/auth/hooks/useAuth";
 import { ReactNode } from "react";
 
 const ProtectedLayout = ({ children }: { children: ReactNode }) => {
-    const {session, status} = useAuth();
+    const {session, status} = useAuth({ requiredRole: 'ADMIN' });
 
     if(status === "loading"){
         return <div></div>

@@ -1,7 +1,7 @@
 "use client";
 
 import { ReactNode } from "react";
-import useAuthenticated from "@/libs/hooks/auth/useAuthenticated";
+import useAuthenticated from "@/features/auth/hooks/useAuthenticated";
 
 const PublicLayout = ({ children }: { children: ReactNode }) => {
     const { session, status } = useAuthenticated();

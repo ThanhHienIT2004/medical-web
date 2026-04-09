@@ -2,7 +2,7 @@
 
 import { Loader } from 'lucide-react';
 import { isToday, isAfter } from 'date-fns';
-import { useGetAppointments } from '@/libs/hooks/appoiment/useGetAppointment';
+import { useGetAppointments } from '@/features/appointments/hooks/useGetAppointment';
 import { useSession } from 'next-auth/react';
 
 export default function DoctorDashboardPage() {

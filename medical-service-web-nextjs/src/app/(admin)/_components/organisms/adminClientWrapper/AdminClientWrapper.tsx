@@ -1,64 +1,48 @@
 "use client";
-import React, {useEffect, useState} from "react";
-import AdminSidebar from "@/app/(admin)/_components/organisms/sidebar/AdminSidebar";
+import React from "react";
+import AdminSidebar from "@/app/(admin)/_components/layout/AdminSidebar";
 import {ADMIN_SIDEBAR_ITEMS} from "@/app/(admin)/_values/constants";
-import ApolloWrapper from "@/components/apollo/ApolloWrapper";
 import {ArrowLeftFromLine, ArrowRightFromLine} from "lucide-react";
+import { useResponsiveSidebar } from "@/app/(admin)/_components/layout/hooks/useResponsiveSidebar";
 
 interface AdminClientWrapperProps {
 	children: React.ReactNode;
 }
 
 export default function AdminClientWrapper({ children }: AdminClientWrapperProps) {
-	const [isOpen, setIsOpen] = useState<boolean>(false);
-	const [isLockedSidebar, setIsLockedSidebar] = useState<boolean>(false);
-	const [windowWidth, setWindowWidth] = useState<number>(0);
-	
-	const handleResize = () => {
-		setWindowWidth(window.innerWidth);
-	}
-	
-	useEffect(() => {
-		handleResize();
-		window.addEventListener('resize', handleResize);
-		
-		if (windowWidth >= 1024) {
-			setIsOpen(true);
-		} else {
-			setIsOpen(false);
-		}
-		
-		return () => window.removeEventListener('resize', handleResize);
-	}, [windowWidth]);
+	const { isOpen, setIsOpen, windowWidth } = useResponsiveSidebar(true, 1024);
+
+	const sidebarWidthClass = isOpen ? "w-[300px]" : "w-0";
 	
 	return (
-		<div className={"min-h-screen flex flex-row"}>
-			
-				<div className={`${isOpen ? "w-64" : "w-0"} fixed top-0 left-0 min-h-screen`}>
-					{isOpen && (
-						<AdminSidebar title={"Quản lí phòng khám"} items={ADMIN_SIDEBAR_ITEMS} isLocked={isLockedSidebar} onLockButton={setIsLockedSidebar}/>
-					)}
-					{!isLockedSidebar && (
-						<button
-							className={`absolute ${isOpen ? "inset-64" : "inset-0" } top-0 bottom-0 w-8 rounded-r-lg shadow-lg cursor-pointer bg-gray-50 dark:bg-zinc-800 text-gray-500 dark:text-gray-300 hover:text-black dark:hover:text-gray-400`} onClick={() => setIsOpen(!isOpen)}>
-							{isOpen && !isLockedSidebar
-								? <ArrowLeftFromLine className={"mx-auto"}/>
-								: <ArrowRightFromLine className={"mx-auto"}/>
-							}
-						</button>
-					)}
+		<div className={"min-h-screen bg-zinc-700/5 dark:bg-zinc-900"}>
+			<div className="flex">
+				<div className={`${sidebarWidthClass} transition-all duration-300 fixed top-0 left-0 h-screen z-30 overflow-hidden`}>
+					<AdminSidebar
+						title={"Quản lí phòng khám"}
+						items={ADMIN_SIDEBAR_ITEMS}
+					/>
 				</div>
-			
-			<main
-				className={`${isOpen ? (isLockedSidebar ? "ml-64" : "ml-66") : "ml-6"} flex-1 outline outline-black/20 bg-zinc-700/5 dark:bg-zinc-900`}
-				onClick={() => isLockedSidebar ? null : setIsOpen(false)}
-			>
-				<div className="container mx-auto p-8">
-					<ApolloWrapper>
+
+				<button
+					className={`fixed top-4 ${isOpen ? "left-[19rem]" : "left-2"} z-40 w-8 h-8 rounded-md shadow cursor-pointer bg-white dark:bg-zinc-800 text-gray-600 dark:text-gray-300 hover:text-black dark:hover:text-gray-100 transition-all`}
+					onClick={() => setIsOpen((prev) => !prev)}
+					title={isOpen ? "Thu gọn sidebar" : "Mở sidebar"}
+				>
+					{isOpen ? <ArrowLeftFromLine className={"mx-auto w-4 h-4"} /> : <ArrowRightFromLine className={"mx-auto w-4 h-4"} />}
+				</button>
+
+				<main
+					className={`${isOpen ? "ml-[300px]" : "ml-0"} transition-all duration-300 flex-1 min-w-0`}
+					onClick={() => {
+						if (windowWidth < 1024 && isOpen) setIsOpen(false);
+					}}
+				>
+					<div className="w-full px-4 md:px-6 lg:px-8 py-8 overflow-x-auto">
 						{children}
-					</ApolloWrapper>
-				</div>
-			</main>
+					</div>
+				</main>
+			</div>
 		</div>
 	);
 }

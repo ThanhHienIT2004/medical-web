@@ -1,17 +1,27 @@
 import {Patient} from "@/types/patient";
 
+export type AppointmentStatus = 'PENDING' | 'COMPLETED' | 'CANCELLED' | string;
+
 export interface Appointment {
     appointment_id: number;
     patient_id: string;
-    doctor_id: number;
-    slot_id: number;
+    doctor_id: string;
+    slot_id: string;
     appointment_type: string;
-    appointment_date: Date;
-    status: string;
+    appointment_date: string | number | Date;
+    status: AppointmentStatus;
     is_done?: boolean;
     is_anonymous: boolean;
     notes: string;
-    patient:Patient;
+    patient?: Patient;
+    doctor?: {
+        user?: {
+            full_name?: string;
+            avatar?: string;
+            email?: string;
+            phone?: string;
+        };
+    };
 }
 
 export interface PaginationAppointmentInput{

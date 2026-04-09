@@ -22,6 +22,8 @@ import { AppointmentSlotsModule } from './modules/appointment-slots/appointment-
 import { EmailService } from './modules/api/send-email/email.service';
 import { OtpModule } from './modules/mail/otp.module';
 import { MailModule } from './modules/mail/mail.module';
+import { DocumentsModule } from './modules/documents/documents.module';
+import { DashboardReportsModule } from './modules/dashboard-reports/dashboard-reports.module';
 
 @Module({
   imports: [
@@ -42,10 +44,12 @@ import { MailModule } from './modules/mail/mail.module';
     RegimenModule,
     UploadModule,
     AppointmentSlotsModule,
+    DocumentsModule,
+    DashboardReportsModule,
     OtpModule,
     MailModule,
   ],
-  controllers: [AppController, UploadController],
+  controllers: [AppController],
   providers: [
     AppService,
     JwtStrategy,
@@ -53,7 +57,6 @@ import { MailModule } from './modules/mail/mail.module';
       provide: APP_PIPE,
       useClass: ValidationPipe,
     },
-    UploadService,
     EmailService,
   ],
   exports: [EmailService],

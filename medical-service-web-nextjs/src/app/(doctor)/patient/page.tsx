@@ -5,11 +5,11 @@ import {Pencil, Trash2, Plus, Loader, View} from "lucide-react";
 import { INIT_PATIENT_TABLE } from "@/app/(doctor)/patient/m_resource/constants";
 import MedicalExaminationForm from "@/app/(doctor)/patient/m_resource/MedicalExaminationForm";
 import { MedicalExaminationInput } from "@/types/examination_report";
-import {useGetAppointments} from "@/libs/hooks/appoiment/useGetAppointment";
-import {useCreateExamination} from "@/libs/hooks/a/useCreateExaminationReport";
-import {useUpdateAppointment} from "@/libs/hooks/appoiment/useUpdateAppointment";
+import {useGetAppointments} from "@/features/appointments/hooks/useGetAppointment";
+import {useCreateExamination} from "@/features/examinationReports/hooks/useCreateExaminationReport";
+import {useUpdateAppointment} from "@/features/appointments/hooks/useUpdateAppointment";
 import {useSession} from "next-auth/react";
-import {useDeleteAppointment} from "@/libs/hooks/appoiment/useDeleteAppointment";
+import {useDeleteAppointment} from "@/features/appointments/hooks/useDeleteAppointment";
 import ConfirmationDialog from "@/app/(admin)/_components/molecules/dialog/ConfirmationDialog";
 
 export default function PatientPage() {

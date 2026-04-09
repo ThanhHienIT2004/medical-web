@@ -1,0 +1,103 @@
+[
+  {
+    "_id": { "$oid": "661000000000000000000301" },
+    "doctor_id": { "$oid": "661000000000000000000002" },
+    "day": "MONDAY",
+    "shift": "MORNING",
+    "start_time": { "$date": "2026-04-06T01:00:00.000Z" },
+    "end_time": { "$date": "2026-04-06T05:00:00.000Z" },
+    "is_available": true,
+    "created_at": { "$date": "2026-04-01T10:00:00.000Z" }
+  },
+  {
+    "_id": { "$oid": "661000000000000000000303" },
+    "doctor_id": { "$oid": "661000000000000000000004" },
+    "day": "TUESDAY",
+    "shift": "AFTERNOON",
+    "start_time": { "$date": "2026-04-07T06:00:00.000Z" },
+    "end_time": { "$date": "2026-04-07T10:00:00.000Z" },
+    "is_available": true,
+    "created_at": { "$date": "2026-04-01T10:01:00.000Z" }
+  },
+  {
+    "_id": { "$oid": "661000000000000000000304" },
+    "doctor_id": { "$oid": "661000000000000000000005" },
+    "day": "WEDNESDAY",
+    "shift": "MORNING",
+    "start_time": { "$date": "2026-04-08T01:00:00.000Z" },
+    "end_time": { "$date": "2026-04-08T05:00:00.000Z" },
+    "is_available": true,
+    "created_at": { "$date": "2026-04-01T10:02:00.000Z" }
+  },
+  {
+    "_id": { "$oid": "661000000000000000000305" },
+    "doctor_id": { "$oid": "66100000000000000000000B" },
+    "day": "THURSDAY",
+    "shift": "AFTERNOON",
+    "start_time": { "$date": "2026-04-09T06:00:00.000Z" },
+    "end_time": { "$date": "2026-04-09T10:00:00.000Z" },
+    "is_available": true,
+    "created_at": { "$date": "2026-04-01T10:03:00.000Z" }
+  },
+  {
+    "_id": { "$oid": "661000000000000000000306" },
+    "doctor_id": { "$oid": "66100000000000000000000C" },
+    "day": "FRIDAY",
+    "shift": "MORNING",
+    "start_time": { "$date": "2026-04-10T01:00:00.000Z" },
+    "end_time": { "$date": "2026-04-10T05:00:00.000Z" },
+    "is_available": true,
+    "created_at": { "$date": "2026-04-01T10:04:00.000Z" }
+  },
+  {
+    "_id": { "$oid": "661000000000000000000307" },
+    "doctor_id": { "$oid": "66100000000000000000000D" },
+    "day": "SATURDAY",
+    "shift": "OVERTIME",
+    "start_time": { "$date": "2026-04-11T10:00:00.000Z" },
+    "end_time": { "$date": "2026-04-11T12:00:00.000Z" },
+    "is_available": true,
+    "created_at": { "$date": "2026-04-01T10:05:00.000Z" }
+  },
+  {
+    "_id": { "$oid": "661000000000000000000308" },
+    "doctor_id": { "$oid": "66100000000000000000000E" },
+    "day": "SUNDAY",
+    "shift": "MORNING",
+    "start_time": { "$date": "2026-04-12T01:00:00.000Z" },
+    "end_time": { "$date": "2026-04-12T05:00:00.000Z" },
+    "is_available": false,
+    "created_at": { "$date": "2026-04-01T10:06:00.000Z" }
+  },
+  {
+    "_id": { "$oid": "661000000000000000000309" },
+    "doctor_id": { "$oid": "66100000000000000000000F" },
+    "day": "MONDAY",
+    "shift": "AFTERNOON",
+    "start_time": { "$date": "2026-04-13T06:00:00.000Z" },
+    "end_time": { "$date": "2026-04-13T10:00:00.000Z" },
+    "is_available": true,
+    "created_at": { "$date": "2026-04-01T10:07:00.000Z" }
+  },
+  {
+    "_id": { "$oid": "66100000000000000000030A" },
+    "doctor_id": { "$oid": "661000000000000000000010" },
+    "day": "TUESDAY",
+    "shift": "MORNING",
+    "start_time": { "$date": "2026-04-14T01:00:00.000Z" },
+    "end_time": { "$date": "2026-04-14T05:00:00.000Z" },
+    "is_available": true,
+    "created_at": { "$date": "2026-04-01T10:08:00.000Z" }
+  },
+  {
+    "_id": { "$oid": "66100000000000000000030B" },
+    "doctor_id": { "$oid": "661000000000000000000011" },
+    "day": "WEDNESDAY",
+    "shift": "AFTERNOON",
+    "start_time": { "$date": "2026-04-15T06:00:00.000Z" },
+    "end_time": { "$date": "2026-04-15T10:00:00.000Z" },
+    "is_available": true,
+    "created_at": { "$date": "2026-04-01T10:09:00.000Z" }
+  }
+]
+

@@ -1,7 +1,7 @@
 "use client";
 
 import PostCard from "@/components/cards/PostCard";
-import { useGetAllPost } from "@/libs/hooks/posts/useGetPost";
+import { useGetAllPost } from "@/features/posts/hooks/useGetPost";
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { Loader2 } from "lucide-react";

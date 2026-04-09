@@ -1,6 +1,7 @@
-import { IsString, IsBoolean, IsOptional, IsArray } from 'class-validator';
+import { IsString, IsBoolean, IsOptional } from 'class-validator';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
+import { CreateRegimenDto } from 'src/modules/regimen/dto/regimen.dto';
 
 export class CreateExaminationReportDto {
   @ApiProperty()
@@ -31,28 +32,6 @@ export class CreateExaminationReportDto {
   @IsOptional()
   @IsString()
   treatment_plan_id?: string;
-}
-
-export class CreateRegimenDto {
-  @ApiProperty()
-  @IsString()
-  care_stage: string;
-
-  @ApiProperty()
-  @IsString()
-  regimen_type: string;
-
-  @ApiProperty({ type: [String] })
-  @IsArray()
-  medication_list: string[];
-
-  @ApiProperty()
-  @IsString()
-  user_guide: string;
-
-  @ApiProperty()
-  @IsBoolean()
-  is_default: boolean;
 }
 
 export class CreateTreatmentPlanDto {

@@ -10,14 +10,19 @@ import {
   Post,
   Req,
   UseFilters,
+  UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
-import { ApiTags, ApiOperation } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags, ApiOperation } from '@nestjs/swagger';
 import { ExaminationReportService } from './examination-report.service';
 import { CreateExaminationReportDto, MedicalExaminationDto } from './dto/examination-report.dto';
 import { ApiResponse } from '../common/response/api-response';
 import { GlobalExceptionFilter } from '../common/filters/http-exception.filter';
 import { ResponseInterceptor } from '../common/interceptors/response.interceptor';
+import { AuthGuard } from '../auth/auth.guard';
+import { PermissionsGuard } from '../auth/guards/permissions.guard';
+import { Permissions } from '../auth/decorators/permissions.decorator';
+import { Permission } from '../auth/enums/permission.enum';
 
 @ApiTags('Examination Reports')
 @Controller('examination-reports')
@@ -27,6 +32,9 @@ export class ExaminationReportController {
   constructor(private readonly reportService: ExaminationReportService) {}
 
   @Get()
+  @UseGuards(AuthGuard, PermissionsGuard)
+  @Permissions(Permission.EXAMINATION_READ)
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Danh sách tất cả báo cáo khám bệnh' })
   @HttpCode(HttpStatus.OK)
   async findAll(@Req() req: Request) {
@@ -35,6 +43,9 @@ export class ExaminationReportController {
   }
 
   @Get(':id')
+  @UseGuards(AuthGuard, PermissionsGuard)
+  @Permissions(Permission.EXAMINATION_READ)
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Chi tiết báo cáo khám bệnh' })
   @HttpCode(HttpStatus.OK)
   async findOne(@Req() req: Request, @Param('id') id: string) {
@@ -43,6 +54,9 @@ export class ExaminationReportController {
   }
 
   @Post()
+  @UseGuards(AuthGuard, PermissionsGuard)
+  @Permissions(Permission.EXAMINATION_CREATE)
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Tạo báo cáo khám bệnh' })
   @HttpCode(HttpStatus.CREATED)
   async create(@Req() req: Request, @Body() dto: CreateExaminationReportDto) {
@@ -51,6 +65,9 @@ export class ExaminationReportController {
   }
 
   @Post('medical-examination')
+  @UseGuards(AuthGuard, PermissionsGuard)
+  @Permissions(Permission.EXAMINATION_CREATE)
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Tạo trọn bộ khám bệnh (report + regimen + treatment plan)' })
   @HttpCode(HttpStatus.CREATED)
   async makeMedicalExamination(@Req() req: Request, @Body() dto: MedicalExaminationDto) {
@@ -59,6 +76,9 @@ export class ExaminationReportController {
   }
 
   @Delete(':id')
+  @UseGuards(AuthGuard, PermissionsGuard)
+  @Permissions(Permission.EXAMINATION_DELETE)
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Xóa báo cáo khám bệnh' })
   @HttpCode(HttpStatus.OK)
   async delete(@Req() req: Request, @Param('id') id: string) {

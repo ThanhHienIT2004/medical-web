@@ -1,0 +1,123 @@
+[
+  {
+    "_id": { "$oid": "661000000000000000000601" },
+    "name": "Khám HIV - Demo",
+    "doctor_id": { "$oid": "661000000000000000000002" },
+    "risk_assessment": "LOW",
+    "is_HIV": true,
+    "HIV_test_file": "uploads/hiv_test_demo.pdf",
+    "regimen_id": { "$oid": "661000000000000000000201" },
+    "treatment_plan_id": { "$oid": "661000000000000000000401" },
+    "created_at": { "$date": "2026-04-01T12:00:00.000Z" },
+    "updated_at": { "$date": "2026-04-01T12:00:00.000Z" }
+  },
+  {
+    "_id": { "$oid": "661000000000000000000602" },
+    "name": "Khám HIV 2",
+    "doctor_id": { "$oid": "661000000000000000000004" },
+    "risk_assessment": "MEDIUM",
+    "is_HIV": false,
+    "HIV_test_file": "uploads/hiv_test_2.pdf",
+    "regimen_id": { "$oid": "661000000000000000000202" },
+    "treatment_plan_id": { "$oid": "661000000000000000000402" },
+    "created_at": { "$date": "2026-04-01T12:01:00.000Z" },
+    "updated_at": { "$date": "2026-04-01T12:01:00.000Z" }
+  },
+  {
+    "_id": { "$oid": "661000000000000000000603" },
+    "name": "Khám HIV 3",
+    "doctor_id": { "$oid": "661000000000000000000005" },
+    "risk_assessment": "LOW",
+    "is_HIV": true,
+    "HIV_test_file": "uploads/hiv_test_3.pdf",
+    "regimen_id": { "$oid": "661000000000000000000203" },
+    "treatment_plan_id": { "$oid": "661000000000000000000403" },
+    "created_at": { "$date": "2026-04-01T12:02:00.000Z" },
+    "updated_at": { "$date": "2026-04-01T12:02:00.000Z" }
+  },
+  {
+    "_id": { "$oid": "661000000000000000000604" },
+    "name": "Khám HIV 4",
+    "doctor_id": { "$oid": "66100000000000000000000B" },
+    "risk_assessment": "HIGH",
+    "is_HIV": true,
+    "HIV_test_file": "uploads/hiv_test_4.pdf",
+    "regimen_id": { "$oid": "661000000000000000000204" },
+    "treatment_plan_id": { "$oid": "661000000000000000000404" },
+    "created_at": { "$date": "2026-04-01T12:03:00.000Z" },
+    "updated_at": { "$date": "2026-04-01T12:03:00.000Z" }
+  },
+  {
+    "_id": { "$oid": "661000000000000000000605" },
+    "name": "Khám HIV 5",
+    "doctor_id": { "$oid": "66100000000000000000000C" },
+    "risk_assessment": "LOW",
+    "is_HIV": false,
+    "HIV_test_file": "uploads/hiv_test_5.pdf",
+    "regimen_id": { "$oid": "661000000000000000000205" },
+    "treatment_plan_id": { "$oid": "661000000000000000000405" },
+    "created_at": { "$date": "2026-04-01T12:04:00.000Z" },
+    "updated_at": { "$date": "2026-04-01T12:04:00.000Z" }
+  },
+  {
+    "_id": { "$oid": "661000000000000000000606" },
+    "name": "Khám HIV 6",
+    "doctor_id": { "$oid": "66100000000000000000000D" },
+    "risk_assessment": "MEDIUM",
+    "is_HIV": true,
+    "HIV_test_file": "uploads/hiv_test_6.pdf",
+    "regimen_id": { "$oid": "661000000000000000000206" },
+    "treatment_plan_id": { "$oid": "661000000000000000000406" },
+    "created_at": { "$date": "2026-04-01T12:05:00.000Z" },
+    "updated_at": { "$date": "2026-04-01T12:05:00.000Z" }
+  },
+  {
+    "_id": { "$oid": "661000000000000000000607" },
+    "name": "Khám HIV 7",
+    "doctor_id": { "$oid": "66100000000000000000000E" },
+    "risk_assessment": "LOW",
+    "is_HIV": false,
+    "HIV_test_file": "uploads/hiv_test_7.pdf",
+    "regimen_id": { "$oid": "661000000000000000000207" },
+    "treatment_plan_id": { "$oid": "661000000000000000000407" },
+    "created_at": { "$date": "2026-04-01T12:06:00.000Z" },
+    "updated_at": { "$date": "2026-04-01T12:06:00.000Z" }
+  },
+  {
+    "_id": { "$oid": "661000000000000000000608" },
+    "name": "Khám HIV 8",
+    "doctor_id": { "$oid": "66100000000000000000000F" },
+    "risk_assessment": "MEDIUM",
+    "is_HIV": true,
+    "HIV_test_file": "uploads/hiv_test_8.pdf",
+    "regimen_id": { "$oid": "661000000000000000000208" },
+    "treatment_plan_id": { "$oid": "661000000000000000000408" },
+    "created_at": { "$date": "2026-04-01T12:07:00.000Z" },
+    "updated_at": { "$date": "2026-04-01T12:07:00.000Z" }
+  },
+  {
+    "_id": { "$oid": "661000000000000000000609" },
+    "name": "Khám HIV 9",
+    "doctor_id": { "$oid": "661000000000000000000010" },
+    "risk_assessment": "LOW",
+    "is_HIV": false,
+    "HIV_test_file": "uploads/hiv_test_9.pdf",
+    "regimen_id": { "$oid": "661000000000000000000209" },
+    "treatment_plan_id": { "$oid": "661000000000000000000409" },
+    "created_at": { "$date": "2026-04-01T12:08:00.000Z" },
+    "updated_at": { "$date": "2026-04-01T12:08:00.000Z" }
+  },
+  {
+    "_id": { "$oid": "66100000000000000000060A" },
+    "name": "Khám HIV 10",
+    "doctor_id": { "$oid": "661000000000000000000011" },
+    "risk_assessment": "HIGH",
+    "is_HIV": true,
+    "HIV_test_file": "uploads/hiv_test_10.pdf",
+    "regimen_id": { "$oid": "66100000000000000000020A" },
+    "treatment_plan_id": { "$oid": "66100000000000000000040A" },
+    "created_at": { "$date": "2026-04-01T12:09:00.000Z" },
+    "updated_at": { "$date": "2026-04-01T12:09:00.000Z" }
+  }
+]
+

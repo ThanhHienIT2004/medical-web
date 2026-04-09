@@ -12,26 +12,27 @@ import {
 import AppointmentDetailModal from './AppointmentDetailModal';
 import { useSnackbar } from 'notistack';
 import { apiClient } from '@/libs/api/apiClient';
+import type { Appointment } from '@/types/appointment';
 
 export default function AppointmentsPage() {
     const { data: session, status } = useSession();
     const { enqueueSnackbar } = useSnackbar();
     const patientId = session?.user?.id;
 
-    const [appointments, setAppointments] = useState<any[]>([]);
+    const [appointments, setAppointments] = useState<Appointment[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<Error | null>(null);
-    const [selectedAppointment, setSelectedAppointment] = useState(null);
+    const [selectedAppointment, setSelectedAppointment] = useState<Appointment | null>(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     const fetchAppointments = useCallback(async () => {
         if (!patientId) return;
         try {
             setLoading(true);
-            const result = await apiClient(`/appointments/patient/${patientId}`);
+            const result = await apiClient<Appointment[]>(`/appointments/patient/${patientId}`);
             setAppointments(Array.isArray(result) ? result : []);
-        } catch (e: any) {
-            setError(e);
+        } catch (e: unknown) {
+            setError(e instanceof Error ? e : new Error('Không thể tải lịch hẹn'));
         } finally {
             setLoading(false);
         }
@@ -41,7 +42,7 @@ export default function AppointmentsPage() {
         fetchAppointments();
     }, [fetchAppointments]);
 
-    const handleOpenModal = (appointment: any) => {
+    const handleOpenModal = (appointment: Appointment) => {
         setSelectedAppointment(appointment);
         setIsModalOpen(true);
     };
@@ -60,8 +61,9 @@ export default function AppointmentsPage() {
                 });
                 enqueueSnackbar('Đã hủy lịch hẹn thành công!', { variant: 'success' });
                 await fetchAppointments();
-            } catch (err: any) {
-                enqueueSnackbar('Lỗi khi hủy lịch: ' + err.message, { variant: 'error' });
+            } catch (err: unknown) {
+                const error = err instanceof Error ? err : new Error('Lỗi khi hủy lịch');
+                enqueueSnackbar('Lỗi khi hủy lịch: ' + error.message, { variant: 'error' });
             }
         }
     };
@@ -125,7 +127,7 @@ export default function AppointmentsPage() {
                         </div>
                     ) : (
                         <div className="divide-y divide-gray-100">
-                            {appointments.map((appt: any) => {
+                            {appointments.map((appt) => {
                                 const dt = typeof appt.appointment_date === 'number'
                                     ? new Date(appt.appointment_date)
                                     : new Date(appt.appointment_date);

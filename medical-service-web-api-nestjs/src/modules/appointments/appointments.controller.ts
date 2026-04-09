@@ -12,14 +12,19 @@ import {
   Query,
   Req,
   UseFilters,
+  UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiQuery } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags, ApiOperation, ApiQuery } from '@nestjs/swagger';
 import { AppointmentService } from './appointments.service';
 import { CreateAppointmentDto, UpdateAppointmentDto, UpdateAppointmentStatusDto, PaginationAppointmentQueryDto } from './dto/appointments.dto';
 import { ApiResponse } from '../common/response/api-response';
 import { GlobalExceptionFilter } from '../common/filters/http-exception.filter';
 import { ResponseInterceptor } from '../common/interceptors/response.interceptor';
+import { AuthGuard } from '../auth/auth.guard';
+import { PermissionsGuard } from '../auth/guards/permissions.guard';
+import { Permissions } from '../auth/decorators/permissions.decorator';
+import { Permission } from '../auth/enums/permission.enum';
 
 @ApiTags('Appointments')
 @Controller('appointments')
@@ -29,6 +34,9 @@ export class AppointmentsController {
   constructor(private readonly appointmentService: AppointmentService) {}
 
   @Post()
+  @UseGuards(AuthGuard, PermissionsGuard)
+  @Permissions(Permission.APPOINTMENT_CREATE)
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Đặt lịch hẹn mới' })
   @HttpCode(HttpStatus.CREATED)
   async create(@Req() req: Request, @Body() dto: CreateAppointmentDto) {
@@ -37,6 +45,9 @@ export class AppointmentsController {
   }
 
   @Get()
+  @UseGuards(AuthGuard, PermissionsGuard)
+  @Permissions(Permission.APPOINTMENT_READ)
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Danh sách tất cả lịch hẹn' })
   @HttpCode(HttpStatus.OK)
   async findAll(@Req() req: Request) {
@@ -45,6 +56,9 @@ export class AppointmentsController {
   }
 
   @Get('doctor')
+  @UseGuards(AuthGuard, PermissionsGuard)
+  @Permissions(Permission.APPOINTMENT_READ)
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Lịch hẹn theo bác sĩ (phân trang)' })
   @ApiQuery({ name: 'doctor_id', required: true })
   @ApiQuery({ name: 'page', required: false, type: Number })
@@ -60,6 +74,9 @@ export class AppointmentsController {
   }
 
   @Get('patient/:patientId')
+  @UseGuards(AuthGuard, PermissionsGuard)
+  @Permissions(Permission.APPOINTMENT_READ)
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Lịch hẹn theo bệnh nhân' })
   @HttpCode(HttpStatus.OK)
   async findByPatient(
@@ -71,6 +88,9 @@ export class AppointmentsController {
   }
 
   @Get(':id')
+  @UseGuards(AuthGuard, PermissionsGuard)
+  @Permissions(Permission.APPOINTMENT_READ)
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Chi tiết lịch hẹn' })
   @HttpCode(HttpStatus.OK)
   async findOne(@Req() req: Request, @Param('id') id: string) {
@@ -79,6 +99,9 @@ export class AppointmentsController {
   }
 
   @Patch(':id')
+  @UseGuards(AuthGuard, PermissionsGuard)
+  @Permissions(Permission.APPOINTMENT_UPDATE)
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Cập nhật lịch hẹn' })
   @HttpCode(HttpStatus.OK)
   async update(
@@ -91,6 +114,9 @@ export class AppointmentsController {
   }
 
   @Patch(':id/status')
+  @UseGuards(AuthGuard, PermissionsGuard)
+  @Permissions(Permission.APPOINTMENT_UPDATE)
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Cập nhật trạng thái lịch hẹn' })
   @HttpCode(HttpStatus.OK)
   async updateStatus(
@@ -103,6 +129,9 @@ export class AppointmentsController {
   }
 
   @Delete(':id')
+  @UseGuards(AuthGuard, PermissionsGuard)
+  @Permissions(Permission.APPOINTMENT_DELETE)
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Xóa lịch hẹn' })
   @HttpCode(HttpStatus.OK)
   async remove(@Req() req: Request, @Param('id') id: string) {

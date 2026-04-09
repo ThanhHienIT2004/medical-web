@@ -6,9 +6,12 @@ import { useSession } from 'next-auth/react';
 import { useSnackbar } from 'notistack';
 import { useLoading } from '@/app/context/loadingContext';
 import { apiClient } from '@/libs/api/apiClient';
+import type { Patient } from '@/types/patient';
+import type { Appointment } from '@/types/appointment';
+import type { TimeSlot } from './components/TimeSlotSelector';
 
-import { useBookingForm } from '@/libs/hooks/appoiment/useBookingForm';
-import { useBookingData } from '@/libs/hooks/appoiment/useBookingData';
+import { useBookingForm } from '@/features/appointments/hooks/useBookingForm';
+import { useBookingData } from '@/features/appointments/hooks/useBookingData';
 
 import DoctorCard from './components/DoctorCard';
 import DateSelector from './components/DateSelector';
@@ -29,13 +32,13 @@ export default function BookingPage() {
     const [mutationError, setMutationError] = useState<Error | null>(null);
 
     // Fetch patient data
-    const [patient, setPatient] = useState<any>(null);
-    const [user, setUser] = useState<any>(null);
+    const [patient, setPatient] = useState<Patient | null>(null);
+    const [user, setUser] = useState<Patient['user'] | null>(null);
 
     const fetchPatient = useCallback(async () => {
         if (!session?.user?.id) return;
         try {
-            const result = await apiClient(`/patients/${session.user.id}`);
+            const result = await apiClient<Patient>(`/patients/${session.user.id}`);
             setPatient(result);
             setUser(result?.user);
         } catch (e) {
@@ -58,11 +61,11 @@ export default function BookingPage() {
         slots,
     } = useBookingData(doctorId, selectedDate, selectedScheduleId);
 
-    const handleSubmit = async (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         if (!selectedSlotId || !session?.user?.id) return;
 
-        const selectedSlot = slots.find((s: any) => s.id === selectedSlotId);
+        const selectedSlot = slots.find((s: TimeSlot) => s.id === selectedSlotId);
         if (!selectedSlot) return;
 
         try {
@@ -88,9 +91,10 @@ export default function BookingPage() {
             resetForm();
             setSelectedScheduleId(null);
             setSelectedSlotId(null);
-        } catch (err: any) {
-            setMutationError(err);
-            enqueueSnackbar('Đặt lịch thất bại: ' + err.message, { variant: 'error' });
+        } catch (err: unknown) {
+            const error = err instanceof Error ? err : new Error('Đặt lịch thất bại');
+            setMutationError(error);
+            enqueueSnackbar('Đặt lịch thất bại: ' + error.message, { variant: 'error' });
         } finally {
             setMutationLoading(false);
         }
@@ -149,7 +153,7 @@ export default function BookingPage() {
                     <div className={"bg-white border p-2 rounded-md shadow-sm"}>
                         <h2 className="text-lg font-semibold mb-4">Giờ khám</h2>
                         <TimeSlotSelector
-                            slots={slots.map((slot: any) => ({
+                            slots={slots.map((slot) => ({
                                 id: slot.id,
                                 time: slot.start_time.slice(11, 16),
                                 max_patients: slot.max_patients,

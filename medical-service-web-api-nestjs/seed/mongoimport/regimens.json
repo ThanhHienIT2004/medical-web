@@ -1,0 +1,103 @@
+[
+  {
+    "_id": { "$oid": "661000000000000000000201" },
+    "care_stage": "ARV",
+    "regimen_type": "STANDARD",
+    "medication_list": ["TDF", "FTC", "DTG"],
+    "user_guide": "Uống 1 lần/ngày sau ăn.",
+    "is_default": true,
+    "created_at": { "$date": "2026-04-01T09:10:00.000Z" },
+    "updated_at": { "$date": "2026-04-01T09:10:00.000Z" }
+  },
+  {
+    "_id": { "$oid": "661000000000000000000202" },
+    "care_stage": "PrEP",
+    "regimen_type": "STANDARD",
+    "medication_list": ["TDF", "FTC"],
+    "user_guide": "Uống 1 viên/ngày.",
+    "is_default": false,
+    "created_at": { "$date": "2026-04-01T09:10:10.000Z" },
+    "updated_at": { "$date": "2026-04-01T09:10:10.000Z" }
+  },
+  {
+    "_id": { "$oid": "661000000000000000000203" },
+    "care_stage": "PEP",
+    "regimen_type": "STANDARD",
+    "medication_list": ["TDF", "FTC", "DTG"],
+    "user_guide": "Uống trong 28 ngày.",
+    "is_default": false,
+    "created_at": { "$date": "2026-04-01T09:10:20.000Z" },
+    "updated_at": { "$date": "2026-04-01T09:10:20.000Z" }
+  },
+  {
+    "_id": { "$oid": "661000000000000000000204" },
+    "care_stage": "ARV",
+    "regimen_type": "CUSTOM",
+    "medication_list": ["3TC", "DTG", "ABC"],
+    "user_guide": "Theo chỉ định bác sĩ.",
+    "is_default": false,
+    "created_at": { "$date": "2026-04-01T09:10:30.000Z" },
+    "updated_at": { "$date": "2026-04-01T09:10:30.000Z" }
+  },
+  {
+    "_id": { "$oid": "661000000000000000000205" },
+    "care_stage": "ARV",
+    "regimen_type": "STANDARD",
+    "medication_list": ["AZT", "3TC", "EFV"],
+    "user_guide": "Uống sau ăn.",
+    "is_default": false,
+    "created_at": { "$date": "2026-04-01T09:10:40.000Z" },
+    "updated_at": { "$date": "2026-04-01T09:10:40.000Z" }
+  },
+  {
+    "_id": { "$oid": "661000000000000000000206" },
+    "care_stage": "ARV",
+    "regimen_type": "STANDARD",
+    "medication_list": ["TDF", "3TC", "DTG"],
+    "user_guide": "Theo dõi men gan.",
+    "is_default": false,
+    "created_at": { "$date": "2026-04-01T09:10:50.000Z" },
+    "updated_at": { "$date": "2026-04-01T09:10:50.000Z" }
+  },
+  {
+    "_id": { "$oid": "661000000000000000000207" },
+    "care_stage": "PrEP",
+    "regimen_type": "CUSTOM",
+    "medication_list": ["TDF", "FTC"],
+    "user_guide": "Dùng theo lịch 2-1-1 (nếu phù hợp).",
+    "is_default": false,
+    "created_at": { "$date": "2026-04-01T09:11:00.000Z" },
+    "updated_at": { "$date": "2026-04-01T09:11:00.000Z" }
+  },
+  {
+    "_id": { "$oid": "661000000000000000000208" },
+    "care_stage": "PEP",
+    "regimen_type": "CUSTOM",
+    "medication_list": ["TDF", "FTC", "BIC"],
+    "user_guide": "Theo chỉ định.",
+    "is_default": false,
+    "created_at": { "$date": "2026-04-01T09:11:10.000Z" },
+    "updated_at": { "$date": "2026-04-01T09:11:10.000Z" }
+  },
+  {
+    "_id": { "$oid": "661000000000000000000209" },
+    "care_stage": "ARV",
+    "regimen_type": "CUSTOM",
+    "medication_list": ["DRV", "3TC", "TDF"],
+    "user_guide": "Theo dõi tương tác thuốc.",
+    "is_default": false,
+    "created_at": { "$date": "2026-04-01T09:11:20.000Z" },
+    "updated_at": { "$date": "2026-04-01T09:11:20.000Z" }
+  },
+  {
+    "_id": { "$oid": "66100000000000000000020A" },
+    "care_stage": "ARV",
+    "regimen_type": "STANDARD",
+    "medication_list": ["TDF", "FTC", "BIC"],
+    "user_guide": "Uống 1 lần/ngày.",
+    "is_default": false,
+    "created_at": { "$date": "2026-04-01T09:11:30.000Z" },
+    "updated_at": { "$date": "2026-04-01T09:11:30.000Z" }
+  }
+]
+

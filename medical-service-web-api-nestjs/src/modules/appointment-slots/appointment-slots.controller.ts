@@ -11,14 +11,19 @@ import {
   Post,
   Req,
   UseFilters,
+  UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
-import { ApiTags, ApiOperation } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags, ApiOperation } from '@nestjs/swagger';
 import { AppointmentSlotsService } from './appointment-slots.service';
 import { CreateAppointmentSlotDto, UpdateAppointmentSlotDto } from './dto/appointment-slots.dto';
 import { ApiResponse } from '../common/response/api-response';
 import { GlobalExceptionFilter } from '../common/filters/http-exception.filter';
 import { ResponseInterceptor } from '../common/interceptors/response.interceptor';
+import { AuthGuard } from '../auth/auth.guard';
+import { PermissionsGuard } from '../auth/guards/permissions.guard';
+import { Permissions } from '../auth/decorators/permissions.decorator';
+import { Permission } from '../auth/enums/permission.enum';
 
 @ApiTags('Appointment Slots')
 @Controller('appointment-slots')
@@ -28,6 +33,9 @@ export class AppointmentSlotsController {
   constructor(private readonly slotsService: AppointmentSlotsService) {}
 
   @Get()
+  @UseGuards(AuthGuard, PermissionsGuard)
+  @Permissions(Permission.APPOINTMENT_READ)
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Tất cả appointment slots' })
   @HttpCode(HttpStatus.OK)
   async findAll(@Req() req: Request) {
@@ -36,6 +44,9 @@ export class AppointmentSlotsController {
   }
 
   @Get(':id')
+  @UseGuards(AuthGuard, PermissionsGuard)
+  @Permissions(Permission.APPOINTMENT_READ)
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Chi tiết appointment slot' })
   @HttpCode(HttpStatus.OK)
   async findOne(@Req() req: Request, @Param('id') id: string) {
@@ -44,6 +55,9 @@ export class AppointmentSlotsController {
   }
 
   @Get('schedule/:scheduleId')
+  @UseGuards(AuthGuard, PermissionsGuard)
+  @Permissions(Permission.APPOINTMENT_READ)
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Appointment slots theo schedule ID' })
   @HttpCode(HttpStatus.OK)
   async findBySchedule(
@@ -55,6 +69,9 @@ export class AppointmentSlotsController {
   }
 
   @Post()
+  @UseGuards(AuthGuard, PermissionsGuard)
+  @Permissions(Permission.APPOINTMENT_UPDATE)
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Tạo appointment slot mới' })
   @HttpCode(HttpStatus.CREATED)
   async create(@Req() req: Request, @Body() dto: CreateAppointmentSlotDto) {
@@ -63,6 +80,9 @@ export class AppointmentSlotsController {
   }
 
   @Patch(':id')
+  @UseGuards(AuthGuard, PermissionsGuard)
+  @Permissions(Permission.APPOINTMENT_UPDATE)
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Cập nhật appointment slot' })
   @HttpCode(HttpStatus.OK)
   async update(
@@ -75,6 +95,9 @@ export class AppointmentSlotsController {
   }
 
   @Delete(':id')
+  @UseGuards(AuthGuard, PermissionsGuard)
+  @Permissions(Permission.APPOINTMENT_UPDATE)
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Xóa appointment slot' })
   @HttpCode(HttpStatus.OK)
   async delete(@Req() req: Request, @Param('id') id: string) {

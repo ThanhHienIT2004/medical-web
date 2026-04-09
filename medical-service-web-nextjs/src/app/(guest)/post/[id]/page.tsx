@@ -1,6 +1,6 @@
 "use client";
 
-import { useGetOnePost } from "@/libs/hooks/posts/useGetOnePost";
+import { useGetOnePost } from "@/features/posts/hooks/useGetOnePost";
 import { useEffect } from "react";
 import { use } from "react";
 import { motion } from "framer-motion";

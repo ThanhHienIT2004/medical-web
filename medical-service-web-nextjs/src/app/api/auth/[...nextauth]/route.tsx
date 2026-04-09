@@ -2,6 +2,7 @@ import { jwtDecode } from "jwt-decode";
 import { NextAuthOptions } from "next-auth";
 import NextAuth from "next-auth/next";
 import CredentialsProvider from 'next-auth/providers/credentials';
+import type { LoginResponse, JwtPayload } from '@/types/auth';
 
 const API_BASE_URL = process.env.API_BASE_URL || 'http://localhost:3000/api/v1';
 
@@ -13,7 +14,7 @@ const authOptions: NextAuthOptions = {
                 email: { label: "Email", type: "email" },
                 password: { label: "Password", type: "password" }
             },
-            async authorize(credentials, req) {
+            async authorize(credentials) {
                 if (!credentials?.email || !credentials?.password) return null;
 
                 try {
@@ -31,21 +32,27 @@ const authOptions: NextAuthOptions = {
                         return null;
                     }
 
-                    const data = await response.json();
+                    const json = await response.json() as { data?: LoginResponse } | LoginResponse;
 
-                    if (data?.accessToken) {
-                        const decoded: any = jwtDecode(data.accessToken);
+                    const payload: LoginResponse | null =
+                        'data' in json && json.data
+                            ? json.data
+                            : (json as LoginResponse | null);
+
+                    if (payload?.accessToken) {
+                        const decoded = jwtDecode<JwtPayload>(payload.accessToken);
 
                         return {
                             id: decoded.sub,
                             email: credentials.email,
-                            accessToken: data.accessToken,
+                            accessToken: payload.accessToken,
                             role: decoded.role,
                         };
                     }
                     return null;
-                } catch (error: any) {
-                    console.error("Login error:", error?.message);
+                } catch (error: unknown) {
+                    const message = error instanceof Error ? error.message : 'Unknown login error';
+                    console.error("Login error:", message);
                     return null;
                 }
             }

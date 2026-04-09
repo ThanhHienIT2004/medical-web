@@ -1,0 +1,93 @@
+[
+  {
+    "_id": { "$oid": "661000000000000000000101" },
+    "acronym": "TDF",
+    "name": "Tenofovir disoproxil fumarate",
+    "price": 12000,
+    "available_quantity": 500,
+    "created_at": { "$date": "2026-04-01T09:00:00.000Z" },
+    "updated_at": { "$date": "2026-04-01T09:00:00.000Z" }
+  },
+  {
+    "_id": { "$oid": "661000000000000000000102" },
+    "acronym": "FTC",
+    "name": "Emtricitabine",
+    "price": 15000,
+    "available_quantity": 400,
+    "created_at": { "$date": "2026-04-01T09:00:10.000Z" },
+    "updated_at": { "$date": "2026-04-01T09:00:10.000Z" }
+  },
+  {
+    "_id": { "$oid": "661000000000000000000103" },
+    "acronym": "DTG",
+    "name": "Dolutegravir",
+    "price": 25000,
+    "available_quantity": 300,
+    "created_at": { "$date": "2026-04-01T09:00:20.000Z" },
+    "updated_at": { "$date": "2026-04-01T09:00:20.000Z" }
+  },
+  {
+    "_id": { "$oid": "661000000000000000000104" },
+    "acronym": "EFV",
+    "name": "Efavirenz",
+    "price": 11000,
+    "available_quantity": 250,
+    "created_at": { "$date": "2026-04-01T09:00:30.000Z" },
+    "updated_at": { "$date": "2026-04-01T09:00:30.000Z" }
+  },
+  {
+    "_id": { "$oid": "661000000000000000000105" },
+    "acronym": "3TC",
+    "name": "Lamivudine",
+    "price": 9000,
+    "available_quantity": 600,
+    "created_at": { "$date": "2026-04-01T09:00:40.000Z" },
+    "updated_at": { "$date": "2026-04-01T09:00:40.000Z" }
+  },
+  {
+    "_id": { "$oid": "661000000000000000000106" },
+    "acronym": "AZT",
+    "name": "Zidovudine",
+    "price": 8000,
+    "available_quantity": 150,
+    "created_at": { "$date": "2026-04-01T09:00:50.000Z" },
+    "updated_at": { "$date": "2026-04-01T09:00:50.000Z" }
+  },
+  {
+    "_id": { "$oid": "661000000000000000000107" },
+    "acronym": "ABC",
+    "name": "Abacavir",
+    "price": 14000,
+    "available_quantity": 220,
+    "created_at": { "$date": "2026-04-01T09:01:00.000Z" },
+    "updated_at": { "$date": "2026-04-01T09:01:00.000Z" }
+  },
+  {
+    "_id": { "$oid": "661000000000000000000108" },
+    "acronym": "RPV",
+    "name": "Rilpivirine",
+    "price": 21000,
+    "available_quantity": 180,
+    "created_at": { "$date": "2026-04-01T09:01:10.000Z" },
+    "updated_at": { "$date": "2026-04-01T09:01:10.000Z" }
+  },
+  {
+    "_id": { "$oid": "661000000000000000000109" },
+    "acronym": "BIC",
+    "name": "Bictegravir",
+    "price": 32000,
+    "available_quantity": 90,
+    "created_at": { "$date": "2026-04-01T09:01:20.000Z" },
+    "updated_at": { "$date": "2026-04-01T09:01:20.000Z" }
+  },
+  {
+    "_id": { "$oid": "66100000000000000000010A" },
+    "acronym": "DRV",
+    "name": "Darunavir",
+    "price": 28000,
+    "available_quantity": 75,
+    "created_at": { "$date": "2026-04-01T09:01:30.000Z" },
+    "updated_at": { "$date": "2026-04-01T09:01:30.000Z" }
+  }
+]
+

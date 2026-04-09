@@ -2,7 +2,7 @@
 
 import React from 'react';
 
-interface TimeSlot {
+export interface TimeSlot {
     id: number;
     time: string;
     max_patients: number;

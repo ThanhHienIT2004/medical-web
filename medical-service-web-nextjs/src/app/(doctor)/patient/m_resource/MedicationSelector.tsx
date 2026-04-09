@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { X, AlertCircle } from "lucide-react";
-import { useSearchMedications } from "@/libs/hooks/medications/useSearchMedications";
+import { useSearchMedications } from "@/features/medications/hooks/useSearchMedications";
 import { useDebounce } from "use-debounce";
 import {Medication} from "@/types/medications";
 

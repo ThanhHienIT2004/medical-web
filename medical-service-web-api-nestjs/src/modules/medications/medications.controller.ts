@@ -12,15 +12,20 @@ import {
   Query,
   Req,
   UseFilters,
+  UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiQuery } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags, ApiOperation, ApiQuery } from '@nestjs/swagger';
 import { MedicationsService } from './medications.service';
 import { CreateMedicationDto, UpdateMedicationDto } from './dto/medications.dto';
 import { PaginationQueryDto } from '../common/dto/pagination-query.dto';
 import { ApiResponse } from '../common/response/api-response';
 import { GlobalExceptionFilter } from '../common/filters/http-exception.filter';
 import { ResponseInterceptor } from '../common/interceptors/response.interceptor';
+import { AuthGuard } from '../auth/auth.guard';
+import { PermissionsGuard } from '../auth/guards/permissions.guard';
+import { Permissions } from '../auth/decorators/permissions.decorator';
+import { Permission } from '../auth/enums/permission.enum';
 
 @ApiTags('Medications')
 @Controller('medications')
@@ -30,6 +35,9 @@ export class MedicationsController {
   constructor(private readonly medicationsService: MedicationsService) {}
 
   @Get()
+  @UseGuards(AuthGuard, PermissionsGuard)
+  @Permissions(Permission.MEDICATION_READ)
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Danh sách thuốc (phân trang)' })
   @ApiQuery({ name: 'page', required: false, type: Number })
   @ApiQuery({ name: 'limit', required: false, type: Number })
@@ -43,6 +51,9 @@ export class MedicationsController {
   }
 
   @Get('search')
+  @UseGuards(AuthGuard, PermissionsGuard)
+  @Permissions(Permission.MEDICATION_READ)
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Tìm kiếm thuốc theo từ khóa' })
   @ApiQuery({ name: 'keyword', required: true })
   @HttpCode(HttpStatus.OK)
@@ -52,6 +63,9 @@ export class MedicationsController {
   }
 
   @Get(':id')
+  @UseGuards(AuthGuard, PermissionsGuard)
+  @Permissions(Permission.MEDICATION_READ)
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Chi tiết thuốc theo ID' })
   @HttpCode(HttpStatus.OK)
   async findOne(@Req() req: Request, @Param('id') id: string) {
@@ -60,6 +74,9 @@ export class MedicationsController {
   }
 
   @Post()
+  @UseGuards(AuthGuard, PermissionsGuard)
+  @Permissions(Permission.MEDICATION_CREATE)
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Tạo thuốc mới' })
   @HttpCode(HttpStatus.CREATED)
   async create(@Req() req: Request, @Body() dto: CreateMedicationDto) {
@@ -68,6 +85,9 @@ export class MedicationsController {
   }
 
   @Patch(':id')
+  @UseGuards(AuthGuard, PermissionsGuard)
+  @Permissions(Permission.MEDICATION_UPDATE)
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Cập nhật thuốc' })
   @HttpCode(HttpStatus.OK)
   async update(
@@ -80,6 +100,9 @@ export class MedicationsController {
   }
 
   @Delete(':id')
+  @UseGuards(AuthGuard, PermissionsGuard)
+  @Permissions(Permission.MEDICATION_DELETE)
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Xóa thuốc' })
   @HttpCode(HttpStatus.OK)
   async remove(@Req() req: Request, @Param('id') id: string) {

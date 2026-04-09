@@ -1,29 +1,11 @@
 'use client';
 
-import React, { useState, useEffect, useCallback } from 'react';
+import React from 'react';
 import Link from 'next/link';
-import { apiClient } from '@/libs/api/apiClient';
+import { useGetDoctors } from '@/features/doctors/hooks/useGetDoctors';
 
 function DoctorPage() {
-    const [doctors, setDoctors] = useState<any[]>([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState<Error | null>(null);
-
-    const fetchDoctors = useCallback(async () => {
-        try {
-            setLoading(true);
-            const result = await apiClient('/doctors');
-            setDoctors(Array.isArray(result) ? result : []);
-        } catch (e: any) {
-            setError(e);
-        } finally {
-            setLoading(false);
-        }
-    }, []);
-
-    useEffect(() => {
-        fetchDoctors();
-    }, [fetchDoctors]);
+    const { doctors, loading, error } = useGetDoctors();
 
     if (loading) {
         return (
@@ -42,10 +24,9 @@ function DoctorPage() {
 
     return (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 p-6">
-            {doctors.map((doctor: any, index: number) => {
-                const user = doctor.user;
+            {doctors.map((doctor, index) => {
                 const avatarSrc =
-                    user?.avatar?.startsWith('http') ? user.avatar : '/doctor-placeholder.jpg';
+                    doctor.avatar?.startsWith('http') ? doctor.avatar : '/doctor-placeholder.jpg';
 
                 return (
                     <div
@@ -57,7 +38,7 @@ function DoctorPage() {
                         <div className="relative w-full h-72">
                             <img
                                 src={avatarSrc}
-                                alt={user?.full_name || 'Bác sĩ'}
+                                alt={doctor.full_name || 'Bác sĩ'}
                                 className="w-full h-full object-cover"
                             />
 
@@ -68,7 +49,7 @@ function DoctorPage() {
                                      transition-all duration-300"
                             >
                                 <Link
-                                    href={`/booking/${user?.id}`}
+                                    href={`/booking/${doctor.user_id}`}
                                     className="mb-4 bg-gradient-to-r from-blue-400 to-sky-300 text-white font-semibold
                                    text-sm px-5 py-2 rounded-full shadow-md hover:from-blue-600 hover:to-sky-500
                                    hover:scale-105 transition-transform duration-300"
@@ -83,7 +64,7 @@ function DoctorPage() {
                         {/* Nội dung dưới ảnh */}
                         <div className="p-4 text-center">
                             <h3 className="text-lg font-semibold text-gray-900">
-                                Dr. {user?.full_name || 'Không rõ'}
+                                {doctor.full_name || 'Không rõ'}
                             </h3>
                             <p className="text-sm text-gray-500">
                                 {doctor.hospital || 'Không rõ'}

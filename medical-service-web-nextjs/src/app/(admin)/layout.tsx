@@ -1,7 +1,7 @@
 import React from 'react';
 import '../globals.css';
 import type {Metadata} from "next";
-import AdminClientWrapper from "@/app/(admin)/_components/organisms/adminClientWrapper/AdminClientWrapper";
+import AdminClientWrapper from "@/app/(admin)/_components/layout/AdminClientWrapper";
 import {ToastContainer} from "react-toastify";
 import ProtectedLayout from "@/app/(admin)/protectedLayout";
 

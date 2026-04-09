@@ -1,5 +1,5 @@
-import {HeaderAdminTable} from "@/app/(admin)/_components/organisms/adminManagerTable/AdminTable";
-import {AdminFormProps} from "@/app/(admin)/_components/organisms/create&UpdateForm/AdminForm";
+import {HeaderAdminTable} from "@/app/(admin)/_components/table/AdminTable";
+import {AdminFormProps} from "@/app/(admin)/_components/forms/AdminForm";
 import {UpdateDoctorInput} from "@/types/doctors";
 import {RegisterDoctorInput} from "@/types/register";
 

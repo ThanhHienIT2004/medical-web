@@ -35,6 +35,8 @@ import { ResetPasswordDto } from './dto/user.dto';
 import { ResponseInterceptor } from '../common/interceptors/response.interceptor';
 import { GlobalExceptionFilter } from '../common/filters/http-exception.filter';
 import { ApiResponse } from '../common/response/api-response';
+import { Role } from '../role/role.enum';
+import { Roles } from '../auth/decorators/roles.decorator';
 
 @ApiTags('Users')
 @Controller('users')
@@ -43,12 +45,11 @@ import { ApiResponse } from '../common/response/api-response';
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  // ─── GET ALL: chỉ ADMIN hoặc DOCTOR mới có quyền USER_READ ─────────────────
   @Get()
   @UseGuards(AuthGuard, PermissionsGuard)
-  @Permissions(Permission.USER_READ)
+  @Permissions(Permission.USER_LIST)
   @ApiBearerAuth()
-  @ApiOperation({ summary: 'Lấy danh sách users (phân trang) - Yêu cầu quyền user:read' })
+  @ApiOperation({ summary: 'Lấy danh sách users (phân trang) - Yêu cầu quyền user:list (ADMIN/DOCTOR)' })
   @ApiQuery({ name: 'page', required: false, type: Number })
   @ApiQuery({ name: 'limit', required: false, type: Number })
   @HttpCode(HttpStatus.OK)
@@ -72,7 +73,7 @@ export class UserController {
   // ─── GET by ID: cần đăng nhập & có quyền USER_READ ─────────────────────────
   @Get(':id')
   @UseGuards(AuthGuard, PermissionsGuard)
-  @Permissions(Permission.USER_READ)
+  @Roles(Role.ADMIN, Role.DOCTOR)
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Lấy user theo ID - Yêu cầu quyền user:read' })
   @HttpCode(HttpStatus.OK)

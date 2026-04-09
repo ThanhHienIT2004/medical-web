@@ -11,15 +11,20 @@ import {
   Post,
   Req,
   UseFilters,
+  UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
-import { ApiTags, ApiOperation } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags, ApiOperation } from '@nestjs/swagger';
 import { DoctorsService } from './doctors.service';
 import { AuthService } from '../auth/auth.service';
 import { RegisterDoctorDto, UpdateDoctorDto } from './dto/doctors.dto';
 import { ApiResponse } from '../common/response/api-response';
 import { GlobalExceptionFilter } from '../common/filters/http-exception.filter';
 import { ResponseInterceptor } from '../common/interceptors/response.interceptor';
+import { AuthGuard } from '../auth/auth.guard';
+import { PermissionsGuard } from '../auth/guards/permissions.guard';
+import { Permissions } from '../auth/decorators/permissions.decorator';
+import { Permission } from '../auth/enums/permission.enum';
 
 @ApiTags('Doctors')
 @Controller('doctors')
@@ -40,6 +45,9 @@ export class DoctorsController {
   }
 
   @Get(':id')
+  @UseGuards(AuthGuard, PermissionsGuard)
+  @Permissions(Permission.DOCTOR_READ)
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Chi tiết bác sĩ theo ID' })
   @HttpCode(HttpStatus.OK)
   async findOne(@Req() req: Request, @Param('id') id: string) {
@@ -48,6 +56,9 @@ export class DoctorsController {
   }
 
   @Post()
+  @UseGuards(AuthGuard, PermissionsGuard)
+  @Permissions(Permission.DOCTOR_CREATE)
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Tạo bác sĩ mới (đăng ký + tạo doctor profile)' })
   @HttpCode(HttpStatus.CREATED)
   async createDoctor(@Req() req: Request, @Body() dto: RegisterDoctorDto) {
@@ -56,6 +67,9 @@ export class DoctorsController {
   }
 
   @Patch(':id')
+  @UseGuards(AuthGuard, PermissionsGuard)
+  @Permissions(Permission.DOCTOR_UPDATE)
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Cập nhật thông tin bác sĩ' })
   @HttpCode(HttpStatus.OK)
   async updateDoctor(
@@ -63,11 +77,14 @@ export class DoctorsController {
     @Param('id') id: string,
     @Body() dto: UpdateDoctorDto,
   ) {
-    const result = await this.doctorsService.update(id, dto as any);
+    const result = await this.doctorsService.update(id, dto);
     return ApiResponse.success(result, 'Cập nhật bác sĩ thành công', HttpStatus.OK, req.url);
   }
 
   @Delete(':id')
+  @UseGuards(AuthGuard, PermissionsGuard)
+  @Permissions(Permission.DOCTOR_DELETE)
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Xóa bác sĩ' })
   @HttpCode(HttpStatus.OK)
   async deleteDoctor(@Req() req: Request, @Param('id') id: string) {

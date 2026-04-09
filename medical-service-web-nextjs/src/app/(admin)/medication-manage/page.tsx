@@ -1,34 +1,38 @@
 "use client"
 
 import {Loader} from "lucide-react";
-import {useGetMedications} from "@/libs/hooks/medications/useGetMedications";
-import {useSearchMedications} from "@/libs/hooks/medications/useSearchMedications";
+import {useGetMedications} from "@/features/medications/hooks/useGetMedications";
+import {useSearchMedications} from "@/features/medications/hooks/useSearchMedications";
 import {useState} from "react";
 import {
   HEADER_TABLE_MEDICATION,
   INIT_CREATE_MEDICATION_FORM,
   INIT_UPDATE_MEDICATION_FORM
 } from "@/app/(admin)/medication-manage/values/constants";
-import AdminTableLayout from "@/app/(admin)/_components/organisms/adminManagerTable/AdminTableLayout";
-import {ActionAdminTable} from "@/app/(admin)/_components/organisms/adminManagerTable/AdminTable";
+import AdminTableLayout from "@/app/(admin)/_components/table/AdminTableLayout";
+import {ActionAdminTable} from "@/app/(admin)/_components/table/AdminTable";
 import {CreateMedicationInput, UpdateMedicationInput} from "@/types/medications";
-import AdminForm from "@/app/(admin)/_components/organisms/create&UpdateForm/AdminForm";
-import {useCreateMedication} from "@/libs/hooks/medications/useCreateMedication";
-import {useUpdateMedication} from "@/libs/hooks/medications/useUpdateMedication";
-import {useDeleteMedication} from "@/libs/hooks/medications/useDeleteMedication";
-import ConfirmationDialog from "@/app/(admin)/_components/molecules/dialog/ConfirmationDialog";
+import AdminForm from "@/app/(admin)/_components/forms/AdminForm";
+import {useCreateMedication} from "@/features/medications/hooks/useCreateMedication";
+import {useUpdateMedication} from "@/features/medications/hooks/useUpdateMedication";
+import {useDeleteMedication} from "@/features/medications/hooks/useDeleteMedication";
+import ConfirmationDialog from "@/app/(admin)/_components/dialogs/ConfirmationDialog";
 import {toast} from "react-toastify";
 import {PaginationInput} from "@/types/pagination";
+import { buildCrudRowOperations } from "@/app/(admin)/_libs/table/tableCrud";
+import { useSession } from "next-auth/react";
+import { getCrudAccess } from "@/app/(admin)/_libs/auth/permissions";
 
 export default function MedicationPage() {
+  const { data: session } = useSession();
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [selectedAction, setSelectedAction] = useState<ActionAdminTable["type"]>('view');
   const [selectedId, setSelectedId] = useState<number | null>(null);
-  const [paginationInput, setPaginationInput] = useState<PaginationInput>({
+  const [paginationInput] = useState<PaginationInput>({
     page: 1,
     limit: 20,
   });
-  const { medications: medications, page, pageSize, totalPage, loading: initLoading, error: errorMedications, refetch: refetchMedications } = useGetMedications(
+  const { medications: medications, totalPage, loading: initLoading, error: errorMedications, refetch: refetchMedications } = useGetMedications(
     paginationInput.page, paginationInput.limit
   );
   const { medications: searchMedications, loading: searchLoading, } = useSearchMedications(searchTerm);
@@ -39,6 +43,7 @@ export default function MedicationPage() {
   const displayedMedications = (searchTerm && searchMedications.length > 0) ? searchMedications : medications;
   const loading = initLoading || searchLoading || createLoading || updateLoading || deleteLoading;
   const error = errorMedications || errorCreate || errorUpdate || errorDelete;
+  const access = getCrudAccess(session, "medications");
 
   function handleAction(action: ActionAdminTable['type']) {
     setSelectedAction(action);
@@ -133,12 +138,21 @@ export default function MedicationPage() {
 
       <AdminTableLayout
         searchProps={{placeholder: "Tìm kiếm thuốc", onSearch: (term) => {setSearchTerm(term)}}}
-        dropdownProps={{ onItemSelected: (type) => { handleAction(type) } }}
         tableProps={{
           headers: HEADER_TABLE_MEDICATION,
           items: displayedMedications,
-          action: { type: selectedAction, onClick: (item) => handleSelectedId(item as number) }
+          action: { type: selectedAction, onClick: (item) => handleSelectedId(item as number) },
+          rowOperations: buildCrudRowOperations<{ id: number }, number>({
+            idKey: "id",
+            setSelectedId: (id) => setSelectedId(id),
+            setSelectedAction: (action) => setSelectedAction(action),
+            allow: { view: access.canView, update: access.canEdit, delete: access.canDelete },
+          }),
           }}
+        exportCsvProps={{
+          enabled: true,
+          filename: `medications_${new Date().toISOString().slice(0, 10)}.csv`,
+        }}
         paginationProps={{
           state: {
             page: 1,

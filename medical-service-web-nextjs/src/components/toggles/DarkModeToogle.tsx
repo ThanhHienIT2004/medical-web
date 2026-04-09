@@ -1,6 +1,6 @@
 "use client"
 
-import useDarkMode from "@/libs/hooks/darkMode/useDarkMode";
+import useDarkMode from "@/features/ui/hooks/useDarkMode";
 import {Moon, Sun} from "lucide-react";
 
 export default function DarkModeToggle() {

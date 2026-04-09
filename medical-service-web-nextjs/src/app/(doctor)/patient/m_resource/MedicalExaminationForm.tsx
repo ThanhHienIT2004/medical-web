@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { CreateExaminationReportInput, MedicalExaminationInput } from "@/types/examination_report";
 import { CreateTreatmentPlanInput } from "@/types/treatment_plan";
 import { CreateRegimenInput } from "@/types/regimen";
-import { useGetTreatmentPlan } from "@/libs/hooks/treatmentPlan/useGetTreatmentPlan";
+import { useGetTreatmentPlan } from "@/features/treatmentPlans/hooks/useGetTreatmentPlan";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, AlertCircle } from "lucide-react";
 import MedicationSelector from "@/app/(doctor)/patient/m_resource/MedicationSelector";

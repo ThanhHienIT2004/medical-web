@@ -12,14 +12,19 @@ import {
   Query,
   Req,
   UseFilters,
+  UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiQuery } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags, ApiOperation, ApiQuery } from '@nestjs/swagger';
 import { DoctorScheduleService } from './doctor_schedules.service';
 import { CreateDoctorScheduleDto, WeekDateQueryDto } from './dto/doctor_schedules.dto';
 import { ApiResponse } from '../common/response/api-response';
 import { GlobalExceptionFilter } from '../common/filters/http-exception.filter';
 import { ResponseInterceptor } from '../common/interceptors/response.interceptor';
+import { AuthGuard } from '../auth/auth.guard';
+import { PermissionsGuard } from '../auth/guards/permissions.guard';
+import { Permissions } from '../auth/decorators/permissions.decorator';
+import { Permission } from '../auth/enums/permission.enum';
 
 @ApiTags('Doctor Schedules')
 @Controller('doctor-schedules')
@@ -29,6 +34,9 @@ export class DoctorSchedulesController {
   constructor(private readonly scheduleService: DoctorScheduleService) {}
 
   @Get('week')
+  @UseGuards(AuthGuard, PermissionsGuard)
+  @Permissions(Permission.APPOINTMENT_READ)
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Lấy lịch bác sĩ theo tuần' })
   @ApiQuery({ name: 'start_week', required: true })
   @ApiQuery({ name: 'end_week', required: true })
@@ -39,6 +47,9 @@ export class DoctorSchedulesController {
   }
 
   @Get('available-dates/:doctorId')
+  @UseGuards(AuthGuard, PermissionsGuard)
+  @Permissions(Permission.APPOINTMENT_READ)
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Lấy danh sách ngày có lịch trống của bác sĩ' })
   @HttpCode(HttpStatus.OK)
   async getAvailableDates(@Req() req: Request, @Param('doctorId') doctorId: string) {
@@ -47,6 +58,9 @@ export class DoctorSchedulesController {
   }
 
   @Get('by-date')
+  @UseGuards(AuthGuard, PermissionsGuard)
+  @Permissions(Permission.APPOINTMENT_READ)
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Lấy lịch bác sĩ theo ngày' })
   @ApiQuery({ name: 'doctor_id', required: true })
   @ApiQuery({ name: 'date', required: true })
@@ -61,6 +75,9 @@ export class DoctorSchedulesController {
   }
 
   @Post()
+  @UseGuards(AuthGuard, PermissionsGuard)
+  @Permissions(Permission.APPOINTMENT_UPDATE)
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Tạo lịch bác sĩ mới' })
   @HttpCode(HttpStatus.CREATED)
   async create(@Req() req: Request, @Body() dto: CreateDoctorScheduleDto) {
@@ -69,6 +86,9 @@ export class DoctorSchedulesController {
   }
 
   @Patch(':id')
+  @UseGuards(AuthGuard, PermissionsGuard)
+  @Permissions(Permission.APPOINTMENT_UPDATE)
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Cập nhật lịch bác sĩ' })
   @HttpCode(HttpStatus.OK)
   async update(
@@ -81,6 +101,9 @@ export class DoctorSchedulesController {
   }
 
   @Delete(':id')
+  @UseGuards(AuthGuard, PermissionsGuard)
+  @Permissions(Permission.APPOINTMENT_UPDATE)
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Xóa lịch bác sĩ' })
   @HttpCode(HttpStatus.OK)
   async delete(@Req() req: Request, @Param('id') id: string) {

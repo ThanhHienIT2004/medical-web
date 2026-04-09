@@ -1,19 +1,21 @@
 
 export interface TreatmentPlan{
-    id:number;
+    id:string;
     name:string;
-    hiv_diagnosis_date?: Date;
-    start_date: Date;
-    end_date?: Date;
+    hiv_diagnosis_date?: string | Date;
+    start_date: string | Date;
+    end_date?: string | Date;
     notes?: string;
-    created_at: Date;
-    updated_at?: Date;
+    created_at?: string | Date;
+    updated_at?: string | Date;
 }
 
     export interface CreateTreatmentPlanInput {
         name: string;
-        hiv_diagnosis_date?: Date;
-        start_date?: Date;
-        end_date?: Date;
+        hiv_diagnosis_date?: string;
+        start_date?: string;
+        end_date?: string;
         notes?: string;
     }
+
+    export type UpdateTreatmentPlanInput = Partial<CreateTreatmentPlanInput>

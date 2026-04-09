@@ -1,0 +1,93 @@
+[
+  {
+    "_id": { "$oid": "661000000000000000000701" },
+    "patient_id": { "$oid": "661000000000000000000003" },
+    "reminder_type": "MEDICATION",
+    "reminder_time": { "$date": "2026-04-02T01:00:00.000Z" },
+    "message": "Uống thuốc ARV đúng giờ.",
+    "status": "pending",
+    "created_at": { "$date": "2026-04-01T12:30:00.000Z" }
+  },
+  {
+    "_id": { "$oid": "661000000000000000000702" },
+    "patient_id": { "$oid": "661000000000000000000006" },
+    "reminder_type": "APPOINTMENT",
+    "reminder_time": { "$date": "2026-04-07T05:30:00.000Z" },
+    "message": "Nhắc lịch hẹn hôm nay.",
+    "status": "pending",
+    "created_at": { "$date": "2026-04-01T12:31:00.000Z" }
+  },
+  {
+    "_id": { "$oid": "661000000000000000000703" },
+    "patient_id": { "$oid": "661000000000000000000007" },
+    "reminder_type": "MEDICATION",
+    "reminder_time": { "$date": "2026-04-02T02:00:00.000Z" },
+    "message": "Uống thuốc đúng giờ.",
+    "status": "pending",
+    "created_at": { "$date": "2026-04-01T12:32:00.000Z" }
+  },
+  {
+    "_id": { "$oid": "661000000000000000000704" },
+    "patient_id": { "$oid": "661000000000000000000008" },
+    "reminder_type": "MEDICATION",
+    "reminder_time": { "$date": "2026-04-02T03:00:00.000Z" },
+    "message": "Nhắc uống thuốc.",
+    "status": "done",
+    "created_at": { "$date": "2026-04-01T12:33:00.000Z" }
+  },
+  {
+    "_id": { "$oid": "661000000000000000000705" },
+    "patient_id": { "$oid": "661000000000000000000009" },
+    "reminder_type": "FOLLOW_UP",
+    "reminder_time": { "$date": "2026-04-10T00:30:00.000Z" },
+    "message": "Theo dõi kết quả xét nghiệm.",
+    "status": "pending",
+    "created_at": { "$date": "2026-04-01T12:34:00.000Z" }
+  },
+  {
+    "_id": { "$oid": "661000000000000000000706" },
+    "patient_id": { "$oid": "66100000000000000000000A" },
+    "reminder_type": "APPOINTMENT",
+    "reminder_time": { "$date": "2026-04-11T09:30:00.000Z" },
+    "message": "Sắp đến giờ khám.",
+    "status": "pending",
+    "created_at": { "$date": "2026-04-01T12:35:00.000Z" }
+  },
+  {
+    "_id": { "$oid": "661000000000000000000707" },
+    "patient_id": { "$oid": "661000000000000000000013" },
+    "reminder_type": "MEDICATION",
+    "reminder_time": { "$date": "2026-04-02T04:00:00.000Z" },
+    "message": "Uống thuốc ARV.",
+    "status": "pending",
+    "created_at": { "$date": "2026-04-01T12:36:00.000Z" }
+  },
+  {
+    "_id": { "$oid": "661000000000000000000708" },
+    "patient_id": { "$oid": "661000000000000000000014" },
+    "reminder_type": "APPOINTMENT",
+    "reminder_time": { "$date": "2026-04-13T05:30:00.000Z" },
+    "message": "Nhắc lịch hẹn.",
+    "status": "pending",
+    "created_at": { "$date": "2026-04-01T12:37:00.000Z" }
+  },
+  {
+    "_id": { "$oid": "661000000000000000000709" },
+    "patient_id": { "$oid": "661000000000000000000015" },
+    "reminder_type": "FOLLOW_UP",
+    "reminder_time": { "$date": "2026-04-14T00:30:00.000Z" },
+    "message": "Nhắc tái khám.",
+    "status": "pending",
+    "created_at": { "$date": "2026-04-01T12:38:00.000Z" }
+  },
+  {
+    "_id": { "$oid": "66100000000000000000070A" },
+    "patient_id": { "$oid": "661000000000000000000016" },
+    "reminder_type": "MEDICATION",
+    "reminder_time": { "$date": "2026-04-02T05:00:00.000Z" },
+    "message": "Nhắc uống thuốc.",
+    "status": "pending",
+    "created_at": { "$date": "2026-04-01T12:39:00.000Z" }
+  }
+]
+

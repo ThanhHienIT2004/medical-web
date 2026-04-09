@@ -67,9 +67,9 @@ export class RegisterDoctorInput {
 
 @InputType()
 export class UpdateDoctorInput {
-  @Field({ nullable: true }) full_name: string;
-  @Field({ nullable: true }) email: string;
-  @Field({ nullable: true }) gender: string;
+  @Field({ nullable: true }) full_name?: string;
+  @Field({ nullable: true }) email?: string;
+  @Field({ nullable: true }) gender?: string;
   @Field({ nullable: true }) qualifications?: string;
   @Field({ nullable: true }) work_seniority?: number;
   @Field({ nullable: true }) specialty?: string;

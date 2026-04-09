@@ -2,7 +2,11 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   images: {
-    domains: ['localhost'], // Đặt ở cấp cao nhất, không nằm trong webpack
+    remotePatterns: [
+      { protocol: "http", hostname: "localhost" },
+      { protocol: "https", hostname: "example.com" },
+      { protocol: "https", hostname: "htmediagroup.vn" },
+    ],
   },
   webpack(config) {
     config.module.rules.push({

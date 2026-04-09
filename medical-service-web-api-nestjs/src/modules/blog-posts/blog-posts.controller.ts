@@ -12,14 +12,19 @@ import {
   Query,
   Req,
   UseFilters,
+  UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiQuery } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags, ApiOperation, ApiQuery } from '@nestjs/swagger';
 import { BlogPostsService } from './blog-posts.service';
 import { CreateBlogPostDto, UpdateBlogPostDto, PaginationBlogQueryDto } from './dto/blog-posts.dto';
 import { ApiResponse } from '../common/response/api-response';
 import { GlobalExceptionFilter } from '../common/filters/http-exception.filter';
 import { ResponseInterceptor } from '../common/interceptors/response.interceptor';
+import { AuthGuard } from '../auth/auth.guard';
+import { PermissionsGuard } from '../auth/guards/permissions.guard';
+import { Permissions } from '../auth/decorators/permissions.decorator';
+import { Permission } from '../auth/enums/permission.enum';
 
 @ApiTags('Blog Posts')
 @Controller('blog-posts')
@@ -29,6 +34,9 @@ export class BlogPostsController {
   constructor(private readonly blogPostsService: BlogPostsService) {}
 
   @Get()
+  @UseGuards(AuthGuard, PermissionsGuard)
+  @Permissions(Permission.BLOG_READ)
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Danh sách bài viết (phân trang)' })
   @ApiQuery({ name: 'page', required: false, type: Number })
   @ApiQuery({ name: 'pageSize', required: false, type: Number })
@@ -42,6 +50,9 @@ export class BlogPostsController {
   }
 
   @Get(':id')
+  @UseGuards(AuthGuard, PermissionsGuard)
+  @Permissions(Permission.BLOG_READ)
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Chi tiết bài viết' })
   @HttpCode(HttpStatus.OK)
   async findOne(@Req() req: Request, @Param('id') id: string) {
@@ -50,6 +61,9 @@ export class BlogPostsController {
   }
 
   @Post()
+  @UseGuards(AuthGuard, PermissionsGuard)
+  @Permissions(Permission.BLOG_CREATE)
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Tạo bài viết mới' })
   @HttpCode(HttpStatus.CREATED)
   async create(@Req() req: Request, @Body() dto: CreateBlogPostDto) {
@@ -58,6 +72,9 @@ export class BlogPostsController {
   }
 
   @Patch(':id')
+  @UseGuards(AuthGuard, PermissionsGuard)
+  @Permissions(Permission.BLOG_UPDATE)
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Cập nhật bài viết' })
   @HttpCode(HttpStatus.OK)
   async update(
@@ -65,11 +82,14 @@ export class BlogPostsController {
     @Param('id') id: string,
     @Body() dto: UpdateBlogPostDto,
   ) {
-    const result = await this.blogPostsService.update(id, dto as any);
+    const result = await this.blogPostsService.update(id, dto);
     return ApiResponse.success(result, 'Cập nhật bài viết thành công', HttpStatus.OK, req.url);
   }
 
   @Delete(':id')
+  @UseGuards(AuthGuard, PermissionsGuard)
+  @Permissions(Permission.BLOG_DELETE)
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Xóa bài viết' })
   @HttpCode(HttpStatus.OK)
   async remove(@Req() req: Request, @Param('id') id: string) {

@@ -14,6 +14,7 @@ export interface Doctor {
 
 export interface DoctorDisplay {
     id: string | null;
+    user_id: string;
     email: string;
     full_name: string;
     phone: string;

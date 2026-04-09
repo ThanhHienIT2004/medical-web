@@ -5,6 +5,8 @@
 export enum Permission {
   // ─── USER ────────────────────────────────────────────────
   USER_READ = 'user:read',
+  /** Danh sách / tìm kiếm toàn bộ user — không dùng cho bệnh nhân */
+  USER_LIST = 'user:list',
   USER_CREATE = 'user:create',
   USER_UPDATE = 'user:update',
   USER_DELETE = 'user:delete',
@@ -65,4 +67,5 @@ export enum Permission {
   REGIMEN_CREATE = 'regimen:create',
   REGIMEN_UPDATE = 'regimen:update',
   REGIMEN_DELETE = 'regimen:delete',
+  DOCTOR_LIST = "DOCTOR_LIST",
 }

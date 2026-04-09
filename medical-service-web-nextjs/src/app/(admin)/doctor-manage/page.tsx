@@ -2,23 +2,27 @@
 
 import { Loader } from "lucide-react";
 import { useState } from "react";
-import AdminTableLayout from "@/app/(admin)/_components/organisms/adminManagerTable/AdminTableLayout";
-import { ActionAdminTable } from "@/app/(admin)/_components/organisms/adminManagerTable/AdminTable";
-import ConfirmationDialog from "@/app/(admin)/_components/molecules/dialog/ConfirmationDialog";
+import AdminTableLayout from "@/app/(admin)/_components/table/AdminTableLayout";
+import { ActionAdminTable } from "@/app/(admin)/_components/table/AdminTable";
+import ConfirmationDialog from "@/app/(admin)/_components/dialogs/ConfirmationDialog";
 import {
   HEADER_TABLE_DOCTOR,
   INIT_CREATE_DOCTOR_FORM,
   INIT_UPDATE_DOCTOR_FORM
 } from "@/app/(admin)/doctor-manage/values/constants";
-import { useGetDoctors } from "@/libs/hooks/doctors/useGetDoctors";
-import { useRegisterDoctor } from "@/libs/hooks/doctors/useCreateDoctor";
-import { useUpdateDoctor } from "@/libs/hooks/doctors/useUpdateDoctor";
-import { useDeleteDoctor } from "@/libs/hooks/doctors/userDeleteDoctor";
-import AdminForm from "@/app/(admin)/_components/organisms/create&UpdateForm/AdminForm";
+import { useGetDoctors } from "@/features/doctors/hooks/useGetDoctors";
+import { useRegisterDoctor } from "@/features/doctors/hooks/useCreateDoctor";
+import { useUpdateDoctor } from "@/features/doctors/hooks/useUpdateDoctor";
+import { useDeleteDoctor } from "@/features/doctors/hooks/userDeleteDoctor";
+import AdminForm from "@/app/(admin)/_components/forms/AdminForm";
 import {RegisterDoctorInput} from "@/types/register";
 import {UpdateDoctorInput} from "@/types/doctors";
+import { buildCrudRowOperations } from "@/app/(admin)/_libs/table/tableCrud";
+import { useSession } from "next-auth/react";
+import { getCrudAccess } from "@/app/(admin)/_libs/auth/permissions";
 
 export default function DoctorManagePage() {
+  const { data: session } = useSession();
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [selectedAction, setSelectedAction] = useState<ActionAdminTable["type"]>("view");
   const [selectedId, setSelectedId] = useState<string | null>(null);
@@ -37,6 +41,7 @@ export default function DoctorManagePage() {
 
   const loading = initLoading || createLoading || updateLoading || deleteLoading ;
   const error = errorDoctors || errorCreate || errorUpdate || errorDelete ;
+  const access = getCrudAccess(session, "doctors");
 
   function handleAction(action: ActionAdminTable["type"]) {
     setSelectedAction(action);
@@ -134,13 +139,17 @@ export default function DoctorManagePage() {
       {renderForm()}
       <AdminTableLayout
         searchProps={{placeholder: "Tìm kiếm bác sĩ", onSearch: (term) => setSearchTerm(term)}}
-        dropdownProps={{onItemSelected: (type) => handleAction(type)}}
         tableProps={{
           headers: HEADER_TABLE_DOCTOR,
           items: displayedDoctors,
           action: {type: selectedAction, onClick: (item) => handleSelectedId(item as string)},
+          rowOperations: buildCrudRowOperations<{ id: string }, string>({
+            idKey: "id",
+            setSelectedId: (id) => setSelectedId(id),
+            setSelectedAction: (action) => setSelectedAction(action),
+            allow: { view: access.canView, update: access.canEdit, delete: access.canDelete },
+          }),
         }}
-        paginationProps={undefined}
       />
     </div>
   );

@@ -1,6 +1,9 @@
+'use client';
+
 import React, { ComponentType } from 'react';
 import Link from 'next/link';
-import {LockKeyhole, LockKeyholeOpen, LucideProps} from 'lucide-react';
+import {Moon, Search, Settings2, LucideProps} from 'lucide-react';
+import { usePathname } from 'next/navigation';
 
 export interface SidebarItem {
   title: string;
@@ -11,49 +14,68 @@ export interface SidebarItem {
 interface AdminSidebarProps {
   title: string;
   items: SidebarItem[];
-  isLocked?: boolean;
-  onLockButton?: (isLocked: boolean) => void;
 }
 
-export function AdminSidebar({ title, items, isLocked, onLockButton }: AdminSidebarProps) {
-  const lockHiddenButton = (isLocked: boolean) => {
-    return (
-      <button
-        className={"absolute top-5 right-1 p-1 rounded-full shadow-lg cursor-pointer outline outline-gray-500 dark:outline-gray-600 " +
-          "bg-white dark:bg-zinc-800/10 hover:bg-violet-300 dark:hover:bg-slate-500/30 "}
-        onClick={() => onLockButton?.(!isLocked)}
-      >
-        {isLocked ? <LockKeyhole className="w-3 h-3" /> : <LockKeyholeOpen className="w-3 h-3" />}
-      </button>
-    );
-  }
+export function AdminSidebar({
+  title,
+  items,
+}: AdminSidebarProps) {
+  const pathname = usePathname();
   
   return (
-    <aside className={`h-screen bg-gray-50/60 dark:bg-zinc-900 text-gray-800 dark:text-gray-100 ${title}`}>
-      <div className="p-4 border-b border-gray-300 dark:border-gray-700">
-        <h2 className="text-center text-xl font-bold">
-          { title }
-        </h2>
-        {lockHiddenButton(isLocked)}
+    <aside className="h-screen text-gray-800 dark:text-gray-100">
+      <div className="w-[300px] h-full bg-white/95 dark:bg-zinc-900 border border-gray-200 dark:border-gray-700 rounded-r-xl shadow-sm overflow-hidden">
+          <div className="p-4 border-b border-gray-200 dark:border-gray-700 relative">
+            <h2 className="text-lg font-semibold truncate">{title}</h2>
+          </div>
+
+          <div className="px-4 py-3 border-b border-gray-200 dark:border-gray-700">
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+              <input
+                placeholder="Quick search"
+                className="w-full rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-zinc-800 py-2 pl-9 pr-3 text-sm outline-none focus:ring-2 focus:ring-violet-300"
+                readOnly
+              />
+            </div>
+          </div>
+
+          <div className="h-[calc(100vh-210px)] overflow-y-auto p-3">
+            <p className="text-xs text-gray-500 px-2 mb-2">Menu</p>
+            <ul className="space-y-1">
+              {items.map((item) => (
+                <li key={item.href}>
+                  <Link
+                    href={item.href}
+                    className={`flex items-center gap-2 rounded-lg px-3 py-2.5 transition-colors ${
+                      pathname === item.href
+                        ? "bg-violet-100 text-violet-700 dark:bg-violet-900/30 dark:text-violet-200"
+                        : "hover:bg-gray-100 dark:hover:bg-zinc-800"
+                    }`}
+                  >
+                    {item.icon ? <item.icon className="w-4 h-4 shrink-0" /> : null}
+                    <span className="truncate">{item.title}</span>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div className="border-t border-gray-200 dark:border-gray-700 p-3">
+            <div className="rounded-xl bg-indigo-50 dark:bg-indigo-900/20 p-3 mb-3">
+              <p className="text-xs text-gray-500">Current plan:</p>
+              <p className="font-semibold">Pro trial</p>
+            </div>
+            <div className="space-y-1">
+              <button className="w-full flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-zinc-800 text-sm">
+                <Settings2 className="w-4 h-4" /> Preferences
+              </button>
+              <button className="w-full flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-zinc-800 text-sm">
+                <Moon className="w-4 h-4" /> Dark mode
+              </button>
+            </div>
+          </div>
       </div>
-      <nav className="p-4">
-        <ul>
-          {items.map((item, index) => (
-            <li
-              key={index}
-              className="my-4 rounded-lg shadow-xl outline outline-gray-200 dark:outline-gray-600 bg-white dark:bg-zinc-700/10 transform transition-transform duration-200 ease-in-out hover:scale-110"
-            >
-              <Link
-                href={item.href}
-                className="flex items-center p-3 hover:bg-violet-300 focus:bg-violet-300 dark:hover:bg-slate-500/30 rounded-lg transition-colors"
-              >
-                {item.icon && <item.icon className="w-6 h-6 mr-2 text-gray-600 dark:text-gray-300" />}
-                <span>{item.title}</span>
-              </Link>
-            </li>
-          ))}
-        </ul>
-      </nav>
     </aside>
   );
 }

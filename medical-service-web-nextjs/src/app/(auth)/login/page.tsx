@@ -1,21 +1,25 @@
 "use client";
 
-import { useForm } from "react-hook-form";
+import { SubmitHandler, useForm } from "react-hook-form";
 import { getErrorMessage } from "@/app/utils/common";
 import {getSession, signIn } from "next-auth/react";
-import { useRouter } from "next/navigation";
 import { useSnackbar } from "notistack";
 import { useLoading } from "@/app/context/loadingContext";
 import Link from "next/link";
 import { LockClosedIcon } from "@heroicons/react/24/solid";
 import {toast} from "react-toastify";
 
+type LoginForm = {
+    email: string;
+    password: string;
+};
+
 const Login = () => {
     const { enqueueSnackbar } = useSnackbar();
     const { setLoading } = useLoading();
-    const { register, handleSubmit, formState: { errors } } = useForm();
+    const { register, handleSubmit, formState: { errors } } = useForm<LoginForm>();
 
-    const onSubmit = async (data: any) => {
+    const onSubmit: SubmitHandler<LoginForm> = async (data) => {
         setLoading(true);
         const res = await signIn("credentials", {
             redirect: false,
