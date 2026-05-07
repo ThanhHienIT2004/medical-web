@@ -4,12 +4,21 @@ import React from 'react';
 import Link from 'next/link';
 import { useGetDoctors } from '@/features/doctors/hooks/useGetDoctors';
 
-function DoctorPage() {
+interface DoctorPageProps {
+    limit?: number;
+}
+
+function DoctorPage({ limit }: DoctorPageProps) {
     const { doctors, loading, error } = useGetDoctors();
+    
+    let displayedDoctors = doctors;
+    if (limit && limit > 0) {
+        displayedDoctors = doctors.slice(0, limit);
+    }
 
     if (loading) {
         return (
-            <div className="min-h-screen flex items-center justify-center bg-gray-50 ">
+            <div className="py-20 flex items-center justify-center bg-gray-50 w-full">
                 <div className="flex items-center gap-3 text-gray-600 animate-pulse">
                     <svg className="animate-spin h-5 w-5 text-indigo-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                         <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
@@ -24,7 +33,7 @@ function DoctorPage() {
 
     return (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 p-6">
-            {doctors.map((doctor, index) => {
+            {displayedDoctors.map((doctor, index) => {
                 const avatarSrc =
                     doctor.avatar?.startsWith('http') ? doctor.avatar : '/doctor-placeholder.jpg';
 

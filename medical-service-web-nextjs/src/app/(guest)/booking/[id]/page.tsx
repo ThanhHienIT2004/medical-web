@@ -19,7 +19,7 @@ import TimeSlotSelector from './components/TimeSlotSelector';
 import PatientForm from './components/PatientForm';
 
 export default function BookingPage() {
-    const { id } = useParams();
+    const { id } = useParams(); 
     const doctorId = id as string;
     const { data: session } = useSession();
     const { enqueueSnackbar } = useSnackbar();
