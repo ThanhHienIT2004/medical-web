@@ -7,6 +7,7 @@ type UseAuthOptions = {
     redirectTo?: string;
     unauthorizedTo?: string;
 };
+const normalizeRole = (role?: string) => role?.trim().toUpperCase();
 
 const useAuth = (options: UseAuthOptions = {}) => {
     const router = useRouter();
@@ -25,7 +26,10 @@ const useAuth = (options: UseAuthOptions = {}) => {
             return;
         }
 
-        if (requiredRole && session.user?.role !== requiredRole) {
+        if (
+            requiredRole &&
+            normalizeRole(session.user?.role) !== normalizeRole(requiredRole)
+        ) {
             router.push(unauthorizedTo);
         }
     },[status, session, router, requiredRole, redirectTo, unauthorizedTo])

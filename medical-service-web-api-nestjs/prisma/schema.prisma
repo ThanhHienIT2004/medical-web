@@ -11,13 +11,13 @@ model User {
   id            String     @id @default(auto()) @map("_id") @db.ObjectId
   email         String     @unique
   password      String
-  role          String
+  role          Role
   full_name     String
   phone         String?
   address       String?
   date_of_birth DateTime?
   created_at    DateTime   @default(now())
-  updated_at    DateTime?
+  updated_at    DateTime?  @updatedAt
   avatar        String?
   doctor        Doctors?
   Document      Document[]
@@ -31,7 +31,7 @@ model Medication {
   price              Float // MongoDB uses Float for Decimal/Money usually
   available_quantity Int
   created_at         DateTime @default(now())
-  updated_at         DateTime @default(now())
+  updated_at         DateTime @updatedAt
 }
 
 model Doctors {
@@ -81,10 +81,13 @@ model DoctorSchedule {
   shift        ShiftType
   start_time   DateTime
   end_time     DateTime
-  is_available Boolean?
+  is_available Boolean           @default(true)
   created_at   DateTime          @default(now())
   doctor       Doctors           @relation(fields: [doctor_id], references: [id])
   slots        AppointmentSlot[]
+
+  @@unique([doctor_id, start_time, end_time])
+  @@index([doctor_id, day, shift])
 }
 
 model AppointmentSlot {
@@ -97,6 +100,9 @@ model AppointmentSlot {
   created_at   DateTime       @default(now())
   schedule     DoctorSchedule @relation(fields: [schedule_id], references: [id])
   appointments Appointment[]
+
+  @@unique([schedule_id, start_time, end_time])
+  @@index([schedule_id])
 }
 
 model Patient {
@@ -116,9 +122,9 @@ model Appointment {
   patient_id       String          @db.ObjectId
   doctor_id        String          @db.ObjectId
   slot_id          String          @db.ObjectId
-  appointment_type String
+  appointment_type AppointmentType
   appointment_date DateTime
-  status           String          @default("PENDING")
+  status           AppointmentStatus @default(PENDING)
   is_done          Boolean?        @default(false)
   is_anonymous     Boolean         @default(false)
   notes            String?
@@ -131,6 +137,8 @@ model Appointment {
   treatment_plan_ids String[]      @db.ObjectId
 
   @@index([doctor_id])
+  @@index([patient_id])
+  @@index([slot_id])
   @@index([appointment_date])
 }
 
@@ -148,6 +156,8 @@ model TreatmentPlan {
   follow_up_appointment_ids String[]         @db.ObjectId
 
   Patients               Patient[]
+
+  @@index([start_date])
 }
 
 model ExaminationReport {
@@ -168,13 +178,13 @@ model ExaminationReport {
 
 model Regimen {
   id                  String              @id @default(auto()) @map("_id") @db.ObjectId
-  care_stage          String
-  regimen_type        String
+  care_stage          CareStage
+  regimen_type        RegimenType
   medication_list     String[]
   user_guide          String
   is_default          Boolean
   created_at          DateTime            @default(now())
-  updated_at          DateTime            @default(now())
+  updated_at          DateTime            @updatedAt
   examination_reports ExaminationReport[]
 }
 
@@ -184,9 +194,13 @@ model Reminder {
   reminder_type String
   reminder_time DateTime
   message       String?
-  status        String   @default("pending")
+  status        ReminderStatus @default(PENDING)
   created_at    DateTime @default(now())
+  updated_at    DateTime? @updatedAt
   patient       Patient  @relation(fields: [patient_id], references: [patient_id])
+
+  @@index([patient_id, reminder_time])
+  @@index([status])
 }
 
 model BlogPost {
@@ -197,9 +211,12 @@ model BlogPost {
   category     String
   published_at DateTime?
   created_at   DateTime  @default(now())
-  updated_at   DateTime?
+  updated_at   DateTime? @updatedAt
 
   author Doctors @relation(fields: [author_id], references: [id])
+
+  @@index([author_id])
+  @@index([category, published_at])
 }
 
 model Document {
@@ -209,8 +226,11 @@ model Document {
   category       String
   uploaded_by_id String    @db.ObjectId
   created_at     DateTime  @default(now())
-  updated_at     DateTime?
+  updated_at     DateTime? @updatedAt
   uploaded_by    User      @relation(fields: [uploaded_by_id], references: [id])
+
+  @@index([uploaded_by_id])
+  @@index([category])
 }
 
 model DashboardReport {
@@ -238,6 +258,13 @@ enum AppointmentStatus {
   PENDING
   CONFIRMED
   COMPLETED
+  CANCELLED
+}
+
+enum ReminderStatus {
+  PENDING
+  SENT
+  DONE
   CANCELLED
 }
 

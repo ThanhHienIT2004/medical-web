@@ -5,6 +5,12 @@ import CredentialsProvider from 'next-auth/providers/credentials';
 import type { LoginResponse, JwtPayload } from '@/types/auth';
 
 const API_BASE_URL = process.env.API_BASE_URL || 'http://localhost:3000/api/v1';
+const ALLOWED_ROLES = new Set(['ADMIN', 'DOCTOR', 'USER', 'GUEST']);
+
+const normalizeRole = (rawRole: string | undefined): string => {
+    const normalized = rawRole?.trim().toUpperCase() ?? 'GUEST';
+    return ALLOWED_ROLES.has(normalized) ? normalized : 'GUEST';
+};
 
 const authOptions: NextAuthOptions = {
     providers: [
@@ -46,7 +52,7 @@ const authOptions: NextAuthOptions = {
                             id: decoded.sub,
                             email: credentials.email,
                             accessToken: payload.accessToken,
-                            role: decoded.role,
+                            role: normalizeRole(decoded.role),
                         };
                     }
                     return null;

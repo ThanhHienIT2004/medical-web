@@ -32,7 +32,7 @@ const Login = () => {
             enqueueSnackbar("Sai email hoặc mật khẩu", { variant: "error" });
         } else {
             const session = await getSession();
-            const role = session?.user?.role;
+            const role = session?.user?.role?.trim().toUpperCase();
             toast.success("Đăng nhập thành công!", { toastId: "login-success"});
             if (role === "ADMIN") {
                 window.location.href =("/admin-dashboard");

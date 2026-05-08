@@ -22,7 +22,7 @@ type UpdateUserInput = Partial<
 >;
 
 type UserListResponse = {
-  data: UserRow[]; v
+  data: UserRow[];
   total: number;
   currentPage: number;
   itemsPerPage: number;

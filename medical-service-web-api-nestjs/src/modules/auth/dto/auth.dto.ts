@@ -33,11 +33,6 @@ export class RegisterDto {
   @IsString()
   avatar?: string | null;
 
-  @ApiPropertyOptional({ description: 'Vai trò', default: 'USER', enum: ['USER', 'ADMIN', 'DOCTOR', 'GUEST'] })
-  @IsString({ message: 'role phải là chuỗi' })
-  @IsNotEmpty({ message: 'role không được để trống' })
-  role: string;
-
   @ApiPropertyOptional({ description: 'Ngày sinh', example: '1990-01-01' })
   @IsOptional({ message: 'date_of_birth là tùy chọn' })
   date_of_birth?: string;

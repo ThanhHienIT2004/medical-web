@@ -25,6 +25,7 @@ import { AuthGuard } from '../auth/auth.guard';
 import { PermissionsGuard } from '../auth/guards/permissions.guard';
 import { Permissions } from '../auth/decorators/permissions.decorator';
 import { Permission } from '../auth/enums/permission.enum';
+import { Role } from '../role/role.enum';
 
 @ApiTags('Doctors')
 @Controller('doctors')
@@ -62,7 +63,7 @@ export class DoctorsController {
   @ApiOperation({ summary: 'Tạo bác sĩ mới (đăng ký + tạo doctor profile)' })
   @HttpCode(HttpStatus.CREATED)
   async createDoctor(@Req() req: Request, @Body() dto: RegisterDoctorDto) {
-    const result = await this.authService.register(dto);
+    const result = await this.authService.register(dto, Role.DOCTOR);
     return ApiResponse.success(result, 'Tạo bác sĩ thành công', HttpStatus.CREATED, req.url);
   }
 

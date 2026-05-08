@@ -15,8 +15,6 @@ import { TreatmentPlanModule } from './modules/treatment-plan/treatment-plan.mod
 import { ExaminationReportModule } from './modules/examination-report/examination-report.module';
 import { RegimenModule } from './modules/regimen/regimen.module';
 import { BlogPostsModule } from './modules/blog-posts/blog-posts.module';
-import { UploadController } from './modules/upload/upload.controller';
-import { UploadService } from './modules/upload/upload.service';
 import { UploadModule } from './modules/upload/upload.module';
 import { AppointmentSlotsModule } from './modules/appointment-slots/appointment-slots.module';
 import { EmailService } from './modules/api/send-email/email.service';

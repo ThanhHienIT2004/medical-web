@@ -1,7 +1,14 @@
 import type { Session } from "next-auth";
+const normalizeRole = (role?: string): Role => {
+  const normalized = role?.trim().toUpperCase();
+  if (normalized === "ADMIN" || normalized === "DOCTOR" || normalized === "USER") {
+    return normalized;
+  }
+  return "GUEST";
+};
 
 export function isAdmin(session: Session | null | undefined): boolean {
-  return session?.user?.role === "ADMIN";
+  return normalizeRole(session?.user?.role) === "ADMIN";
 }
 
 type Role = "ADMIN" | "DOCTOR" | "USER" | "GUEST";
@@ -95,7 +102,7 @@ const RESOURCE_PERMISSION_PREFIX: Record<AdminResource, string> = {
 };
 
 export function getCrudAccess(session: Session | null | undefined, resource: AdminResource): CrudAccess {
-  const role = (session?.user?.role ?? "GUEST") as Role;
+  const role = normalizeRole(session?.user?.role);
   const permissions = new Set<Permission>(ROLE_PERMISSIONS[role] ?? ROLE_PERMISSIONS.GUEST);
   const prefix = RESOURCE_PERMISSION_PREFIX[resource];
 

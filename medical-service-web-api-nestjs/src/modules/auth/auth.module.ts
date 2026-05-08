@@ -19,7 +19,7 @@ import { AuthGuard } from './auth.guard';
       useFactory: (configService: ConfigService) => ({
         secret: configService.get<string>('JWT_SECRET'),
         signOptions: { 
-          expiresIn: configService.get<string>('ACCESS_TOKEN_KEY')
+          expiresIn: configService.get<string>('JWT_SECRET_EXPIRES_IN')
         },
       }),
     }),
