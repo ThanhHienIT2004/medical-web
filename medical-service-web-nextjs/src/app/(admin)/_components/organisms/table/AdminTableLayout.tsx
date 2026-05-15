@@ -1,12 +1,11 @@
-import TableSearch, {TableSearchProps} from "@/app/(admin)/_components/table/TableSearch";
-import TableDropdownActions, {
-	TableDropdownActionsProps
-} from "@/app/(admin)/_components/table/TableDropdownActions";
-import AdminTable, {AdminTableProps} from "@/app/(admin)/_components/table/AdminTable";
+
 import React from "react";
-import {TablePagination, TablePaginationProps} from "@/app/(admin)/_components/table/TablePagination";
-import { downloadCsv } from "@/app/(admin)/_libs/table/csv";
 import { Download } from "lucide-react";
+import AdminTable, { AdminTableProps } from "./AdminTable";
+import TableDropdownActions, { TableDropdownActionsProps } from "./TableDropdownActions";
+import { TablePagination, TablePaginationProps } from "./TablePagination";
+import TableSearch, { TableSearchProps } from "./TableSearch";
+import { downloadCsv } from "@/app/(admin)/_libs/csv";
 
 interface AdminTableLayoutProps {
 	searchProps: TableSearchProps;
@@ -23,8 +22,8 @@ export default function AdminTableLayout(
 	{ searchProps, dropdownProps, tableProps, paginationProps, exportCsvProps }: AdminTableLayoutProps
 ){
 	return (
-			<div className="flex flex-col gap-4">
-				<div className="rounded-xl border border-gray-200/80 bg-white p-3 shadow-sm">
+			<div className="flex flex-col gap-4 w-full">
+				<div className="rounded-xl border border-gray-200/80 bg-white p-3 shadow-sm w-full">
 					<div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
 					<TableSearch placeholder={searchProps.placeholder} onSearch={searchProps.onSearch} />
 					<div className="flex items-center justify-end gap-2">
@@ -53,7 +52,9 @@ export default function AdminTableLayout(
 				</div>
 				</div>
 
-				<AdminTable {...tableProps} />
+				<div className="w-full overflow-x-auto">
+					<AdminTable {...tableProps} />
+				</div>
 				{paginationProps ? (
 					<TablePagination
 						state={paginationProps.state}

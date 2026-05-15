@@ -1,17 +1,17 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useState } from "react";
-import AdminTableLayout from "@/app/(admin)/_components/table/AdminTableLayout";
-import { ActionAdminTable } from "@/app/(admin)/_components/table/AdminTable";
-import AdminForm from "@/app/(admin)/_components/forms/AdminForm";
-import type { Appointment, AppointmentStatus } from "@/types/appointment";
 import { apiClient } from "@/libs/api/apiClient";
+import { AppointmentStatus, Appointment } from "@/types/appointment";
 import { Loader } from "lucide-react";
-import { toast } from "react-toastify";
 import { useSession } from "next-auth/react";
-import { logAdminAction } from "@/app/(admin)/_libs/utils/auditLog";
-import { buildCrudRowOperations } from "@/app/(admin)/_libs/table/tableCrud";
-import { getCrudAccess } from "@/app/(admin)/_libs/auth/permissions";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { toast } from "react-toastify";
+import { ActionAdminTable } from "../_components/organisms/table/AdminTable";
+import AdminTableLayout from "../_components/organisms/table/AdminTableLayout";
+import AdminForm from "../_components/organisms/create-update-form/AdminForm";
+import { logAdminAction } from "../_libs/auditLog";
+import { getCrudAccess } from "../_libs/permissions";
+import { buildCrudRowOperations } from "../_libs/tableCrud";
 
 export default function AppointmentManagePage() {
   const { data: session } = useSession();

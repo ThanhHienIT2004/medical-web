@@ -1,25 +1,22 @@
 "use client";
 
-import { Loader } from "lucide-react";
-import { useState } from "react";
-import AdminTableLayout from "@/app/(admin)/_components/table/AdminTableLayout";
-import { ActionAdminTable } from "@/app/(admin)/_components/table/AdminTable";
-import ConfirmationDialog from "@/app/(admin)/_components/dialogs/ConfirmationDialog";
-import {
-  HEADER_TABLE_DOCTOR,
-  INIT_CREATE_DOCTOR_FORM,
-  INIT_UPDATE_DOCTOR_FORM
-} from "@/app/(admin)/doctor-manage/values/constants";
-import { useGetDoctors } from "@/features/doctors/hooks/useGetDoctors";
 import { useRegisterDoctor } from "@/features/doctors/hooks/useCreateDoctor";
-import { useUpdateDoctor } from "@/features/doctors/hooks/useUpdateDoctor";
+import { useGetDoctors } from "@/features/doctors/hooks/useGetDoctors";
 import { useDeleteDoctor } from "@/features/doctors/hooks/userDeleteDoctor";
-import AdminForm from "@/app/(admin)/_components/forms/AdminForm";
-import {RegisterDoctorInput} from "@/types/register";
-import {UpdateDoctorInput} from "@/types/doctors";
-import { buildCrudRowOperations } from "@/app/(admin)/_libs/table/tableCrud";
+import { useUpdateDoctor } from "@/features/doctors/hooks/useUpdateDoctor";
+import { UpdateDoctorInput } from "@/types/doctors";
+import { RegisterDoctorInput } from "@/types/register";
+import { Loader } from "lucide-react";
 import { useSession } from "next-auth/react";
-import { getCrudAccess } from "@/app/(admin)/_libs/auth/permissions";
+import { useState } from "react";
+import ConfirmationDialog from "../_components/dialog/ConfirmationDialog";
+import AdminForm from "../_components/organisms/create-update-form/AdminForm";
+import { ActionAdminTable } from "../_components/organisms/table/AdminTable";
+import AdminTableLayout from "../_components/organisms/table/AdminTableLayout";
+import { getCrudAccess } from "../_libs/permissions";
+import { buildCrudRowOperations } from "../_libs/tableCrud";
+import { INIT_CREATE_DOCTOR_FORM, INIT_UPDATE_DOCTOR_FORM, HEADER_TABLE_DOCTOR } from "./values/constants";
+
 
 export default function DoctorManagePage() {
   const { data: session } = useSession();

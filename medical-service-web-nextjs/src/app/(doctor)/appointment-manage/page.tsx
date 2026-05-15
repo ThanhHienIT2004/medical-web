@@ -6,7 +6,7 @@ import { HEADER_APPOINMENTS_TABLE } from "@/app/(doctor)/appointment-manage/m_re
 import { useUpdateAppointment } from "@/features/appointments/hooks/useUpdateAppointment";
 import { useGetAppointments } from "@/features/appointments/hooks/useGetAppointment";
 import {useSession} from "next-auth/react";
-import ConfirmationDialog from "@/app/(admin)/_components/molecules/dialog/ConfirmationDialog";
+import ConfirmationDialog from "@/app/(admin)/_components/dialog/ConfirmationDialog";
 
 export default function AppointmentManage() {
     const [selectedId, setSelectedId] = useState<number | null>(null);

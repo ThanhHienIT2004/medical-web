@@ -1,5 +1,5 @@
-import {SidebarItem} from "@/app/(admin)/_components/layout/AdminSidebar";
 import {BookMarked, ChartBar, CalendarCheck, ClipboardList, Clock, FileText, History, Layers, NotebookPen, Pill, Timer, UserRound, Users, Wrench} from "lucide-react";
+import { SidebarItem } from "../_components/organisms/sidebar/AdminSidebar";
 
 export const ADMIN_SIDEBAR_ITEMS: SidebarItem[] = [
 	{ title: 'Dashboard', href: '/admin-dashboard', icon: ChartBar },

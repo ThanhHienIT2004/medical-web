@@ -9,7 +9,7 @@ import { useGetAllPost } from "@/features/posts/hooks/useGetPost";
 import { useDeletePost } from "@/features/posts/hooks/useDeletePost";
 import { Post } from "@/types/posts";
 import { useSession } from "next-auth/react";
-import ConfirmationDialog from "@/app/(admin)/_components/molecules/dialog/ConfirmationDialog";
+import ConfirmationDialog from "@/app/(admin)/_components/dialog/ConfirmationDialog";
 
 export default function BlogPage() {
     const [selectedId, setSelectedId] = useState<number | null>(null);

@@ -1,7 +1,4 @@
-import type {
-  ActionAdminTable,
-  RowOperation,
-} from "@/app/(admin)/_components/table/AdminTable";
+import { ActionAdminTable, RowOperation } from "../_components/organisms/table/AdminTable";
 
 type CrudFlags = {
   view?: boolean;

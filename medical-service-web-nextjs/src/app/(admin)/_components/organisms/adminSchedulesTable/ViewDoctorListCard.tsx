@@ -1,4 +1,4 @@
-import {Minimize2Icon, UserRoundCogIcon, UserRoundMinusIcon} from "lucide-react";
+import {Minimize2Icon, UserRoundMinusIcon} from "lucide-react";
 import {DoctorSchedule} from "@/types/doctorSchedule";
 
 type ViewDoctorListCardProps = {

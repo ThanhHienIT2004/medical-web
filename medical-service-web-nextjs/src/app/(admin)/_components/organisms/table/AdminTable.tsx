@@ -1,7 +1,6 @@
 import {ComponentType, ReactNode, useEffect, useState} from "react";
 import {formatNumberWithCommas} from "@/libs/function/formatNumberWithCommas";
 import Image from "next/image";
-import ActionButtons from "@/app/(admin)/_components/table/ActionButtons";
 import {
 	ColumnDef,
 	flexRender,
@@ -12,6 +11,7 @@ import {
 	useReactTable
 } from "@tanstack/react-table";
 import {Eye} from "lucide-react";
+import ActionButtons from "./ActionButtons";
 
 export interface HeaderAdminTable {
 	label: string;
@@ -250,9 +250,9 @@ const AdminTable = <T,>(
 	}, [enableSelection, onSelectionChange, headers, rowSelection, table]);
 
 	return (
-		<div className={"container mx-auto overflow-auto rounded-2xl bg-white shadow-sm ring-1 ring-gray-100"}>
+		<div className={"w-full overflow-auto rounded-2xl bg-white shadow-sm ring-1 ring-gray-100"}>
 			<table className={
-				"table-auto border-collapse min-w-full " +
+				"table-auto border-collapse min-w-full w-full " +
 				"text-xs md:text-sm font-medium text-zinc-800"
 			}>
 				<thead className={"bg-gray-50 text-gray-500"}>

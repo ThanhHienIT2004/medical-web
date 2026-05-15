@@ -1,9 +1,9 @@
 "use client";
 import React from "react";
-import AdminSidebar from "@/app/(admin)/_components/layout/AdminSidebar";
 import {ADMIN_SIDEBAR_ITEMS} from "@/app/(admin)/_values/constants";
 import {ArrowLeftFromLine, ArrowRightFromLine} from "lucide-react";
-import { useResponsiveSidebar } from "@/app/(admin)/_components/layout/hooks/useResponsiveSidebar";
+import { useResponsiveSidebar } from "@/app/(admin)/_components/hooks/useResponsiveSidebar";
+import AdminSidebar from "../sidebar/AdminSidebar";
 
 interface AdminClientWrapperProps {
 	children: React.ReactNode;

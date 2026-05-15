@@ -10,7 +10,7 @@ import {useCreateExamination} from "@/features/examinationReports/hooks/useCreat
 import {useUpdateAppointment} from "@/features/appointments/hooks/useUpdateAppointment";
 import {useSession} from "next-auth/react";
 import {useDeleteAppointment} from "@/features/appointments/hooks/useDeleteAppointment";
-import ConfirmationDialog from "@/app/(admin)/_components/molecules/dialog/ConfirmationDialog";
+import ConfirmationDialog from "@/app/(admin)/_components/dialog/ConfirmationDialog";
 
 export default function PatientPage() {
     const [selectedId, setSelectedId] = useState<string | null>(null);

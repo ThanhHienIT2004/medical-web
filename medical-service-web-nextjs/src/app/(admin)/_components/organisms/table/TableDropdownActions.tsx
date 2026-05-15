@@ -1,6 +1,6 @@
 import {ComponentType, useState} from "react";
 import {BadgePlus, LucideProps, Pencil, SettingsIcon, Trash2, View} from "lucide-react";
-import {ActionAdminTable} from "@/app/(admin)/_components/table/AdminTable";
+import { ActionAdminTable } from "./AdminTable";
 
 export interface DropdownItem {
 	icon: ComponentType<LucideProps>;

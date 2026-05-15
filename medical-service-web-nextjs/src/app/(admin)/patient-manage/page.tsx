@@ -1,9 +1,9 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useState } from "react";
-import AdminTableLayout from "@/app/(admin)/_components/table/AdminTableLayout";
 import { apiClient } from "@/libs/api/apiClient";
 import type { Patient } from "@/types/patient";
+import AdminTableLayout from "../_components/organisms/table/AdminTableLayout";
 
 type PatientRow = {
   patient_id: string;

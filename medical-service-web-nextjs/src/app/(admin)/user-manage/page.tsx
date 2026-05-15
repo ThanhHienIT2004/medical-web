@@ -1,17 +1,18 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useState } from "react";
-import ConfirmationDialog from "@/app/(admin)/_components/dialogs/ConfirmationDialog";
-import AdminForm, { type AdminFormProps } from "@/app/(admin)/_components/forms/AdminForm";
 import { apiClient } from "@/libs/api/apiClient";
 import type { User } from "@/types/user";
 import { toast } from "react-toastify";
-import { logAdminAction } from "@/app/(admin)/_libs/utils/auditLog";
+
+import { HeaderAdminTable, ActionAdminTable } from "../_components/organisms/table/AdminTable";
 import { useSession } from "next-auth/react";
-import { buildCrudRowOperations } from "@/app/(admin)/_libs/table/tableCrud";
-import { getCrudAccess } from "@/app/(admin)/_libs/auth/permissions";
-import { AdminTableLayout } from "../_components";
-import { HeaderAdminTable, ActionAdminTable } from "../_components/organisms/adminManagerTable/AdminTable";
+import ConfirmationDialog from "../_components/dialog/ConfirmationDialog";
+import AdminTableLayout from "../_components/organisms/table/AdminTableLayout";
+import AdminForm, { AdminFormProps } from "../_components/organisms/create-update-form/AdminForm";
+import { logAdminAction } from "../_libs/auditLog";
+import { getCrudAccess } from "../_libs/permissions";
+import { buildCrudRowOperations } from "../_libs/tableCrud";
 
 type UserRow = User & {
   role: string;
