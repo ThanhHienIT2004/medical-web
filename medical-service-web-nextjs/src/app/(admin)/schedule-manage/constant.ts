@@ -1,4 +1,4 @@
-import { AdminFormProps } from "@/app/(admin)/_components/organisms/create-update-form/AdminForm";
+import { AdminFormProps } from "@/app/(admin)/_components/forms/AdminForm";
 import { CreateDoctorScheduleInput } from "@/types/doctorSchedule";
 import { DoctorDisplay } from "@/types/doctors";
 

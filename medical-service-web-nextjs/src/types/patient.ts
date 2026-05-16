@@ -5,5 +5,6 @@ export interface Patient {
     patient_id: string;
     plan_id?: number | null;
     plan?: TreatmentPlan | null;
+    gender?: "MALE" | "FEMALE" | "OTHER" | null;
     user: User;
 }

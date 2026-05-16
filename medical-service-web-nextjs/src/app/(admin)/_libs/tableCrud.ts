@@ -1,4 +1,4 @@
-import { ActionAdminTable, RowOperation } from "../_components/organisms/table/AdminTable";
+import { ActionAdminTable, RowOperation } from "../_components/table/AdminTable";
 
 type CrudFlags = {
   view?: boolean;
@@ -60,3 +60,4 @@ export function buildCrudRowOperations<
 
   return operations;
 }
+

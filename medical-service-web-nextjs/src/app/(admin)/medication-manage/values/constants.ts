@@ -1,6 +1,6 @@
-import {HeaderAdminTable} from "@/app/(admin)/_components/organisms/table/AdminTable";
+import {HeaderAdminTable} from "@/app/(admin)/_components/table/AdminTable";
 import {CreateMedicationInput, UpdateMedicationInput} from "@/types/medications";
-import {AdminFormProps} from "@/app/(admin)/_components/organisms/create-update-form/AdminForm";
+import {AdminFormProps} from "@/app/(admin)/_components/forms/AdminForm";
 
 export const HEADER_TABLE_MEDICATION: HeaderAdminTable[] = [
 	{ label: "ID", key: "id", type: "number" },
@@ -31,3 +31,4 @@ export const INIT_UPDATE_MEDICATION_FORM: AdminFormProps<UpdateMedicationInput> 
 	],
 	submitLabel: "Cập nhật"
 }
+

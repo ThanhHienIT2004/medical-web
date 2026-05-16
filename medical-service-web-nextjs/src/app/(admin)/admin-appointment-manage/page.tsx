@@ -6,10 +6,10 @@ import { Loader } from "lucide-react";
 import { useSession } from "next-auth/react";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { toast } from "react-toastify";
-import { ActionAdminTable } from "@/app/(admin)/_components/organisms/table/AdminTable";
-import AdminTableLayout from "@/app/(admin)/_components/organisms/table/AdminTableLayout";
-import AdminForm from "@/app/(admin)/_components/organisms/create-update-form/AdminForm";
-import ViewModal, { ViewField } from "@/app/(admin)/_components/organisms/view/ViewModal";
+import { ActionAdminTable } from "@/app/(admin)/_components/table/AdminTable";
+import AdminTableLayout from "@/app/(admin)/_components/table/AdminTableLayout";
+import AdminForm from "@/app/(admin)/_components/forms/AdminForm";
+import ViewModal, { ViewField } from "@/app/(admin)/_components/view/ViewModal";
 import { logAdminAction } from "@/app/(admin)/_libs/auditLog";
 import { getCrudAccess } from "@/app/(admin)/_libs/permissions";
 import { buildCrudRowOperations } from "@/app/(admin)/_libs/tableCrud";
@@ -394,4 +394,6 @@ export default function AppointmentManagePage() {
     </div>
   );
 }
+
+
 

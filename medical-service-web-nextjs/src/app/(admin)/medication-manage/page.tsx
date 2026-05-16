@@ -9,11 +9,11 @@ import {
   INIT_CREATE_MEDICATION_FORM,
   INIT_UPDATE_MEDICATION_FORM
 } from "@/app/(admin)/medication-manage/values/constants";
-import AdminTableLayout from "@/app/(admin)/_components/organisms/table/AdminTableLayout";
-import ViewModal, { ViewField } from "@/app/(admin)/_components/organisms/view/ViewModal";
-import {ActionAdminTable} from "@/app/(admin)/_components/organisms/table/AdminTable";
+import AdminTableLayout from "@/app/(admin)/_components/table/AdminTableLayout";
+import ViewModal, { ViewField } from "@/app/(admin)/_components/view/ViewModal";
+import {ActionAdminTable} from "@/app/(admin)/_components/table/AdminTable";
 import {CreateMedicationInput, UpdateMedicationInput} from "@/types/medications";
-import AdminForm from "@/app/(admin)/_components/organisms/create-update-form/AdminForm";
+import AdminForm from "@/app/(admin)/_components/forms/AdminForm";
 import {useCreateMedication} from "@/features/medications/hooks/useCreateMedication";
 import {useUpdateMedication} from "@/features/medications/hooks/useUpdateMedication";
 import {useDeleteMedication} from "@/features/medications/hooks/useDeleteMedication";
@@ -171,3 +171,4 @@ export default function MedicationPage() {
     </>
   );
 }
+

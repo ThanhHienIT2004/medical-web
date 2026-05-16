@@ -2,7 +2,12 @@ import React from 'react';
 import type {Metadata} from "next";
 import {ToastContainer} from "react-toastify";
 import ProtectedLayout from "@/app/(admin)/protectedLayout";
-import AdminClientWrapper from './_components/organisms/adminClientWrapper/AdminClientWrapper';
+import AdminShell from './_components/layout/AdminShell';
+import AppHeader from '@/components/layout/AppHeader';
+import { AdminSearchProvider } from '@/components/context/AdminSearchContext';
+import { SidebarProvider } from '@/components/context/SidebarContext';
+import { ThemeProvider } from '@/components/context/ThemeContext';
+import PageBreadCrumb from '@/components/common/PageBreadCrumb';
 
 export const metadata: Metadata = {
   title: "Quản lí phòng khám",
@@ -16,21 +21,28 @@ export default function AdminLayout({
 }) {
   return (
       <ProtectedLayout>
-      <AdminClientWrapper>
-        {children}
-        <ToastContainer
-          position={"top-right"}
-          autoClose={3000}
-          hideProgressBar={false}
-          newestOnTop={false}
-          closeOnClick={true}
-          rtl={false}
-          pauseOnFocusLoss={false}
-          draggable
-          pauseOnHover={false}
-          theme={"light"}
-        />
-      </AdminClientWrapper>
+      <ThemeProvider>
+        <AdminSearchProvider>
+          <SidebarProvider desktopMinWidth={1024}>
+            <AdminShell header={<AppHeader />}>
+              <PageBreadCrumb showHeading={false} />
+              {children}
+              <ToastContainer
+                position={"top-right"}
+                autoClose={3000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick={true}
+                rtl={false}
+                pauseOnFocusLoss={false}
+                draggable
+                pauseOnHover={false}
+                theme={"light"}
+              />
+            </AdminShell>
+          </SidebarProvider>
+        </AdminSearchProvider>
+      </ThemeProvider>
       </ProtectedLayout>
   );
 }

@@ -4,10 +4,10 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { Loader } from "lucide-react";
 import { toast } from "react-toastify";
 
-import AdminTableLayout from "@/app/(admin)/_components/organisms/table/AdminTableLayout";
-import type { ActionAdminTable } from "@/app/(admin)/_components/organisms/table/AdminTable";
-import AdminForm from "@/app/(admin)/_components/organisms/create-update-form/AdminForm";
-import ViewModal, { ViewField } from "@/app/(admin)/_components/organisms/view/ViewModal";
+import AdminTableLayout from "@/app/(admin)/_components/table/AdminTableLayout";
+import type { ActionAdminTable } from "@/app/(admin)/_components/table/AdminTable";
+import AdminForm from "@/app/(admin)/_components/forms/AdminForm";
+import ViewModal, { ViewField } from "@/app/(admin)/_components/view/ViewModal";
 import { apiClient } from "@/libs/api/apiClient";
 import type { AppointmentSlot, CreateAppointmentSlotInput, UpdateAppointmentSlotInput } from "@/types/appointmentSlots";
 import { useSession } from "next-auth/react";
@@ -296,4 +296,6 @@ export default function SlotManagePage() {
     </div>
   );
 }
+
+
 

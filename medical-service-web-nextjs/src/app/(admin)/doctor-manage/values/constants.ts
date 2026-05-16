@@ -1,8 +1,8 @@
 
 import {UpdateDoctorInput} from "@/types/doctors";
 import {RegisterDoctorInput} from "@/types/register";
-import { AdminFormProps } from "../../_components/organisms/create-update-form/AdminForm";
-import { HeaderAdminTable } from "../../_components/organisms/table/AdminTable";
+import { AdminFormProps } from "../../_components/forms/AdminForm";
+import { HeaderAdminTable } from "../../_components/table/AdminTable";
 
 export const HEADER_TABLE_DOCTOR: HeaderAdminTable[] = [
 	{ label: "ID", key: "id" },
@@ -56,3 +56,4 @@ export const INIT_UPDATE_DOCTOR_FORM: AdminFormProps<UpdateDoctorInput> = {
 	],
 	submitLabel: "Cập nhật"
 }
+

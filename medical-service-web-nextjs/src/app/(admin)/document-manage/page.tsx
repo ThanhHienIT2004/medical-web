@@ -6,15 +6,15 @@ import { Loader } from "lucide-react";
 import { toast } from "react-toastify";
 
 
-import ViewModal, { ViewField } from "@/app/(admin)/_components/organisms/view/ViewModal";
+import ViewModal, { ViewField } from "@/app/(admin)/_components/view/ViewModal";
 
 
 import type { CreateDocumentInput, Document, UpdateDocumentInput } from "@/types/documents";
 import { apiClient } from "@/libs/api/apiClient";
 import ConfirmationDialog from "@/app/(admin)/_components/dialog/ConfirmationDialog";
-import AdminForm, { AdminFormProps } from "@/app/(admin)/_components/organisms/create-update-form/AdminForm";
-import { ActionAdminTable } from "@/app/(admin)/_components/organisms/table/AdminTable";
-import AdminTableLayout from "@/app/(admin)/_components/organisms/table/AdminTableLayout";
+import AdminForm, { AdminFormProps } from "@/app/(admin)/_components/forms/AdminForm";
+import { ActionAdminTable } from "@/app/(admin)/_components/table/AdminTable";
+import AdminTableLayout from "@/app/(admin)/_components/table/AdminTableLayout";
 import { logAdminAction } from "@/app/(admin)/_libs/auditLog";
 import { getCrudAccess } from "@/app/(admin)/_libs/permissions";
 import { buildCrudRowOperations } from "@/app/(admin)/_libs/tableCrud";
@@ -359,4 +359,6 @@ export default function DocumentManagePage() {
     </div>
   );
 }
+
+
 
