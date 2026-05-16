@@ -6,12 +6,13 @@ import { Loader } from "lucide-react";
 import { useSession } from "next-auth/react";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { toast } from "react-toastify";
-import { ActionAdminTable } from "../_components/organisms/table/AdminTable";
-import AdminTableLayout from "../_components/organisms/table/AdminTableLayout";
-import AdminForm from "../_components/organisms/create-update-form/AdminForm";
-import { logAdminAction } from "../_libs/auditLog";
-import { getCrudAccess } from "../_libs/permissions";
-import { buildCrudRowOperations } from "../_libs/tableCrud";
+import { ActionAdminTable } from "@/app/(admin)/_components/organisms/table/AdminTable";
+import AdminTableLayout from "@/app/(admin)/_components/organisms/table/AdminTableLayout";
+import AdminForm from "@/app/(admin)/_components/organisms/create-update-form/AdminForm";
+import ViewModal, { ViewField } from "@/app/(admin)/_components/organisms/view/ViewModal";
+import { logAdminAction } from "@/app/(admin)/_libs/auditLog";
+import { getCrudAccess } from "@/app/(admin)/_libs/permissions";
+import { buildCrudRowOperations } from "@/app/(admin)/_libs/tableCrud";
 
 export default function AppointmentManagePage() {
   const { data: session } = useSession();
@@ -217,6 +218,11 @@ export default function AppointmentManagePage() {
   };
 
   const renderForm = () => {
+    if (selectedAction === "view" && selectedAppointment) {
+      const viewFields: ViewField[] = headers.map(h => ({ label: h.label, key: h.key }));
+      return <ViewModal isOpen={true} item={selectedAppointment} title={`Chi tiết lịch hẹn #${selectedAppointment.appointment_id}`} fields={viewFields} onClose={() => setSelectedAction("view")} />;
+    }
+
     if (selectedAction !== "update") return null;
     if (!selectedAppointment) return null;
 

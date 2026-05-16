@@ -3,7 +3,7 @@ import AdminScheduleLayout from "@/app/(admin)/_components/organisms/adminSchedu
 import {useGetDoctors} from "@/features/doctors/hooks/useGetDoctors";
 import {CreateDoctorScheduleData, DoctorSchedule, WeekDateInput} from "@/types/doctorSchedule";
 import {useCallback, useState} from "react";
-import AdminForm from "@/app/(admin)/_components/forms/AdminForm";
+import AdminForm from "@/app/(admin)/_components/organisms/create-update-form/AdminForm";
 import {CREATE_DOCTOR_SCHEDULE_INPUT} from "@/app/(admin)/schedule-manage/constant";
 import {useCreateDoctorSchedule} from "@/features/doctorSchedules/hooks/useCreateDoctorSchedule";
 import {toast} from "react-toastify";

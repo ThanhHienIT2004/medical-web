@@ -4,14 +4,15 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { Loader } from "lucide-react";
 import { toast } from "react-toastify";
 
-import AdminTableLayout from "@/app/(admin)/_components/table/AdminTableLayout";
-import type { ActionAdminTable } from "@/app/(admin)/_components/table/AdminTable";
-import AdminForm, { type AdminFormProps } from "@/app/(admin)/_components/forms/AdminForm";
-import ConfirmationDialog from "@/app/(admin)/_components/dialogs/ConfirmationDialog";
+import AdminTableLayout from "@/app/(admin)/_components/organisms/table/AdminTableLayout";
+import type { ActionAdminTable } from "@/app/(admin)/_components/organisms/table/AdminTable";
+import AdminForm, { type AdminFormProps } from "@/app/(admin)/_components/organisms/create-update-form/AdminForm";
+import ViewModal, { ViewField } from "@/app/(admin)/_components/organisms/view/ViewModal";
+import ConfirmationDialog from "@/app/(admin)/_components/dialog/ConfirmationDialog";
 import { apiClient } from "@/libs/api/apiClient";
-import { buildCrudRowOperations } from "@/app/(admin)/_libs/table/tableCrud";
+import { buildCrudRowOperations } from "@/app/(admin)/_libs/tableCrud";
 import { useSession } from "next-auth/react";
-import { getCrudAccess } from "@/app/(admin)/_libs/auth/permissions";
+import { getCrudAccess } from "@/app/(admin)/_libs/permissions";
 
 import type { TreatmentPlan, CreateTreatmentPlanInput, UpdateTreatmentPlanInput } from "@/types/treatment_plan";
 
@@ -156,6 +157,16 @@ export default function TreatmentPlanManagePage() {
           }}
         />
       );
+    }
+
+    if (selectedAction === "view" && selected) {
+      const fields: ViewField[] = [
+        { label: "ID", key: "id" },
+        { label: "Tên", key: "name" },
+        { label: "Bắt đầu", key: "start_date" },
+        { label: "Kết thúc", key: "end_date" },
+      ];
+      return <ViewModal isOpen={true} item={selected} title={`Chi tiết phác đồ ${selected.id}`} fields={fields} onClose={() => setSelectedAction("view")} />;
     }
 
     return null;

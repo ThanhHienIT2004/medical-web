@@ -3,7 +3,9 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { apiClient } from "@/libs/api/apiClient";
 import type { Patient } from "@/types/patient";
-import AdminTableLayout from "../_components/organisms/table/AdminTableLayout";
+import AdminTableLayout from "@/app/(admin)/_components/organisms/table/AdminTableLayout";
+import ViewModal from "@/app/(admin)/_components/organisms/view/ViewModal";
+import { buildCrudRowOperations } from "@/app/(admin)/_libs/tableCrud";
 
 type PatientRow = {
   patient_id: string;
@@ -20,6 +22,8 @@ export default function PatientManagePage() {
   const [error, setError] = useState<string | null>(null);
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
+  const [selectedAction, setSelectedAction] = useState<"view" | "create" | "update" | "delete">("view");
+  const [selectedId, setSelectedId] = useState<string | null>(null);
 
   const fetchPatients = useCallback(async () => {
     try {
@@ -65,6 +69,8 @@ export default function PatientManagePage() {
     return filteredRows.slice(start, start + limit);
   }, [filteredRows, page, limit]);
 
+  const selectedPatient = useMemo(() => (selectedId ? patients.find((p) => p.patient_id === selectedId) ?? null : null), [patients, selectedId]);
+
   return (
     <div className="container mx-auto p-6">
       <h1 className="text-2xl font-bold mb-4">Quản lý bệnh nhân</h1>
@@ -87,7 +93,13 @@ export default function PatientManagePage() {
             { label: "SĐT", key: "phone" },
           ],
           items: pagedRows,
-          action: { type: "view", onClick: () => {} },
+          action: { type: "view", onClick: (item) => setSelectedId(String(item)) },
+          rowOperations: buildCrudRowOperations<PatientRow, string>({
+            idKey: "patient_id",
+            setSelectedId: (id) => setSelectedId(id),
+            setSelectedAction: (action) => setSelectedAction(action),
+            allow: { view: true, update: false, delete: false },
+          }),
         }}
         paginationProps={{
           state: { page, limit, total },
@@ -98,6 +110,14 @@ export default function PatientManagePage() {
           },
         }}
       />
+      {selectedAction === "view" && selectedPatient ? (
+        <ViewModal isOpen={true} item={selectedPatient} title={`Chi tiết bệnh nhân ${selectedPatient.patient_id}`} fields={[
+          { label: "Patient ID", key: "patient_id" },
+          { label: "Họ tên", key: "full_name" },
+          { label: "Email", key: "email" },
+          { label: "SĐT", key: "phone" },
+        ]} onClose={() => { setSelectedId(null); setSelectedAction("view"); }} />
+      ) : null}
     </div>
   );
 }

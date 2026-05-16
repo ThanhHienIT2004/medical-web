@@ -4,15 +4,16 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { Loader } from "lucide-react";
 import { toast } from "react-toastify";
 
-import AdminTableLayout from "@/app/(admin)/_components/table/AdminTableLayout";
-import type { ActionAdminTable } from "@/app/(admin)/_components/table/AdminTable";
-import AdminForm from "@/app/(admin)/_components/forms/AdminForm";
+import AdminTableLayout from "@/app/(admin)/_components/organisms/table/AdminTableLayout";
+import type { ActionAdminTable } from "@/app/(admin)/_components/organisms/table/AdminTable";
+import AdminForm from "@/app/(admin)/_components/organisms/create-update-form/AdminForm";
+import ViewModal, { ViewField } from "@/app/(admin)/_components/organisms/view/ViewModal";
 import { apiClient } from "@/libs/api/apiClient";
 import type { AppointmentSlot, CreateAppointmentSlotInput, UpdateAppointmentSlotInput } from "@/types/appointmentSlots";
 import { useSession } from "next-auth/react";
-import { logAdminAction } from "@/app/(admin)/_libs/utils/auditLog";
-import { buildCrudRowOperations } from "@/app/(admin)/_libs/table/tableCrud";
-import { getCrudAccess } from "@/app/(admin)/_libs/auth/permissions";
+import { logAdminAction } from "@/app/(admin)/_libs/auditLog";
+import { buildCrudRowOperations } from "@/app/(admin)/_libs/tableCrud";
+import { getCrudAccess } from "@/app/(admin)/_libs/permissions";
 
 export default function SlotManagePage() {
   const { data: session } = useSession();
@@ -191,6 +192,19 @@ export default function SlotManagePage() {
           </div>
         </div>
       );
+    }
+
+    if (selectedAction === "view") {
+      if (!selectedSlot) return null;
+      const fields: ViewField[] = [
+        { label: "ID", key: "id" },
+        { label: "Schedule", key: "schedule_id" },
+        { label: "Start", key: "start_time" },
+        { label: "End", key: "end_time" },
+        { label: "Max", key: "max_patients" },
+        { label: "Booked", key: "booked_count" },
+      ];
+      return <ViewModal isOpen={true} item={selectedSlot} title={`Chi tiết slot ${selectedSlot.id}`} fields={fields} onClose={() => setSelectedAction("view")} />;
     }
 
     return null;

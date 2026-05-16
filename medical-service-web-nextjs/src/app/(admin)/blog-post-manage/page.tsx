@@ -4,15 +4,16 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { Loader } from "lucide-react";
 import { toast } from "react-toastify";
 
-import AdminTableLayout from "@/app/(admin)/_components/table/AdminTableLayout";
-import type { ActionAdminTable } from "@/app/(admin)/_components/table/AdminTable";
-import AdminForm, { type AdminFormProps } from "@/app/(admin)/_components/forms/AdminForm";
-import ConfirmationDialog from "@/app/(admin)/_components/dialogs/ConfirmationDialog";
+import AdminTableLayout from "@/app/(admin)/_components/organisms/table/AdminTableLayout";
+import type { ActionAdminTable } from "@/app/(admin)/_components/organisms/table/AdminTable";
+import AdminForm, { type AdminFormProps } from "@/app/(admin)/_components/organisms/create-update-form/AdminForm";
+import ViewModal, { ViewField } from "@/app/(admin)/_components/organisms/view/ViewModal";
+import ConfirmationDialog from "@/app/(admin)/_components/dialog/ConfirmationDialog";
 import { apiClient } from "@/libs/api/apiClient";
 import { useSession } from "next-auth/react";
-import { logAdminAction } from "@/app/(admin)/_libs/utils/auditLog";
-import { buildCrudRowOperations } from "@/app/(admin)/_libs/table/tableCrud";
-import { getCrudAccess } from "@/app/(admin)/_libs/auth/permissions";
+import { logAdminAction } from "@/app/(admin)/_libs/auditLog";
+import { buildCrudRowOperations } from "@/app/(admin)/_libs/tableCrud";
+import { getCrudAccess } from "@/app/(admin)/_libs/permissions";
 
 import type { CreateBlogPostInput, PaginatedBlogPosts, UpdateBlogPostInput } from "@/types/blogPosts";
 
@@ -177,6 +178,15 @@ export default function BlogPostManagePage() {
           }}
         />
       );
+    }
+    if (selectedAction === "view" && selected) {
+      const fields: ViewField[] = [
+        { label: "ID", key: "id" },
+        { label: "Tiêu đề", key: "title" },
+        { label: "Danh mục", key: "category" },
+        { label: "Tạo lúc", key: "created_at" },
+      ];
+      return <ViewModal isOpen={true} item={selected} title={`Chi tiết bài viết ${selected.id}`} fields={fields} onClose={() => setSelectedAction("view")} />;
     }
 
     return null;

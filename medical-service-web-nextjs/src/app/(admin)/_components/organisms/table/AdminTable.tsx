@@ -168,7 +168,7 @@ const AdminTable = <T,>(
 						return (
 							<button
 								onClick={() => action.onClick && action.onClick(item[headers[0].key as keyof T])}
-								className={"container p-2 rounded-xl shadow-md outline outline-violet-500 dark:outline dark:outline-white/40 bg-zinc-50 hover:bg-violet-300  hover:text-gray-50 dark:bg-gray-900 dark:hover:bg-gray-700 dark:text-gray-100"}
+								className={"w-full inline-flex items-center justify-center px-3 py-2 rounded-xl shadow-md outline outline-violet-500 dark:outline dark:outline-white/40 bg-zinc-50 hover:bg-violet-300 hover:text-gray-50 dark:bg-gray-900 dark:hover:bg-gray-700 dark:text-gray-100 text-sm font-medium"}
 							>
 								{ isUpdate ? "Cập nhật" : "Xóa" }
 							</button>

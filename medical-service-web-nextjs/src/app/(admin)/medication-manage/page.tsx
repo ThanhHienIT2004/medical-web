@@ -9,19 +9,20 @@ import {
   INIT_CREATE_MEDICATION_FORM,
   INIT_UPDATE_MEDICATION_FORM
 } from "@/app/(admin)/medication-manage/values/constants";
-import AdminTableLayout from "@/app/(admin)/_components/table/AdminTableLayout";
-import {ActionAdminTable} from "@/app/(admin)/_components/table/AdminTable";
+import AdminTableLayout from "@/app/(admin)/_components/organisms/table/AdminTableLayout";
+import ViewModal, { ViewField } from "@/app/(admin)/_components/organisms/view/ViewModal";
+import {ActionAdminTable} from "@/app/(admin)/_components/organisms/table/AdminTable";
 import {CreateMedicationInput, UpdateMedicationInput} from "@/types/medications";
-import AdminForm from "@/app/(admin)/_components/forms/AdminForm";
+import AdminForm from "@/app/(admin)/_components/organisms/create-update-form/AdminForm";
 import {useCreateMedication} from "@/features/medications/hooks/useCreateMedication";
 import {useUpdateMedication} from "@/features/medications/hooks/useUpdateMedication";
 import {useDeleteMedication} from "@/features/medications/hooks/useDeleteMedication";
-import ConfirmationDialog from "@/app/(admin)/_components/dialogs/ConfirmationDialog";
+import ConfirmationDialog from "@/app/(admin)/_components/dialog/ConfirmationDialog";
 import {toast} from "react-toastify";
 import {PaginationInput} from "@/types/pagination";
-import { buildCrudRowOperations } from "@/app/(admin)/_libs/table/tableCrud";
+import { buildCrudRowOperations } from "@/app/(admin)/_libs/tableCrud";
 import { useSession } from "next-auth/react";
-import { getCrudAccess } from "@/app/(admin)/_libs/auth/permissions";
+import { getCrudAccess } from "@/app/(admin)/_libs/permissions";
 
 export default function MedicationPage() {
   const { data: session } = useSession();
@@ -93,6 +94,12 @@ export default function MedicationPage() {
 
   const renderForm = () => {
     switch (selectedAction) {
+      case "view":
+        if (selectedId === null) return null;
+        const selectedMed = displayedMedications.find(m => m.id === selectedId);
+        if (!selectedMed) return null;
+        const viewFields: ViewField[] = HEADER_TABLE_MEDICATION.map(h => ({ label: h.label, key: h.key }));
+        return <ViewModal isOpen={true} item={selectedMed} title={`Chi tiết thuốc #${selectedId}`} fields={viewFields} onClose={() => handleAction("view")} />;
       case "create":
         return <AdminForm<CreateMedicationInput>
           { ...INIT_CREATE_MEDICATION_FORM }

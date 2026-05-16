@@ -3,7 +3,6 @@ import AdminSchedulesTable from "@/app/(admin)/_components/organisms/adminSchedu
 import DoctorScheduleFilter from "@/app/(admin)/_components/organisms/adminSchedulesTable/DoctorScheduleFilter";
 import {ScheduleDatePicker} from "@/app/(admin)/_components/organisms/adminSchedulesTable/ScheduleDatePicker";
 import {DoctorDisplay} from "@/types/doctors";
-import {useState} from "react";
 import {CreateDoctorScheduleData, DoctorSchedule} from "@/types/doctorSchedule";
 
 export type AdminScheduleLayoutProps = {
@@ -18,7 +17,6 @@ export default function AdminScheduleLayout(
 	props : AdminScheduleLayoutProps
 ) {
 	const { doctors, schedules, dateProps, onCreateButton, onDeleteButton } = props;
-	const [selectedDoctors, setSelectedDoctors] = useState<DoctorDisplay>()
 	
 	return (
 		<div className={"flex flex-col"}>

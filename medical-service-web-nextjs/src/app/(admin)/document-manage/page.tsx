@@ -5,16 +5,19 @@ import { useSession } from "next-auth/react";
 import { Loader } from "lucide-react";
 import { toast } from "react-toastify";
 
-import AdminTableLayout from "@/app/(admin)/_components/table/AdminTableLayout";
-import type { ActionAdminTable } from "@/app/(admin)/_components/table/AdminTable";
-import AdminForm, { type AdminFormProps } from "@/app/(admin)/_components/forms/AdminForm";
-import ConfirmationDialog from "@/app/(admin)/_components/dialogs/ConfirmationDialog";
-import { apiClient } from "@/libs/api/apiClient";
-import { logAdminAction } from "@/app/(admin)/_libs/utils/auditLog";
-import { buildCrudRowOperations } from "@/app/(admin)/_libs/table/tableCrud";
-import { getCrudAccess } from "@/app/(admin)/_libs/auth/permissions";
+
+import ViewModal, { ViewField } from "@/app/(admin)/_components/organisms/view/ViewModal";
+
 
 import type { CreateDocumentInput, Document, UpdateDocumentInput } from "@/types/documents";
+import { apiClient } from "@/libs/api/apiClient";
+import ConfirmationDialog from "@/app/(admin)/_components/dialog/ConfirmationDialog";
+import AdminForm, { AdminFormProps } from "@/app/(admin)/_components/organisms/create-update-form/AdminForm";
+import { ActionAdminTable } from "@/app/(admin)/_components/organisms/table/AdminTable";
+import AdminTableLayout from "@/app/(admin)/_components/organisms/table/AdminTableLayout";
+import { logAdminAction } from "@/app/(admin)/_libs/auditLog";
+import { getCrudAccess } from "@/app/(admin)/_libs/permissions";
+import { buildCrudRowOperations } from "@/app/(admin)/_libs/tableCrud";
 
 export default function DocumentManagePage() {
   const { data: session } = useSession();
@@ -215,6 +218,18 @@ export default function DocumentManagePage() {
 
     return null;
   };
+
+  // view branch: show document details when action is 'view'
+  if (selectedAction === "view" && selected) {
+    const fields: ViewField[] = [
+      { label: "ID", key: "document_id" },
+      { label: "Tiêu đề", key: "title" },
+      { label: "Category", key: "category" },
+      { label: "URL", key: "file_url" },
+      { label: "Tạo lúc", key: "created_at" },
+    ];
+    return <ViewModal isOpen={true} item={selected} title={`Chi tiết tài liệu`} fields={fields} onClose={() => setSelectedAction("view")} />;
+  }
 
   if (loading) return <Loader className="w-8 h-8 animate-spin mx-auto mt-10" />;
   if (error) return <div className="text-red-500">{error.message}</div>;

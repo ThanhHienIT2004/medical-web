@@ -10,6 +10,7 @@ import { useSession } from "next-auth/react";
 import ConfirmationDialog from "../_components/dialog/ConfirmationDialog";
 import AdminTableLayout from "../_components/organisms/table/AdminTableLayout";
 import AdminForm, { AdminFormProps } from "../_components/organisms/create-update-form/AdminForm";
+import ViewModal, { ViewField } from "../_components/organisms/view/ViewModal";
 import { logAdminAction } from "../_libs/auditLog";
 import { getCrudAccess } from "../_libs/permissions";
 import { buildCrudRowOperations } from "../_libs/tableCrud";
@@ -127,6 +128,31 @@ export default function UserManagePage() {
   ];
 
   const renderForm = () => {
+    if (selectedAction === "view" && selectedUser) {
+      const fields: ViewField[] = [
+        { label: "ID", key: "id" },
+        { label: "Vai trò", key: "role" },
+        { label: "Email", key: "email" },
+        { label: "Số điện thoại", key: "phone" },
+        { label: "Địa chỉ", key: "address" },
+        { label: "Avatar", key: "avatar" },
+        { label: "Ngày sinh", key: "date_of_birth" },
+      ];
+
+      return (
+        <ViewModal
+          isOpen={true}
+          item={selectedUser}
+          title={`Chi tiết người dùng`}
+          fields={fields}
+          onClose={() => {
+            setSelectedId(null);
+            setSelectedAction("view");
+          }}
+        />
+      );
+    }
+
     if (selectedAction === "update" && selectedUser) {
       const initialData: UpdateUserInput = {
         full_name: selectedUser.full_name,

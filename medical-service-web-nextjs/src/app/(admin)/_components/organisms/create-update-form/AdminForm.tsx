@@ -2,24 +2,23 @@ import React, {FormEvent, useEffect, useRef, useState} from "react";
 import {XIcon} from "lucide-react";
 import {toast} from "react-toastify";
 
-export interface AdminFormProps<T> {
-	initialData?: T;
-	title: string;
-	fields: {
-		label: string;
-		key: keyof T;
-		type?: 'text' | 'number' | 'select' | 'password';
-		options?: { label: string; value: string | number; }[];
-		required?: boolean
-	}[];
-	onClose?: () => void;
-	onSubmit?: (data: T) => void;
-	submitLabel: string;
-}
+	export interface AdminFormProps<T> {
+		initialData?: T;
+		title: string;
+		fields: {
+			label: string;
+			key: keyof T;
+			type?: 'text' | 'number' | 'select' | 'password';
+			options?: { label: string; value: string | number; }[];
+			required?: boolean
+		}[];
+		onClose?: () => void;
+		onSubmit?: (data: T) => void;
+		submitLabel: string;
+	}
 
-export default function AdminForm<T>({ initialData, title, fields, onClose, onSubmit, submitLabel }: AdminFormProps<T>) {
+	export default function AdminForm<T>({ initialData, title, fields, onClose, onSubmit, submitLabel }: AdminFormProps<T>) {
 	const [formData, setFormData] = useState<T>(initialData || ({} as T));
-	const [displayValue, setDisplayValue] = useState<string>("");
 	const formRef = useRef<HTMLDivElement>(null);
 
 	useEffect(() => {

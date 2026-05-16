@@ -9,12 +9,13 @@ import { RegisterDoctorInput } from "@/types/register";
 import { Loader } from "lucide-react";
 import { useSession } from "next-auth/react";
 import { useState } from "react";
-import ConfirmationDialog from "../_components/dialog/ConfirmationDialog";
-import AdminForm from "../_components/organisms/create-update-form/AdminForm";
-import { ActionAdminTable } from "../_components/organisms/table/AdminTable";
-import AdminTableLayout from "../_components/organisms/table/AdminTableLayout";
-import { getCrudAccess } from "../_libs/permissions";
-import { buildCrudRowOperations } from "../_libs/tableCrud";
+import ConfirmationDialog from "@/app/(admin)/_components/dialog/ConfirmationDialog";
+import AdminForm from "@/app/(admin)/_components/organisms/create-update-form/AdminForm";
+import ViewModal, { ViewField } from "@/app/(admin)/_components/organisms/view/ViewModal";
+import { ActionAdminTable } from "@/app/(admin)/_components/organisms/table/AdminTable";
+import AdminTableLayout from "@/app/(admin)/_components/organisms/table/AdminTableLayout";
+import { getCrudAccess } from "@/app/(admin)/_libs/permissions";
+import { buildCrudRowOperations } from "@/app/(admin)/_libs/tableCrud";
 import { INIT_CREATE_DOCTOR_FORM, INIT_UPDATE_DOCTOR_FORM, HEADER_TABLE_DOCTOR } from "./values/constants";
 
 
@@ -87,6 +88,12 @@ export default function DoctorManagePage() {
 
   const renderForm = () => {
     switch (selectedAction) {
+      case "view":
+        if (selectedId === null) return null;
+        const selectedDoctorForView = displayedDoctors.find(doctor => doctor.id === selectedId);
+        if (!selectedDoctorForView) return null;
+        const viewFields: ViewField[] = HEADER_TABLE_DOCTOR.map(h => ({ label: h.label, key: h.key }));
+        return <ViewModal isOpen={true} item={selectedDoctorForView} title={`Chi tiết bác sĩ`} fields={viewFields} onClose={() => handleAction("view")} />;
       case "create":
         return (
           <AdminForm<RegisterDoctorInput>
